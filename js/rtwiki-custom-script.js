@@ -1,16 +1,16 @@
 jQuery(document).ready(function() {
        
-   jQuery("#public").click(function () {
+   jQuery('#public').click(function () {
        
-jQuery('.case , .all_na , .all_r , .all_w').prop('checked', this.checked);
+jQuery(' .case#r , .all_r').prop('checked', this.checked);
 });
 
-jQuery(".case , all_na , .all_r , .all_w").click(function(){
+jQuery('.all_r').click(function(){
  
-        if(jQuery(".case").length == jQuery(".case:checked").length) {
-            jQuery("#public").attr("checked", "checked");
+        if(jQuery('.all_r').length == jQuery('.all_r:checked').length) {
+            jQuery('#public').attr('checked', 'checked');
         } else {
-            jQuery("#public").removeAttr("checked");
+            jQuery('#public').removeAttr('checked');
         }
  
     });
@@ -64,7 +64,29 @@ jQuery('.case#w').click(function(){
     });  
 
 
+jQuery('#reset').on('click',function()
+{
+    jQuery('input[type="radio"] , #public').removeAttr('checked');
+    jQuery('input[type="radio"], #public').attr('disabled',false);
+    
+    
+});
 
+jQuery('.all_na').click(function()
+{
+ jQuery('.all_r , .all_w , .case#r , .case#w , #public').attr('disabled',true);
+  
+});
+
+jQuery('.all_w').click(function()
+{
+ jQuery('.all_r , .all_na , .case#r , .case#na , #public').attr('disabled',true);
+});
+
+jQuery('.all_r ').click(function()
+{
+ jQuery('.all_w , .all_na , .case#w , .case#na').attr('disabled',true);
+});
 
 
 
