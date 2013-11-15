@@ -3,6 +3,9 @@ jQuery(document).ready(function() {
    jQuery('#public').click(function () {
        
 jQuery(' .case#r , .all_r').prop('checked', this.checked);
+jQuery('.case#na ,.all_na').attr('disabled',true);
+jQuery('.case#na ,.all_na').removeAttr('checked');
+
 });
 
 jQuery('.all_r').click(function(){
@@ -38,7 +41,7 @@ jQuery('.case#w').click(function(){
         if(jQuery('.case#w').length == jQuery(".case#w:checked").length) {
             jQuery(".all_w").attr("checked", "checked");
         } else {
-            jQuery('.all_w , #public').removeAttr("checked");
+            jQuery('.all_w').removeAttr("checked");
         }
  
     });
