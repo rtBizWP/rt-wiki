@@ -88,7 +88,7 @@ jQuery('.all_w').click(function()
 
 jQuery('.all_r ').click(function()
 {
- jQuery('.all_w , .all_na , .case#w , .case#na').attr('disabled',true);
+ jQuery(' , .all_na , .case#na').attr('disabled',true);
 });
 
 

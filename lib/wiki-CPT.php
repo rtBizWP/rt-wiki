@@ -1,16 +1,10 @@
 <?php
 /*
-  Plugin Name: rtWiki
-  Description: Declares and create a wiki CPT.Adds email metafield to user group taxonomy.
-  Version: 1.0
-  Author: Prannoy Tank a.k.a Wolverine
+ * 
+ * Creates wiki named CPT.
+ * 
  */
-
-
-require dirname(__FILE__) . '/lib/user-groups.php';
-wp_register_script('rtwiki-custom-script', plugins_url('/js/rtwiki-custom-script.js', __FILE__), array('jquery'));
-wp_enqueue_script('rtwiki-custom-script');
-
+require_once dirname(__FILE__) . '/user-groups.php';
 add_action('init', 'create_wiki');
 
 function create_wiki() {
@@ -42,9 +36,14 @@ function create_wiki() {
     );
 }
 
-add_action('admin_init', 'my_admin');
+/*
+ *
+ * Add User group and permission type metabox
+ *  
+ */
+add_action('admin_init', 'wiki_permission_metabox');
 
-function my_admin() {
+function wiki_permission_metabox() {
     add_meta_box('wiki_post_access', 'Permissions', 'display_wiki_post_access_metabox', 'wiki', 'normal', 'high');
 }
 
@@ -92,6 +91,12 @@ function display_wiki_post_access_metabox($post) {
 
     <?php
 }
+
+/*
+ *
+ * Save user and its permission as meta value
+ *  
+ */
 
 function rtp_wiki_permission_save($post) {
 
@@ -187,117 +192,6 @@ function save_taxonomy_custom_meta($term_id) {
 add_action('edited_user-group', 'save_taxonomy_custom_meta', 20, 2);
 add_action('create_user-group', 'save_taxonomy_custom_meta', 20, 2);
 
-function rtwiki_get_page_id($name) {
-    global $wpdb;
-    $page_id = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE ( post_name = '" . $name . "' or post_title = '" . $name . "' ) and post_status = 'publish' and post_type='wiki' ");
-    return $page_id;
-}
-
-add_action('template_redirect', 'redirect_404');
-/* Redirect to edit page when page not found in wiki */
-
-function redirect_404() {
-    if (is_404() && get_query_var('post_type') == 'wiki') {
-
-
-        $page = $_SERVER['REQUEST_URI'];
-        $segments = explode('/', trim($page, '/'));
-        if ($segments[0] == 'wiki') {
-            $postid = '';
-            for ($i = 1; $i < count($segments); $i++) {
-
-                $page = rtwiki_get_page_id($segments[$i]);
-
-                var_dump($page);
-                if ($i == 1) {
-
-
-                    if ($page != null) {
-                        
-                    } else {
-
-                        $my_post1 = array(
-                            'post_title' => $segments[$i],
-                            'post_content' => '',
-                            'post_status' => 'publish',
-                            'post_author' => 1,
-                            'post_type' => 'wiki',
-                            'slug' => $segments[$i],
-                        );
-                        $postid = wp_insert_post($my_post1);
-                    }
-                } else {
-
-                    $pid = $i - 1;
-                    $parentId = rtwiki_get_page_id($segments[$pid]);
-                    if ($page != null) {
-                        
-                    } else {
-
-                        $my_post = array(
-                            'post_title' => $segments[$i],
-                            'post_content' => '',
-                            'post_status' => 'publish',
-                            'post_author' => 1,
-                            'post_type' => 'wiki',
-                            'slug' => $segments[$i],
-                            'post_parent' => $parentId,
-                        );
-                        $postid = wp_insert_post($my_post);
-                    }
-                }
-            }
-            $url = admin_url('post.php?post=' . $postid . '&action=edit');
-            wp_redirect($url);
-        }
-    }
-}
-
-/* Single post content  */
-
-function single_post_filtering() {
-    global $post;
-    $rflag = 0;
-    $wflag = 0;
-    $noflag = 0;
-    $user = get_current_user_id();
-    $terms = get_terms('user-group', array('hide_empty' => false));
-    $access_rights = get_post_meta($post->ID, 'access_rights', true);
-
-    foreach ($terms as $term) {
-        $ans = get_term_if_exists($term->slug, $user);
-        if ($ans == $term->slug) {
-
-            if ($access_rights[$ans]['w'] == '1') {
-
-                echo $post->post_title;
-                $wflag = 1;
-                break;
-            } else if ($access_rights[$ans]['r'] == '1') {
-                echo 'got read access for' . $ans;
-                $rflag = 1;
-                break;
-            } else if ($access_rights[$ans]['na'] == '1') {
-                echo 'cannot look';
-                $noflag = 1;
-            }
-        } else if ($ans == '') {
-            echo 'cannot find your access rights';
-        }
-    }
-}
-
-//add_action('wp','random_picture');
-//add_shortcode('shortcode_name', 'single_post_filtering');
-
-function get_term_if_exists($term, $userid) {
-
-    global $wpdb;
-    $query = "SELECT slug FROM $wpdb->terms WHERE term_id IN(SELECT term_id from $wpdb->term_taxonomy WHERE term_taxonomy_id IN(SELECT term_taxonomy_id from $wpdb->term_relationships WHERE object_id=$userid))and name='" . $term . "'";
-    $page_id = $wpdb->get_var($query);
-    return $page_id;
-}
-
 function admin_side_post_check() {
     global $post;
     $rflag = 0;
@@ -327,48 +221,12 @@ function admin_side_post_check() {
     }
 }
 
-/* Send mail On post Update having body as diff of content */
-
-function post_changes_send_mail() {
-    if (get_query_var('post_type') == 'wiki') {
-        $post_id = absint($_POST['post']);
-        $post = get_post($post_id);
-        $revision = wp_get_post_revisions($post->ID);
-        $textContent = array();
-        $textTitle = array();
-        $authorId = array();
-        $authorName = array();
-        foreach ($revision as $revisions) {
-
-
-            $textContent[] = $revisions->post_content;
-            $textTitle[] = $revisions->post_title;
-        }
-
-        $args = array(
-            'title' => 'Differences',
-            'title_left' => $textTitle[1],
-            'title_right' => $textTitle[0],
-        );
-        $diff_table = wp_text_diff($textContent[1], $textContent[0], $args);
-
-        add_filter('wp_mail_content_type', 'set_html_content_type');
-
-        wp_mail('prannoy.tank@rtcamp.com', 'Diff', $diff_table);
-
-        remove_filter('wp_mail_content_type', 'set_html_content_type');
-    }
-}
-
 /* Get post Contributers list via revisions */
 
 function getContributers() {
     if (get_query_var('post_type') == 'wiki') {
-        $post_id = absint($_POST['post']);
-        $post = get_post($post_id);
+        global $post;
         $revision = wp_get_post_revisions($post->ID);
-        $textContent = array();
-        $textTitle = array();
         $authorId = array();
         $authorName = array();
         foreach ($revision as $revisions) {
@@ -381,24 +239,70 @@ function getContributers() {
                 $authorId[] = $revisions->post_author;
                 $authorName[] = get_userdata($id)->display_name;
             }
-            $textContent[] = $revisions->post_content;
-            $textTitle[] = $revisions->post_title;
         }
 
-        $args = array(
-            'title' => 'Differences',
-            'title_left' => $textTitle[1],
-            'title_right' => $textTitle[0],
-        );
-        $diff_table = wp_text_diff($textContent[1], $textContent[0], $args);
 
-        echo $diff_table;
+        return $authorName;
     }
 }
 
-add_action('save_post', 'getContributers');
+/*
+ * 
+ * Get SubPages 
+ * 
+ */
 
-function set_html_content_type() {
+function pagesRecursive($parentId, $lvl,$content='') {
+    $content.=$content;
+    $args = array('parent' => $parentId, 'post_type' => 'wiki');
+    $pages = get_pages($args);
 
-    return 'text/html';
+    if ($pages) {
+        $lvl++;
+        print '<ul>';
+        foreach ($pages as $page) {
+            
+           $permission=getPermission($page->ID);
+           if($permission==true)
+           {
+           print '<li>'.$page->post_title . "</li>";
+           }
+       else {
+           
+       }
+           pagesRecursive($page->ID, $lvl);
+        }
+      print '</ul>';
+        
+        }
+}
+
+function getPermission($pageID)
+{
+    
+    $noflag = 0;
+    $user = get_current_user_id();
+    $terms = get_terms('user-group', array('hide_empty' => false));
+    $access_rights = get_post_meta($pageID, 'access_rights', true);
+
+    foreach ($terms as $term) {
+        $ans = get_term_if_exists($term->slug, $user);
+        if ($ans == $term->slug) {
+
+            if ($access_rights[$ans]['w'] == '1') {
+                 return true;
+               
+            } else if ($access_rights[$ans]['r'] == '1') {
+                
+                return true; 
+            } else if ($access_rights[$ans]['na'] == '1') {
+                    $noflag=1;   
+            }
+        }
+    }
+    if($noflag == 1)
+    {
+        return false;
+    }
+
 }
