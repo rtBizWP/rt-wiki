@@ -18,5 +18,10 @@ require_once dirname(__FILE__) . '/lib/wiki-post-subscribe.php';
 wp_register_script('rtwiki-custom-script', plugins_url('/js/rtwiki-custom-script.js', __FILE__), array('jquery'));
 wp_enqueue_script('rtwiki-custom-script');
 
-
+if ( ! defined( 'RC_TC_BASE_FILE' ) )
+    define( 'RC_TC_BASE_FILE', __FILE__ );
+if ( ! defined( 'RC_TC_BASE_DIR' ) )
+    define( 'RC_TC_BASE_DIR', dirname( RC_TC_BASE_FILE ) );
+if ( ! defined( 'RC_TC_PLUGIN_URL' ) )
+    define( 'RC_TC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 

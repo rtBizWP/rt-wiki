@@ -252,7 +252,7 @@ function getContributers() {
  * 
  */
 
-function pagesRecursive($parentId, $lvl,$content='') {
+function getSubPages($parentId, $lvl, $content = '') {
     $content.=$content;
     $args = array('parent' => $parentId, 'post_type' => 'wiki');
     $pages = get_pages($args);
@@ -261,48 +261,57 @@ function pagesRecursive($parentId, $lvl,$content='') {
         $lvl++;
         print '<ul>';
         foreach ($pages as $page) {
-            
-           $permission=getPermission($page->ID);
-           if($permission==true)
-           {
-           print '<li>'.$page->post_title . "</li>";
-           }
-       else {
-           
-       }
-           pagesRecursive($page->ID, $lvl);
+
+            $permission = getPermission($page->ID);
+            if ($permission == true) {
+                print '<li>' . $page->post_title . "</li>";
+            }
+
+            getSubPages($page->ID, $lvl);
         }
-      print '</ul>';
-        
-        }
+        print '</ul>';
+    }
+ else {
+     print 'No Subpages';    
+    }
 }
 
-function getPermission($pageID)
-{
-    
+function getPermission($pageID) {
+
     $noflag = 0;
+    $noGroup = 0;
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => false));
     $access_rights = get_post_meta($pageID, 'access_rights', true);
 
-    foreach ($terms as $term) {
-        $ans = get_term_if_exists($term->slug, $user);
-        if ($ans == $term->slug) {
-
-            if ($access_rights[$ans]['w'] == '1') {
-                 return true;
-               
-            } else if ($access_rights[$ans]['r'] == '1') {
-                
-                return true; 
-            } else if ($access_rights[$ans]['na'] == '1') {
-                    $noflag=1;   
-            }
-        }
-    }
-    if($noflag == 1)
-    {
+    if ($access_rights['all']['w'] == '1') {
+        return true;
+    } else if ($access_rights['all']['r'] == '1') {
+        return true;
+    } else if ($access_rights['all']['na'] == '1') {
         return false;
     }
 
+
+    foreach ($terms as $term) {
+        $ans = get_term_if_exists($term->slug, $user);
+        if ($ans == $term->slug) {
+            if ($access_rights[$ans]['w'] == '1') {
+                return true;
+            } else if ($access_rights[$ans]['r'] == '1') {
+
+                return true;
+            } else if ($access_rights[$ans]['na'] == '1') {
+                $noflag = 1;
+            }
+        } else if ($ans == '') {
+            $noGroup = 1;
+        }
+    }
+    if ($noflag == 1) {
+        return false;
+    }
+    if ($noGroup == 1) {
+        return false;
+    }
 }

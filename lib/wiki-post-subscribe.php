@@ -33,6 +33,29 @@ function update() {
 
 add_action('init', 'update');
 
+
+/* 
+ * 
+ * Update subscriber list meta value for the Sub Pages. 
+ * 
+ */
+function updateForAllSubPages() {
+    if (isset($_REQUEST['allSubscribe']) == '1') {
+        $id = $_POST['update-all-postId'];
+        $userId = get_current_user_id();
+        $subscribeId = get_post_meta($id,'subcribers_list', true);
+        $subscribeId[] = $userId;
+        update_post_meta($id, 'subcribers_list', $subscribeId);
+    }
+}
+
+//add_action('init', 'update');
+
+
+
+
+
+
 /* 
  * 
  * Send mail On post Update having body as diff of content  
@@ -63,7 +86,9 @@ function post_changes_send_mail() {
 
         $subscriberList = get_post_meta($post->ID, 'subcribers_list', true);
         foreach ($subscriberList as $subscriber) {
-            wp_mail($subscriber, 'Diff', $diff_table);
+            $user=get_user_by('id',$subscriber);
+            
+            wp_mail($user->user_email, 'Diff', $diff_table);
         }
         remove_filter('wp_mail_content_type', 'set_html_content_type');
     }
