@@ -1,10 +1,16 @@
 <?php
+
+require_once dirname(__FILE__) . '/user-groups.php';
+require_once dirname(__FILE__) . '/wiki-post-filtering.php';
+
+
+
 /*
  * 
  * Creates wiki named CPT.
  * 
  */
-require_once dirname(__FILE__) . '/user-groups.php';
+
 add_action('init', 'create_wiki');
 
 function create_wiki() {
@@ -192,34 +198,6 @@ function save_taxonomy_custom_meta($term_id) {
 add_action('edited_user-group', 'save_taxonomy_custom_meta', 20, 2);
 add_action('create_user-group', 'save_taxonomy_custom_meta', 20, 2);
 
-function admin_side_post_check() {
-    global $post;
-    $rflag = 0;
-    $wflag = 0;
-    $noflag = 0;
-    $user = get_current_user_id();
-    $terms = get_terms('user-group', array('hide_empty' => false));
-    $access_rights = get_post_meta($post->ID, 'access_rights', true);
-
-    foreach ($terms as $term) {
-        $ans = get_term_if_exists($term->slug, $user);
-        if ($ans == $term->slug) {
-
-            if ($access_rights[$ans]['w'] == '1') {
-
-                echo $post->post_title;
-                $wflag = 1;
-                break;
-            } else if ($access_rights[$ans]['r'] == '1') {
-                echo 'got read access for' . $ans;
-                $rflag = 1;
-                break;
-            } else if ($access_rights[$ans]['na'] == '1') {
-                
-            }
-        }
-    }
-}
 
 /* Get post Contributers list via revisions */
 
@@ -270,48 +248,5 @@ function getSubPages($parentId, $lvl, $content = '') {
             getSubPages($page->ID, $lvl);
         }
         print '</ul>';
-    }
- else {
-     print 'No Subpages';    
-    }
-}
-
-function getPermission($pageID) {
-
-    $noflag = 0;
-    $noGroup = 0;
-    $user = get_current_user_id();
-    $terms = get_terms('user-group', array('hide_empty' => false));
-    $access_rights = get_post_meta($pageID, 'access_rights', true);
-
-    if ($access_rights['all']['w'] == '1') {
-        return true;
-    } else if ($access_rights['all']['r'] == '1') {
-        return true;
-    } else if ($access_rights['all']['na'] == '1') {
-        return false;
-    }
-
-
-    foreach ($terms as $term) {
-        $ans = get_term_if_exists($term->slug, $user);
-        if ($ans == $term->slug) {
-            if ($access_rights[$ans]['w'] == '1') {
-                return true;
-            } else if ($access_rights[$ans]['r'] == '1') {
-
-                return true;
-            } else if ($access_rights[$ans]['na'] == '1') {
-                $noflag = 1;
-            }
-        } else if ($ans == '') {
-            $noGroup = 1;
-        }
-    }
-    if ($noflag == 1) {
-        return false;
-    }
-    if ($noGroup == 1) {
-        return false;
-    }
+    } 
 }

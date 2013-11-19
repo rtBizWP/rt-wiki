@@ -14,7 +14,33 @@ global $post;
 $content = single_post_filtering();
 echo $content;
 ?>
-<?php
+<h4>Subscribe For Updates </h4>
+<?php if (checkSubscribe() == true) { ?>
+
+    <p>You are Subscribed to this Page. </p>
+<?php } else { ?>
+    <form id="user-subscribe" method="post" action="?subscribe=1">
+        <input type="submit" name=post-update-subscribe" value="Subscribe" >
+        <input type="hidden" name="update-postId"  value="<?php echo $post->ID ?>">
+    </form>
+
+    <?php
+}
+
+
+$isParent = ifSubPages($post->ID);
+if ($isParent == true) {
+    ?>
+
+    <h4>Subscribe For All Pages </h4>   
+    <form id="user-all-subscribe" method="post" action="?allSubscribe=1">
+        <input type="submit" name=post-update-subscribe" value="Subscribe To all subpages" >
+        <input type="hidden" name="update-all-postId"  value="<?php echo $post->ID ?>">
+    </form>
+    <?php
+}
+
+
 $contributers = getContributers();
 if (!empty($contributers)) {
     ?>
@@ -27,28 +53,9 @@ if (!empty($contributers)) {
     </ul>     
     <?php
 }
-
-
 ?>
-    <h4>Sub Pages</h4>
- <?php getSubPages($post->ID,0); ?>  
-<h4>Subscribe For Updates </h4>
-<?php if (checkSubscribe() == true) { ?>
+<h4>Sub Pages</h4>
+<?php getSubPages($post->ID, 0); ?>  
 
-    <p>You are Subscribed to this Page. </p>
-<?php } else { ?>
-    <form id="user-subscribe" method="post" action="?subscribe=1">
-        <input type="submit" name=post-update-subscribe" value="Subscribe" >
-        <input type="hidden" name="update-postId"  value="<?php echo $post->ID ?>">
-    </form>
-
-<?php
-} ?>
-
- <h4>Subscribe For All Pages </h4>   
-<form id="user-all-subscribe" method="post" action="?allSubscribe=1">
-        <input type="submit" name=post-update-subscribe" value="Subscribe To all subpages" >
-        <input type="hidden" name="update-all-postId"  value="<?php echo $post->ID ?>">
-</form>
 <?php
 get_footer();
