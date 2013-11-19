@@ -6,15 +6,79 @@
   Author: Prannoy Tank a.k.a Wolverine
  */
 
+/**
+ * Admin Files Loaded
+ */
+if ( !defined( 'RT_WIKI_VERSION' ) ) {
+	define( 'RT_WIKI_VERSION', '1.0' );
+}
+if ( !defined( 'RT_WIKI_PATH' ) ) {
+	define( 'RT_WIKI_PATH', plugin_dir_path( __FILE__ ) );
+}
+if ( !defined( 'RT_WIKI_URL' ) ) {
+	define( 'RT_WIKI_URL', plugin_dir_url( __FILE__ ) );
+}
+if ( !defined( 'RT_WIKI_PATH_ADMIN' ) ) {
+	define( 'RT_WIKI_PATH_ADMIN', plugin_dir_path( __FILE__ ) . 'admin/' );
+}
+if ( !defined( 'RT_WIKI_PATH_LIB' ) ) {
+	define( 'RT_WIKI_PATH_LIB', plugin_dir_path( __FILE__ ) . 'lib/' );
+}
+if ( !defined( 'RT_WIKI_PATH_MODELS' ) ) {
+	define( 'RT_WIKI_PATH_MODELS', plugin_dir_path( __FILE__ ) . 'models/' );
+}
+if ( !defined( 'RT_WIKI_PATH_HELPER' ) ) {
+	define( 'RT_WIKI_PATH_HELPER', plugin_dir_path( __FILE__ ) . 'helper/' );
+}
 
-require dirname(__FILE__) . '/lib/user-groups.php';
+function rtwiki_include_class_file( $dir ) {
+	if ( $dh = opendir( $dir ) ) {
+		while ( $file = readdir( $dh ) ) {
+			//Loop
+			if ( $file !== '.' && $file !== '..' && $file[0] !== '.' ) {
+				if ( is_dir( $dir . $file ) ) {
+					rtwiki_include_class_file( $dir . $file . '/' );
+				} else {
+					include_once $dir . $file;
+				}
+			}
+		}
+		closedir( $dh );
+		return 0;
+	}
+}
+
+function rtwiki_include() {
+	$rtWooCLIncludePaths = array(
+		RT_WIKI_PATH_LIB,
+		RT_WIKI_PATH_MODELS,
+		RT_WIKI_PATH_HELPER,
+		RT_WIKI_PATH_ADMIN,
+	);
+	foreach ( $rtWooCLIncludePaths as $path ) {
+		rtwiki_include_class_file( $path );
+	}
+}
+
+function rtwiki_init() {
+	rtwiki_include();
+
+	// DB Upgrade
+	$updateDB = new RTDBUpdate( false, RT_WIKI_PATH . 'index.php' , RT_WIKI_PATH . 'schema/' );
+	$updateDB->do_upgrade();
+
+	global $rtWikiAdmin;
+	$rtWikiAdmin = new RtWikiAdmin();
+}
+add_action( 'init', 'rtwiki_init' );
+
 wp_register_script('rtwiki-custom-script', plugins_url('/js/rtwiki-custom-script.js', __FILE__), array('jquery'));
 wp_enqueue_script('rtwiki-custom-script');
 
 add_action('init', 'create_wiki');
 
 function create_wiki() {
-    register_post_type('wiki', array(
+		register_post_type('wiki', array(
         'labels' => array(
             'name' => 'Wiki',
             'singular_name' => 'wiki',
@@ -52,11 +116,11 @@ function display_wiki_post_access_metabox($post) {
     wp_nonce_field(plugin_basename(__FILE__), $post->post_type . '_noncename');
 
     $access_rights = get_post_meta($post->ID, 'access_rights', true);
-    ?>  
+    ?>
     <table>
         <tr>
-            <td><h4>Public Permission:</h4></td>    
-            <td><input type="checkbox" id="public" name="public" value=""> </td>    
+            <td><h4>Public Permission:</h4></td>
+            <td><input type="checkbox" id="public" name="public" value=""> </td>
         </tr>
 
         <tr>
@@ -85,7 +149,7 @@ function display_wiki_post_access_metabox($post) {
                 <td><input type="radio" class="case" id="r" name="access_rights[<?php echo $groupName ?>][r]" <?php if ($access_rights[$groupName]['r'] == '1') { ?>checked="checked"<?php } ?> value="<?php echo $access_rights[$groupName]['r']; ?>"></td>
                 <td><input type="radio" class="case" id="w" name="access_rights[<?php echo $groupName ?>][w]" <?php if ($access_rights[$groupName]['w'] == '1') { ?>checked="checked"<?php } ?> value="<?php echo $access_rights[$groupName]['w']; ?>"></td>
             </tr>
-        <?php } ?> 
+        <?php } ?>
 
         <input type="button" name="reset" id="reset" value="Reset">
     </table>
@@ -213,7 +277,7 @@ function redirect_404() {
 
 
                     if ($page != null) {
-                        
+
                     } else {
 
                         $my_post1 = array(
@@ -231,7 +295,7 @@ function redirect_404() {
                     $pid = $i - 1;
                     $parentId = rtwiki_get_page_id($segments[$pid]);
                     if ($page != null) {
-                        
+
                     } else {
 
                         $my_post = array(
@@ -321,7 +385,7 @@ function admin_side_post_check() {
                 $rflag = 1;
                 break;
             } else if ($access_rights[$ans]['na'] == '1') {
-                
+
             }
         }
     }
@@ -374,7 +438,7 @@ function getContributers() {
         foreach ($revision as $revisions) {
 
             if (in_array($revisions->post_author, $authorId, true)) {
-                
+
             } else {
 
                 $id = $revisions->post_author;
