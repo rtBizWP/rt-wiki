@@ -7,9 +7,7 @@ function single_post_filtering() {
     $noGroup = 0;
     $readOnly = 0;
     $user = get_current_user_id();
-
     $terms = get_terms('user-group', array('hide_empty' => false));
-    
     $access_rights = get_post_meta($post->ID, 'access_rights', true);
 
     if ($access_rights['all']['w'] == '1') {
@@ -25,11 +23,11 @@ function single_post_filtering() {
 
     foreach ($terms as $term) {
         $ans = get_term_if_exists($term->slug, $user);
-        
+
         if ($ans == $term->slug) {
-            
+
             if ($access_rights[$ans]['w'] == '1') {
-               
+
                 return $post->post_content;
             } else if ($access_rights[$ans]['r'] == '1') {
                 $readOnly = 1;
@@ -40,22 +38,19 @@ function single_post_filtering() {
             $noGroup = 1;
         }
     }
-     if ($readOnly == 1) {
+    if ($readOnly == 1) {
         show_admin_bar(false);
         return $post->post_content;
-    }
-    else if ($noflag == 1) {
+    } else if ($noflag == 1) {
 
         wp_redirect(home_url());
         wp_die(__('You Do not have permission to access this Content'));
         //return false;
-    }
-    else if ($noGroup == 1) {
+    } else if ($noGroup == 1) {
 
         wp_redirect(home_url());
         wp_die(__('No Permissions found to access this Content'));
     }
-   
 }
 
 function get_term_if_exists($term, $userid) {
@@ -66,3 +61,80 @@ function get_term_if_exists($term, $userid) {
     return $page_id;
 }
 
+/* removes quick edit from wiki post type */
+
+function remove_quick_edit($actions) {
+    global $post;
+    if ($post->post_type == 'wiki') {
+        if (getPermission($post->ID) == false) {
+            unset($actions['inline hide-if-no-js']);
+            unset($actions['trash']);
+            unset($actions['view']);
+            unset($actions['edit']);
+          }
+    }
+    return $actions;
+}
+
+add_filter('page_row_actions', 'remove_quick_edit', 1000);
+
+
+/* Check permissions at Admin side for edit post */
+
+function postCheck() {
+    $action = $_GET['action'];
+    if ($action == 'edit') {
+        $page = $_GET['post'];
+        if (get_post_type($page) == 'wiki' && $_GET['message']!=1 ) {
+            if (getPermission($page) == false) {
+                WP_DIE(__('You Dont have enough access rights to view this post'));
+            }
+        }
+    }
+}
+
+add_action('admin_init', 'postCheck');
+
+/*
+ * Checks the permission of the user for the post
+ */
+function getPermission($pageID) {
+
+    $noflag = 0;
+    $noGroup = 0;
+    $user = get_current_user_id();
+    $terms = get_terms('user-group', array('hide_empty' => false));
+    $access_rights = get_post_meta($pageID, 'access_rights', true);
+
+    if ($access_rights['all']['w'] == '1') {
+        return true;
+    } else if ($access_rights['all']['r'] == '1') {
+        return true;
+    } else if ($access_rights['all']['na'] == '1') {
+        return false;
+    }
+
+    foreach ($terms as $term) {
+        $ans = get_term_if_exists($term->slug, $user);
+
+        if ($ans == $term->slug) {
+            if ($access_rights[$ans]['w'] == '1') {
+                return true;
+            } else if ($access_rights[$ans]['r'] == '1') {
+                return true;
+            } else if ($access_rights[$ans]['na'] == '1') {
+                $noflag = 1;
+            }
+        } else if ($ans == '' || $ans == null) {
+            //$noGroup = 1;
+            return true;
+        }
+    }
+    if ($noflag == 1) {
+        return false;
+    }
+//    if ($noGroup == 1) {
+//        return false;
+//    }
+}
+add_filter( 'bulk_actions-' . 'edit-wiki', '__return_empty_array' );

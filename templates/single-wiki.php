@@ -53,9 +53,14 @@ if (!empty($contributers)) {
     </ul>     
     <?php
 }
-?>
-<h4>Sub Pages</h4>
-<?php getSubPages($post->ID, 0); ?>  
+
+if ($isParent) {
+    ?>    
+    <h4>Sub Pages</h4>
+    <?php
+    getSubPages($post->ID, 0);
+}
+?>  
 
 <?php
 get_footer();

@@ -1,14 +1,9 @@
 <?php
-
 require_once dirname(__FILE__) . '/user-groups.php';
 require_once dirname(__FILE__) . '/wiki-post-filtering.php';
 
-
-
 /*
- * 
  * Creates wiki named CPT.
- * 
  */
 
 add_action('init', 'create_wiki');
@@ -31,6 +26,26 @@ function create_wiki() {
             'No wiki found in Trash',
             'parent' => 'Parent wiki'
         ),
+        'description' => __('Wiki', 'rtWiki'),
+        'publicly_queryable' => null,
+        'exclude_from_search' => null,
+        'capability_type' => 'post',
+        'capabilities' => array(),
+        'map_meta_cap' => null,
+        '_builtin' => false,
+        '_edit_link' => 'post.php?post=%d',
+        'rewrite' => true,
+        'has_archive' => true,
+        'query_var' => true,
+        'register_meta_box_cb' => null,
+        'taxonomies' => array('category', 'post_tag'),
+        'show_ui' => null,
+        'menu_icon' => null,
+        'permalink_epmask' => EP_PERMALINK,
+        'can_export' => true,
+        'show_in_nav_menus' => null,
+        'show_in_menu' => null,
+        'show_in_admin_bar' => null,
         'hierarchical' => true,
         'public' => true,
         'menu_position' => 10,
@@ -43,10 +58,9 @@ function create_wiki() {
 }
 
 /*
- *
- * Add User group and permission type metabox
- *  
+ * Add User group and permission type metabox  
  */
+
 add_action('admin_init', 'wiki_permission_metabox');
 
 function wiki_permission_metabox() {
@@ -109,9 +123,6 @@ function rtp_wiki_permission_save($post) {
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
         return;
 
-    // verify this came from the our screen and with proper authorization,
-    // because save_post can be triggered at other times
-
     if (!wp_verify_nonce(@$_POST[$_POST['post_type'] . '_noncename'], plugin_basename(__FILE__)))
         return;
 
@@ -141,11 +152,11 @@ function rtp_wiki_permission_save($post) {
 add_action('save_post', 'rtp_wiki_permission_save');
 
 
-/* Email Address field in User group taxonomy */
+/*
+ * Adds Email Address field in User Group Taxonomy
+ */
 
-// Add term page
 function user_group_taxonomy_add_new_meta_field() {
-    // this will add the custom meta field to the add new term page
     ?>
     <div class="form-field">
         <label for="term_meta[email_address]"><?php _e('Email Address', 'rtcamp'); ?></label>
@@ -157,16 +168,14 @@ function user_group_taxonomy_add_new_meta_field() {
 
 add_action('user-group_add_form_fields', 'user_group_taxonomy_add_new_meta_field', 10, 2);
 
-// Edit term page
+/*
+ *  Edit User-Group
+ */
+
 function user_group_taxonomy_edit_meta_field($term) {
-
-
     $t_id = $term->term_id;
-
-    // retrieve the existing value(s) for this meta field. This returns an array
     $term_meta = get_option("user-group-meta");
     ?>
-
     <tr class="form-field">
         <th scope="row" valign="top"><label for="term_meta[email_address]"><?php _e('Email Address', 'rtCamp'); ?></label></th>
         <td>
@@ -179,12 +188,14 @@ function user_group_taxonomy_edit_meta_field($term) {
 
 add_action('user-group_edit_form_fields', 'user_group_taxonomy_edit_meta_field', 10, 2);
 
+/*
+ *  Adds New User-Group Term
+ */
+
 function save_taxonomy_custom_meta($term_id) {
 
     if (isset($_POST['user-group'])) {
-
         $term_meta = (array) get_option('user-group-meta');
-
         $term_meta[$term_id] = (array) $_POST['user-group'];
         update_option('user-group-meta', $term_meta);
 
@@ -199,54 +210,3 @@ add_action('edited_user-group', 'save_taxonomy_custom_meta', 20, 2);
 add_action('create_user-group', 'save_taxonomy_custom_meta', 20, 2);
 
 
-/* Get post Contributers list via revisions */
-
-function getContributers() {
-    if (get_query_var('post_type') == 'wiki') {
-        global $post;
-        $revision = wp_get_post_revisions($post->ID);
-        $authorId = array();
-        $authorName = array();
-        foreach ($revision as $revisions) {
-
-            if (in_array($revisions->post_author, $authorId, true)) {
-                
-            } else {
-
-                $id = $revisions->post_author;
-                $authorId[] = $revisions->post_author;
-                $authorName[] = get_userdata($id)->display_name;
-            }
-        }
-
-
-        return $authorName;
-    }
-}
-
-/*
- * 
- * Get SubPages 
- * 
- */
-
-function getSubPages($parentId, $lvl, $content = '') {
-    $content.=$content;
-    $args = array('parent' => $parentId, 'post_type' => 'wiki');
-    $pages = get_pages($args);
-
-    if ($pages) {
-        $lvl++;
-        print '<ul>';
-        foreach ($pages as $page) {
-
-            $permission = getPermission($page->ID);
-            if ($permission == true) {
-                print '<li>' . $page->post_title . "</li>";
-            }
-
-            getSubPages($page->ID, $lvl);
-        }
-        print '</ul>';
-    } 
-}

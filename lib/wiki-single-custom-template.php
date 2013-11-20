@@ -1,10 +1,10 @@
-<?php 
+<?php
 
-//add_action('admin_init','rc_tc_template_chooser');
+
 
 
 function rc_tc_template_chooser($template) {
-    
+
     // Post ID
     $post_id = get_the_ID();
 
@@ -29,14 +29,8 @@ function rc_tc_get_template_hierarchy($template) {
     // Get the template slug
     $template_slug = rtrim($template, '.php');
     $template = $template_slug . '.php';
-
-    // Check if a custom template exists in the theme folder, if not, load the plugin template file
-//    if ($theme_file = locate_template(array('plugin_templates/' . $template))) {
-//        $file = $theme_file;
-//    } else {
-        $file = RC_TC_BASE_DIR . '/templates/' . $template;
-   // }
-
+    
+    $file = RC_TC_BASE_DIR . '/templates/' . $template;
     return apply_filters('rc_repl_template_' . $template, $file);
 }
 

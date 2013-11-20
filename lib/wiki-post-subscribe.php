@@ -24,12 +24,18 @@ function checkSubscribe() {
  */
 
 function update() {
+    global $pagenow;
     if (isset($_REQUEST['subscribe']) == '1') {
-        $id = $_POST['update-postId'];
-        $userId = get_current_user_id();
-        $subscribeId = get_post_meta($id, 'subcribers_list', true);
-        $subscribeId[] = $userId;
-        update_post_meta($id, 'subcribers_list', $subscribeId);
+
+        if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
+            wp_redirect(wp_login_url(), 302);
+        } else {
+            $id = $_POST['update-postId'];
+            $userId = get_current_user_id();
+            $subscribeId = get_post_meta($id, 'subcribers_list', true);
+            $subscribeId[] = $userId;
+            update_post_meta($id, 'subcribers_list', $subscribeId);
+        }
     }
 }
 
@@ -43,11 +49,17 @@ add_action('wp', 'update');
  */
 
 function updateForAllSubPages() {
+    global $pagenow;
     if (isset($_REQUEST['allSubscribe']) == '1') {
-        $id = $_POST['update-all-postId'];
+        if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
+            wp_redirect(wp_login_url(), 302);
+        } else {
+            $id = $_POST['update-all-postId'];
 
-        $userId = get_current_user_id();
-        subcribeSubPages($id, 0, $userId);
+            $userId = get_current_user_id();
+            //add_user_meta($userId, 'updates_for_all_pages', 1, false);
+            subcribeSubPages($id, 0, $userId);
+        }
     }
 }
 
@@ -91,7 +103,6 @@ function ifSubPages($parentId) {
  * Send mail On post Update having body as diff of content  
  * 
  */
-
 function post_changes_send_mail() {
     if (get_query_var('post_type') == 'wiki') {
         $post_id = absint($_POST['post']);
@@ -129,48 +140,4 @@ function post_changes_send_mail() {
 function set_html_content_type() {
 
     return 'text/html';
-}
-
-function getPermission($pageID) {
-
-    $noflag = 0;
-    $noGroup = 0;
-    $user = get_current_user_id();
-    $terms = get_terms('user-group', array('hide_empty' => false));
-
-    $access_rights = get_post_meta($pageID, 'access_rights', true);
-
-    if ($access_rights['all']['w'] == '1') {
-        return true;
-    } else if ($access_rights['all']['r'] == '1') {
-        return true;
-    } else if ($access_rights['all']['na'] == '1') {
-        return false;
-    }
-
-
-    foreach ($terms as $term) {
-
-        $ans = get_term_if_exists($term->slug, $user);
-
-        if ($ans == $term->slug) {
-
-
-            if ($access_rights[$ans]['w'] == '1') {
-                return true;
-            } else if ($access_rights[$ans]['r'] == '1') {
-                return true;
-            } else if ($access_rights[$ans]['na'] == '1') {
-                $noflag = 1;
-            }
-        } else if ($ans == '' || $ans == null) {
-            $noGroup = 1;
-        }
-    }
-    if ($noflag == 1) {
-        return false;
-    }
-    if ($noGroup == 1) {
-        return false;
-    }
 }
