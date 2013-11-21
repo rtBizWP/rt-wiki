@@ -14,6 +14,8 @@ require_once dirname(__FILE__) . '/lib/wiki-404-redirect.php';
 require_once dirname(__FILE__) . '/lib/wiki-post-filtering.php';
 require_once dirname(__FILE__) . '/lib/wiki-post-subscribe.php';
 require_once dirname(__FILE__) . '/lib/wiki-singlepost-content.php';
+require_once dirname(__FILE__) . '/lib/wiki-sidebar.php';
+require_once dirname(__FILE__) . '/lib/wiki-widgets.php';
 
 
 wp_register_script('rtwiki-custom-script', plugins_url('/js/rtwiki-custom-script.js', __FILE__), array('jquery'));

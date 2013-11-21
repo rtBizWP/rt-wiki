@@ -2,11 +2,11 @@
 
 function single_post_filtering() {
     global $post;
-    
+
     $noflag = 0;
     $noGroup = 0;
     $readOnly = 0;
-  
+
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => false));
     $access_rights = get_post_meta($post->ID, 'access_rights', true);
@@ -16,11 +16,10 @@ function single_post_filtering() {
         if ($access_rights['public'] == '1') {
             return $post->post_content;
         } else {
-            wp_die(__('Please <a href='.wp_login_url().'>Login</a> To View the post Content'));
-             
+            wp_die(__('Please <a href=' . wp_login_url() . '>Login</a> To View the post Content'));
         }
     } else {
-         
+
         if ($access_rights['all']['w'] == '1') {
             return $post->post_content;
         } else if ($access_rights['all']['r'] == '1') {
@@ -124,40 +123,34 @@ function getPermission($pageID) {
         } else {
             return false;
         }
-    }
-  else
-  {
-    if ($access_rights['all']['w'] == '1') {
-        return true;
-    } else if ($access_rights['all']['r'] == '1') {
-        return true;
-    } else if ($access_rights['all']['na'] == '1') {
-        return false;
-    }
+    } else {
+        
+        if ($access_rights['all']['w'] == '1' || $access_rights['all']['r'] == '1') {
+            return true;
+        } else if ($access_rights['all']['na'] == '1') {
+            return false;
+        }
 
-    foreach ($terms as $term) {
-        $ans = get_term_if_exists($term->slug, $user);
+        foreach ($terms as $term) {
+            $ans = get_term_if_exists($term->slug, $user);
 
-        if ($ans == $term->slug) {
-            if ($access_rights[$ans]['w'] == '1') {
-                return true;
-            } else if ($access_rights[$ans]['r'] == '1') {
-                return true;
-            } else if ($access_rights[$ans]['na'] == '1') {
-                $noflag = 1;
+            if ($ans == $term->slug) {
+                if ($access_rights[$ans]['w'] == '1' || $access_rights[$ans]['r'] == '1') {
+                    return true;
+                } else if ($access_rights[$ans]['na'] == '1') {
+                    $noflag = 1;
+                }
+            } else if ($ans == '' || $ans == null) {
+                $noPublic = 1;
             }
-        } else if ($ans == '' || $ans == null) {
-            $noPublic = 1;
-            // return true;
+        }
+        if ($noflag == 1) {
+            return false;
+        }
+        if ($noPublic == 1) {
+            return false;
         }
     }
-    if ($noflag == 1) {
-        return false;
-    }
-    if ($noPublic == 1) {
-        return false;
-    }
-}
 }
 
 add_filter('bulk_actions-' . 'edit-wiki', '__return_empty_array');

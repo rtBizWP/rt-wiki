@@ -1,9 +1,7 @@
 <?php
 
 /*
- * 
  * Checks if subscribe ID is in the list or not 
- * 
  */
 
 function checkSubscribe() {
@@ -18,9 +16,7 @@ function checkSubscribe() {
 }
 
 /*
- * 
  * Update subscriber list meta value for the particular post ID. 
- * 
  */
 
 function update() {
@@ -43,9 +39,7 @@ add_action('wp', 'update');
 
 
 /*
- * 
  * Update subscriber list meta value for the Sub Pages. 
- * 
  */
 
 function updateForAllSubPages() {
@@ -98,11 +92,10 @@ function ifSubPages($parentId) {
         return false;
 }
 
-/*
- * 
+/* 
  * Send mail On post Update having body as diff of content  
- * 
  */
+
 function post_changes_send_mail() {
     if (get_query_var('post_type') == 'wiki') {
         $post_id = absint($_POST['post']);
