@@ -75,7 +75,7 @@ function display_wiki_post_access_metabox($post) {
     <table>
         <tr>
             <td><h4>Public Permission:</h4></td>    
-            <td><input type="checkbox" id="public" name="public" value=""> </td>    
+            <td><input type="checkbox" id="public" name="public" <?php if ($access_rights['public'] == '1') { ?>checked="checked"<?php } ?> value="<?php echo $access_rights['public']; ?>"> </td>    
         </tr>
 
         <tr>
@@ -144,6 +144,7 @@ function rtp_wiki_permission_save($post) {
                     $access_rights[$g][$p] = $value;
                 }
             }
+            $access_rights['public']=isset($_POST['public'])? '1' : '0';
             update_post_meta($post, 'access_rights', $access_rights);
         }
     }

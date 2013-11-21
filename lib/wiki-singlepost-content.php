@@ -29,7 +29,7 @@ function getContributers() {
 function getSubPages($parentId, $lvl) {
     $args = array('parent' => $parentId, 'post_type' => 'wiki');
     $pages = get_pages($args);
-
+   
     if ($pages) {
         $lvl++;
         print '<ul>';
@@ -37,7 +37,7 @@ function getSubPages($parentId, $lvl) {
 
             $permission = getPermission($page->ID);
             if ($permission == true) {
-                print '<li>' . $page->post_title . "</li>";
+                print '<li><a href='.$page->guid.'>' . $page->post_title . "</a></li>";
             }
 
             getSubPages($page->ID, $lvl);

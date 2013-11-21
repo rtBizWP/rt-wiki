@@ -8,6 +8,7 @@
  */
 get_header();
 global $post;
+global $pagenow;
 ?>
 <h2><?php echo $post->post_title ?></h2>
 <?php
