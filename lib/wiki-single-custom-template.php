@@ -1,8 +1,4 @@
 <?php
-
-
-
-
 function rc_tc_template_chooser($template) {
 
     // Post ID

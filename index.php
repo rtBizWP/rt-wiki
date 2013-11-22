@@ -14,6 +14,7 @@ require_once dirname(__FILE__) . '/lib/wiki-404-redirect.php';
 require_once dirname(__FILE__) . '/lib/wiki-post-filtering.php';
 require_once dirname(__FILE__) . '/lib/wiki-post-subscribe.php';
 require_once dirname(__FILE__) . '/lib/wiki-singlepost-content.php';
+require_once dirname(__FILE__) . '/lib/class-daily-changes.php';
 require_once dirname(__FILE__) . '/lib/wiki-sidebar.php';
 require_once dirname(__FILE__) . '/lib/wiki-widgets.php';
 

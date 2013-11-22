@@ -32,6 +32,7 @@ function single_post_filtering() {
 
 
         foreach ($terms as $term) {
+           
             $ans = get_term_if_exists($term->slug, $user);
 
             if ($ans == $term->slug) {

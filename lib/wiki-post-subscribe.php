@@ -92,43 +92,45 @@ function ifSubPages($parentId) {
         return false;
 }
 
-/* 
+/*
  * Send mail On post Update having body as diff of content  
  */
 
-function post_changes_send_mail() {
-    if (get_query_var('post_type') == 'wiki') {
-        $post_id = absint($_POST['post']);
-        $post = get_post($post_id);
-        $revision = wp_get_post_revisions($post->ID);
-        $textContent = array();
-        $textTitle = array();
+function post_changes_send_mail($post, $email) {
+    global $post;
+    $revision = wp_get_post_revisions($post);
+    $latestContent = array();
+    $oldContent = array();
+    $latestTitle = array();
+    $oldTitle = array();
 
-        foreach ($revision as $revisions) {
-            $textContent[] = $revisions->post_content;
-            $textTitle[] = $revisions->post_title;
+    $currentDate = date('Y-m-d');
+
+    foreach ($revision as $revisions) {
+        if (mysql2date('Y-m-d', $revisions->post_date) == $currentDate) {
+            $latestContent[] = $revisions->post_content;
+            $latestTitle[] = $revisions->post_title;
+        } else {
+            $oldContent[] = $revisions->post_content;
+            $oldTitle[] = $revisions->post_title;
         }
-
-        $args = array(
-            'title' => 'Differences',
-            'title_left' => $textTitle[1],
-            'title_right' => $textTitle[0],
-        );
-        $diff_table = wp_text_diff($textContent[1], $textContent[0], $args);
-
+    }
+    var_dump($latestContent);
+    var_dump($oldContent);
+    $args = array(
+        'title' => 'Differences',
+        'title_left' => $oldTitle[1],
+        'title_right' => $latestTitle[0],
+    );
+    if (!empty($latestContent) && !empty($oldContent)) {
+        $diff_table = wp_text_diff($oldContent[1], $latestContent[0], $args);
         add_filter('wp_mail_content_type', 'set_html_content_type');
-
-        $subscriberList = get_post_meta($post->ID, 'subcribers_list', true);
-        foreach ($subscriberList as $subscriber) {
-            $user = get_user_by('id', $subscriber);
-
-            wp_mail($user->user_email, 'Diff', $diff_table);
-        }
+        wp_mail($email, 'Diff', $diff_table);
         remove_filter('wp_mail_content_type', 'set_html_content_type');
     }
 }
 
-//add_action('edit_post', 'post_changes_send_mail');
+//add_action('wp', 'post_changes_send_mail');
 
 function set_html_content_type() {
 
