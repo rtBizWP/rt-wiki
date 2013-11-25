@@ -14,15 +14,13 @@ class rt_wiki_contributers extends WP_Widget {
 
         if (!empty($contributers)) {
             echo $args['before_widget'];
-            echo '<div class="clearfix">';
-            echo '<h4>Contributers</h4>';
+            echo $args['before_title'].'Contributers'.$args['after_title'];
             echo '<ul id="contributers">';
             foreach ($contributers as $contributer) {
 
                 echo '<li>' . $contributer . '</li>';
             }
             echo '</ul>';
-            echo '</div>';
             echo $args['after_widget'];
         }
     }
@@ -50,10 +48,10 @@ class rt_wiki_subPages extends WP_Widget {
         global $post;
         $isParent = ifSubPages($post->ID);
         if ($isParent) {
-            ?>    
-            <h4>Sub Pages</h4>
-            <?php
+            echo $args['before_widget'];
+            echo $args['before_title'].'Sub Pages'.$args['after_title'];
             getSubPages($post->ID, 0);
+            echo $args['after_widget'];
         }
     }
 
@@ -78,8 +76,8 @@ class rt_wiki_single_page_subscribe extends WP_Widget {
     function widget($args, $instance) {
         extract($args, EXTR_SKIP);
         global $post;
-
-        echo '<h4>Subscribe For Updates </h4>';
+        echo $args['before_widget'];
+        echo $args['before_title'].'Subscribe For Updates'.$args['after_title'];
         if (checkSubscribe() == true) {
 
             echo '<p>You are Subscribed to this Page. </p>';
@@ -89,6 +87,7 @@ class rt_wiki_single_page_subscribe extends WP_Widget {
                 <input type="hidden" name="update-postId"  value=' . $post->ID . '>
             </form>';
         }
+        echo $args['after_widget'];
     }
 
     function update($new_instance, $old_instance) {
@@ -112,18 +111,16 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
     function widget($args, $instance) {
         extract($args, EXTR_SKIP);
         global $post;
-
+        echo $args['before_widget'];
         $isParent = ifSubPages($post->ID);
         if ($isParent == true) {
-           
-
-          echo '<h4>Subscribe For All Pages </h4>   
+            echo $args['before_title'].'Subscribe For All Pages'.$args['after_title']; ?>   
             <form id="user-all-subscribe" method="post" action="?allSubscribe=1">
                 <input type="submit" name=post-update-subscribe" value="Subscribe To all subpages" >
-                <input type="hidden" name="update-all-postId"  value='.$post->ID.'>
-            </form>';
-            
-        }
+                <input type="hidden" name="update-all-postId"  value=<?php echo $post->ID ?>>
+            </form>
+     <?php   }
+        echo $args['after_widget'];
     }
 
     function update($new_instance, $old_instance) {

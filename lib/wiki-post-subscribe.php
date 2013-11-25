@@ -26,11 +26,14 @@ function update() {
         if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
             wp_redirect(wp_login_url(), 302);
         } else {
+            if(isset($_POST['update-postId']))
+            {
             $id = $_POST['update-postId'];
             $userId = get_current_user_id();
             $subscribeId = get_post_meta($id, 'subcribers_list', true);
             $subscribeId[] = $userId;
             update_post_meta($id, 'subcribers_list', $subscribeId);
+            }
         }
     }
 }
@@ -115,8 +118,7 @@ function post_changes_send_mail($post, $email) {
             $oldTitle[] = $revisions->post_title;
         }
     }
-    var_dump($latestContent);
-    var_dump($oldContent);
+    
     $args = array(
         'title' => 'Differences',
         'title_left' => $oldTitle[1],
