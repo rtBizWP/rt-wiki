@@ -94,10 +94,19 @@ add_filter('page_row_actions', 'remove_quick_edit', 1000);
 function postCheck() {
     if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         $page = $_GET['post'];
-        if (get_post_type($page) == 'wiki' && $_GET['message'] != 1) {
+        
+        $status=get_post_meta($page,'_edit_last');
+       
+        if($status[0] != '1')
+        {
+        }
+        else 
+        {    
+            if (get_post_type($page) == 'wiki' && $_GET['message'] != 1) {
             if (getAdminPanelSidePermission($page) == false) {
                 WP_DIE(__('You Dont have enough access rights to Edit this post'));
             }
+        }
         }
     }
 }
