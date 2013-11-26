@@ -24,7 +24,7 @@ if ( !class_exists( 'RtWikiAdmin' ) ) {
 			$rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
 
 			$this->init_attributes();
-			$this->register_pages();
+			add_action('admin_menu', array($this, 'register_pages'));
 
 			$this->register_taxonomies();
 		}
