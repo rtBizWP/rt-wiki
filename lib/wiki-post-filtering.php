@@ -32,7 +32,7 @@ function single_post_filtering() {
 
 
         foreach ($terms as $term) {
-           
+
             $ans = get_term_if_exists($term->slug, $user);
 
             if ($ans == $term->slug) {
@@ -92,8 +92,7 @@ add_filter('page_row_actions', 'remove_quick_edit', 1000);
 /* Check permissions at Admin side for edit post */
 
 function postCheck() {
-    $action = $_GET['action'];
-    if ($action == 'edit') {
+    if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         $page = $_GET['post'];
         if (get_post_type($page) == 'wiki' && $_GET['message'] != 1) {
             if (getAdminPanelSidePermission($page) == false) {
@@ -126,10 +125,10 @@ function getAdminPanelSidePermission($pageID) {
             return false;
         }
     } else {
-        
+
         if ($access_rights['all']['w'] == '1' ) {
             return true;
-        } 
+        }
         else if($access_rights['all']['r'] == '1')
         {
             return false;
@@ -144,7 +143,7 @@ function getAdminPanelSidePermission($pageID) {
             if ($ans == $term->slug) {
                 if ($access_rights[$ans]['w'] == '1' ) {
                     return true;
-                } 
+                }
                 else if($access_rights[$ans]['r'] == '1')
                 {
                     $readOnly=1;
@@ -189,7 +188,7 @@ function getPermission($pageID) {
             return false;
         }
     } else {
-        
+
         if ($access_rights['all']['w'] == '1' || $access_rights['all']['r'] == '1') {
             return true;
         } else if ($access_rights['all']['na'] == '1') {
