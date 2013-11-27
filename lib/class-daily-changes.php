@@ -20,7 +20,7 @@ if (defined('WP_CLI') && WP_CLI) {
                     $access_rights = get_post_meta(get_the_ID, 'access_rights', true);
                     $term_meta = get_option("user-group-meta");
                     foreach ($terms as $term) {
-                        if ($access_rights[$term]['w'] == '1' || $access_rights[$term]['r'] == '1') {
+                        if ($access_rights[$term]['w'] == 1 || $access_rights[$term]['r'] == 1) {
                             $termId=$term->term_id;
                             $email=$term_meta[$termId]['email_address'];
                             post_changes_send_mail($postID,$email);

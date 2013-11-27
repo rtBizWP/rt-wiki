@@ -13,17 +13,17 @@ function create_wiki() {
         'labels' => array(
             'name' => __('Wiki', 'post type general name', 'rtCamp'),
             'singular_name' => __('wiki', 'post type singular name', 'rtCamp'),
-            'add_new' => __('Add New','wiki','rtCamp'),
-            'add_new_item' => __('Add New wiki','rtCamp'),
-            'edit' => __('Edit','wiki','rtCamp'),
-            'edit_item' => __('Edit wiki','rtCamp'),
-            'new_item' => __('New wiki','rtCamp'),
-            'view' => __('View','wiki','rtCamp'),
-            'view_item' => __('View wiki','rtCamp'),
-            'search_items' => __('Search Wiki','rtCamp'),
+            'add_new' => __('Add New', 'wiki', 'rtCamp'),
+            'add_new_item' => __('Add New wiki', 'rtCamp'),
+            'edit' => __('Edit', 'wiki', 'rtCamp'),
+            'edit_item' => __('Edit wiki', 'rtCamp'),
+            'new_item' => __('New wiki', 'rtCamp'),
+            'view' => __('View', 'wiki', 'rtCamp'),
+            'view_item' => __('View wiki', 'rtCamp'),
+            'search_items' => __('Search Wiki', 'rtCamp'),
             'not_found' => __('No wiki found', 'rtCamp'),
-            'not_found_in_trash' =>__('No Wiki found in Trash','rtCamp'),
-            'all_items' => __( 'All Wiki', 'rtCamp' ),
+            'not_found_in_trash' => __('No Wiki found in Trash', 'rtCamp'),
+            'all_items' => __('All Wiki', 'rtCamp'),
             'parent' => 'Parent wiki'
         ),
         'description' => __('Wiki', 'rtCamp'),
@@ -75,7 +75,7 @@ function display_wiki_post_access_metabox($post) {
     <table>
         <tr>
             <td><h4>Public Permission:</h4></td>    
-            <td><input type="checkbox" id="public" name="public" <?php if ($access_rights['public'] == '1') { ?>checked="checked"<?php } ?> value="<?php echo $access_rights['public']; ?>"> </td>    
+            <td><input type="checkbox" id="public" name="public" <?php if ($access_rights['public'] == 1) { ?>checked="checked"<?php } ?> value="<?php echo $access_rights['public']; ?>"> </td>    
         </tr>
 
         <tr>
@@ -87,9 +87,9 @@ function display_wiki_post_access_metabox($post) {
 
         <tr>
             <td>All</td>
-            <td><input type="radio" class="all_na" name="access_rights[all]" <?php if ($access_rights['all']['na'] == '1') { ?>checked="checked"<?php } ?> value="na" /></td>
-            <td><input type="radio" class="all_r" name="access_rights[all]" <?php if ($access_rights['all']['r'] == '1') { ?>checked="checked"<?php } ?> value="r" /></td>
-            <td><input type="radio" class="all_w" name="access_rights[all]" <?php if ($access_rights['all']['w'] == '1') { ?>checked="checked"<?php } ?> value="w" /></td>
+            <td><input type="radio" class="rtwiki_all_na" name="access_rights[all]" <?php if (isset($access_rights['all']['na']) == 1) { ?>checked="checked"<?php } ?> value="na" /></td>
+            <td><input type="radio" class="rtwiki_all_r" name="access_rights[all]" <?php if (isset($access_rights['all']['r']) == 1) { ?>checked="checked"<?php } ?> value="r" /></td>
+            <td><input type="radio" class="rtwiki_all_w" name="access_rights[all]" <?php if (isset($access_rights['all']['w']) == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
         </tr>
 
         <?php
@@ -100,9 +100,9 @@ function display_wiki_post_access_metabox($post) {
             ?>
             <tr>
                 <td><?php echo $groupName ?></td>
-                <td><input type="radio" class="case" id="na" name="access_rights[<?php echo $groupName ?>]"  <?php if ($access_rights[$groupName]['na'] == '1') { ?>checked="checked"<?php } ?> value="na" /></td>
-                <td><input type="radio" class="case" id="r" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['r'] == '1') { ?>checked="checked"<?php } ?> value="r" /></td>
-                <td><input type="radio" class="case" id="w" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['w'] == '1') { ?>checked="checked"<?php } ?> value="w" /></td>
+                <td><input type="radio" class="case" id="na" name="access_rights[<?php echo $groupName ?>]"  <?php if ($access_rights[$groupName]['na'] == 1) { ?>checked="checked"<?php } ?> value="na" /></td>
+                <td><input type="radio" class="case" id="r" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['r'] == 1) { ?>checked="checked"<?php } ?> value="r" /></td>
+                <td><input type="radio" class="case" id="w" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['w'] == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
             </tr>
         <?php } ?> 
 
@@ -137,24 +137,37 @@ function rtp_wiki_permission_save($post) {
             foreach ($terms as $term) {
                 $group[] = $term->name;
             }
-            array_unshift($group, 'all');
+            // array_unshift($group, 'all');
+            
+
             foreach ($group as $g) {
                 foreach ($perm as $p) {
-                    if(isset($_POST['access_rights'][$g])){
-                        if($_POST['access_rights'][$g] == $p)
-                            $access_rights[$g][$p] =1;
+                    if (isset($_POST['access_rights'][$g])) {
+
+                        if ($_POST['access_rights'][$g] == $p)
+                            $access_rights[$g][$p] = 1;
                         else
-                            $access_rights[$g][$p] =0;
-                    }else{
-                        if($p == 'na'){
-                            $access_rights[$g][$p]= 1;
-                        }else{
-                            $access_rights[$g][$p]= 0;
+                            $access_rights[$g][$p] = 0;
+                    }else {
+
+                        if ($p == 'na') {
+                            $access_rights[$g][$p] = 1;
+                        } else {
+                            $access_rights[$g][$p] = 0;
                         }
                     }
                 }
             }
-            $access_rights['public']=isset($_POST['public'])? '1' : '0';
+            if (isset($_POST['access_rights']['all'])) {
+                foreach ($perm as $p1) {
+                    if ($_POST['access_rights']['all'] == $p1)
+                        $access_rights['all'][$p1] = 1;
+                 
+                    
+                }
+            }
+            $access_rights['public'] = isset($_POST['public']) ? 1 : 0;
+
             update_post_meta($post, 'access_rights', $access_rights);
         }
     }
