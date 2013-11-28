@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * Single Post Content Permission for Wiki CPT
+ */
+
 function single_post_filtering() {
     global $post;
 
@@ -16,20 +20,9 @@ function single_post_filtering() {
         if ($access_rights['public'] == 1) {
             return $post->post_content;
         } else {
-            wp_die(__('Please <a href='. wp_login_url($post->guid) .'>Login</a> To View the post Content'));
+            wp_die(__('Please <a href=' . wp_login_url($post->guid) . '>Login</a> To View the post Content'));
         }
     } else {
-
-        if ($access_rights['all']['w'] == 1) {
-            return $post->post_content;
-        } else if ($access_rights['all']['r'] == 1) {
-            show_admin_bar(false);
-            return $post->post_content;
-        } else if ($access_rights['all']['na'] == 1) {
-            wp_redirect(home_url());
-            wp_die(__('You Do not have permission to access this Content'));
-        }
-
 
         foreach ($terms as $term) {
 
@@ -60,6 +53,16 @@ function single_post_filtering() {
             wp_redirect(home_url());
             wp_die(__('You Do not have permission to access this Content'));
         }
+
+        if ($access_rights['all']['w'] == 1) {
+            return $post->post_content;
+        } else if ($access_rights['all']['r'] == 1) {
+            show_admin_bar(false);
+            return $post->post_content;
+        } else if ($access_rights['all']['na'] == 1) {
+            wp_redirect(home_url());
+            wp_die(__('You Do not have permission to access this Content'));
+        }
     }
 }
 
@@ -71,7 +74,9 @@ function get_term_if_exists($term, $userid) {
     return $page_id;
 }
 
-/* removes quick edit from wiki post type */
+/*
+ * removes quick edit from wiki post type
+ */
 
 function remove_quick_edit($actions) {
     global $post;
@@ -89,21 +94,22 @@ function remove_quick_edit($actions) {
 add_filter('page_row_actions', 'remove_quick_edit', 1000);
 
 
-/* Check permissions at Admin side for edit post */
+/*
+ * Check permissions at Admin side for edit post 
+ */
 
 function postCheck() {
     if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         $page = $_GET['post'];
-        
-        $status=get_post_meta($page,'_edit_last');
-       
-        if($status[0] == '1')
-        {    
+
+        $status = get_post_meta($page, '_edit_last');
+
+        if ($status[0] == '1') {
             if (get_post_type($page) == 'wiki' && isset($_GET['message']) != 1) {
-            if (getAdminPanelSidePermission($page) == false) {
-                WP_DIE(__('You Dont have enough access rights to Edit this post'));
+                if (getAdminPanelSidePermission($page) == false) {
+                    WP_DIE(__('You Dont have enough access rights to Edit this post'));
+                }
             }
-        }
         }
     }
 }
@@ -113,7 +119,6 @@ add_action('admin_init', 'postCheck');
 /*
  * Checks the permission of the Logged in User for editing post
  */
-
 
 function getAdminPanelSidePermission($pageID) {
 
@@ -132,43 +137,43 @@ function getAdminPanelSidePermission($pageID) {
         }
     } else {
 
-        if (isset($access_rights['all']['w'])== 1 ) {
-            return true;
-        }
-        else if(isset($access_rights['all']['r']) == 1)
-        {
-            return false;
-        }
-        else if (isset($access_rights['all']['na'])== 1) {
-            return false;
-        }
+
 
         foreach ($terms as $term) {
+
             $ans = get_term_if_exists($term->slug, $user);
 
             if ($ans == $term->slug) {
-                if ($access_rights[$ans]['w'] == 1 ) {
+
+                if ($access_rights[$ans]['w'] == 1) {
                     return true;
-                }
-                else if($access_rights[$ans]['r'] == 1)
-                {
-                    $readOnly=1;
-                }
-                else if ($access_rights[$ans]['na'] == 1) {
+                } else if ($access_rights[$ans]['r'] == 1) {
+                    $readOnly = 1;
+                } else if ($access_rights[$ans]['na'] == 1) {
                     $noflag = 1;
                 }
             } else if ($ans == '' || $ans == null) {
                 $noPublic = 1;
             }
         }
+
+
         if ($noflag == 1) {
             return false;
         }
-        if($readOnly == 1)
-        {
+        if ($readOnly == 1) {
             return false;
         }
+
         if ($noPublic == 1) {
+            return false;
+        }
+
+        if (isset($access_rights['all']['w']) == 1) {
+            return true;
+        } else if (isset($access_rights['all']['r']) == 1) {
+            return false;
+        } else if (isset($access_rights['all']['na']) == 1) {
             return false;
         }
     }
@@ -195,12 +200,6 @@ function getPermission($pageID) {
         }
     } else {
 
-        if ($access_rights['all']['w'] == 1 || $access_rights['all']['r'] == 1) {
-            return true;
-        } else if ($access_rights['all']['na'] == 1) {
-            return false;
-        }
-
         foreach ($terms as $term) {
             $ans = get_term_if_exists($term->slug, $user);
 
@@ -218,6 +217,12 @@ function getPermission($pageID) {
             return false;
         }
         if ($noPublic == 1) {
+            return false;
+        }
+
+        if ($access_rights['all']['w'] == 1 || $access_rights['all']['r'] == 1) {
+            return true;
+        } else if ($access_rights['all']['na'] == 1) {
             return false;
         }
     }

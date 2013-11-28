@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * rtWiki Post Contributers Widget
+ */
+
 class rt_wiki_contributers extends WP_Widget {
 
     function __construct() {
@@ -9,18 +13,11 @@ class rt_wiki_contributers extends WP_Widget {
 
     function widget($args, $instance) {
         extract($args, EXTR_SKIP);
-
-        $contributers = getContributers();
-
-        if (!empty($contributers)) {
+        global $post;
+        if (ifWikiContributers($post->ID)) {
             echo $args['before_widget'];
             echo $args['before_title'].'Contributers'.$args['after_title'];
-            echo '<ul id="contributers">';
-            foreach ($contributers as $contributer) {
-
-                echo '<li>' . $contributer . '</li>';
-            }
-            echo '</ul>';
+            getContributers($post->ID);
             echo $args['after_widget'];
         }
     }
@@ -36,6 +33,10 @@ class rt_wiki_contributers extends WP_Widget {
 
 }
 
+/*
+ * rtWiki Post SubPages List Widget
+ */
+
 class rt_wiki_subPages extends WP_Widget {
 
     function __construct() {
@@ -49,7 +50,7 @@ class rt_wiki_subPages extends WP_Widget {
         $isParent = ifSubPages($post->ID);
         if ($isParent) {
             echo $args['before_widget'];
-            echo $args['before_title'].'Sub Pages'.$args['after_title'];
+            echo $args['before_title'] . 'Sub Pages' . $args['after_title'];
             getSubPages($post->ID, 0);
             echo $args['after_widget'];
         }
@@ -66,6 +67,42 @@ class rt_wiki_subPages extends WP_Widget {
 
 }
 
+/*
+ * rtWiki Post Taxonomies Widget
+ */
+
+class rt_wiki_taxonomies extends WP_Widget {
+
+    function __construct() {
+        $widget_ops = array('classname' => 'rtWiki-taxonomies', 'description' => __('Taxonomies', 'rtCamp'));
+        parent::__construct('rtWiki-taxonomies-widgets', __('rtWiki: Taxonomies', 'rtCamp'), $widget_ops);
+    }
+
+    function widget($args, $instance) {
+        extract($args, EXTR_SKIP);
+        global $post;
+
+        echo $args['before_widget'];
+        echo $args['before_title'] . 'Taxonomies' . $args['after_title'];
+        wiki_custom_taxonomies($post->ID);
+        echo $args['after_widget'];
+    }
+
+    function update($new_instance, $old_instance) {
+        $instance = $old_instance;
+        return $instance;
+    }
+
+    function form($instance) {
+        
+    }
+
+}
+
+/*
+ * rtWiki Single Page Subscription Widget
+ */
+
 class rt_wiki_single_page_subscribe extends WP_Widget {
 
     function __construct() {
@@ -77,7 +114,7 @@ class rt_wiki_single_page_subscribe extends WP_Widget {
         extract($args, EXTR_SKIP);
         global $post;
         echo $args['before_widget'];
-        echo $args['before_title'].'Subscribe For Updates'.$args['after_title'];
+        echo $args['before_title'] . 'Subscribe For Updates' . $args['after_title'];
         if (checkSubscribe() == true) {
 
             echo '<p>You are Subscribed to this Page. </p>';
@@ -101,6 +138,10 @@ class rt_wiki_single_page_subscribe extends WP_Widget {
 
 }
 
+/*
+ * rtWiki SubPage Subscription Widget
+ */
+
 class rt_wiki_subpage_subscribe extends WP_Widget {
 
     function __construct() {
@@ -114,12 +155,14 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
         echo $args['before_widget'];
         $isParent = ifSubPages($post->ID);
         if ($isParent == true) {
-            echo $args['before_title'].'Subscribe For All Pages'.$args['after_title']; ?>   
+            echo $args['before_title'] . 'Subscribe For All Pages' . $args['after_title'];
+            ?>   
             <form id="user-all-subscribe" method="post" action="?allSubscribe=1">
                 <input type="submit" name=post-update-subscribe" value="Subscribe To all subpages" >
                 <input type="hidden" name="update-all-postId"  value=<?php echo $post->ID ?>>
             </form>
-     <?php   }
+            <?php
+        }
         echo $args['after_widget'];
     }
 
@@ -139,6 +182,7 @@ function rt_wiki_register_widgets() {
     register_widget('rt_wiki_subPages');
     register_widget('rt_wiki_single_page_subscribe');
     register_widget('rt_wiki_subpage_subscribe');
+    register_widget('rt_wiki_taxonomies');
 }
 
 add_action('widgets_init', 'rt_wiki_register_widgets');

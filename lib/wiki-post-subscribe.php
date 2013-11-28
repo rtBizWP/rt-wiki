@@ -60,7 +60,7 @@ function updateForAllSubPages() {
     }
 }
 
-add_action('wp', 'updateForAllSubPages');
+//add_action('wp', 'updateForAllSubPages');
 
 function subcribeSubPages($parentId, $lvl, $userId) {
     $args = array('parent' => $parentId, 'post_type' => 'wiki');

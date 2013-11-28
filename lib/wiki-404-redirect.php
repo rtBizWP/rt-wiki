@@ -8,8 +8,12 @@ function rtwiki_get_page_id($name) {
     return $page_id;
 }
 
+
 add_action('template_redirect', 'redirect_404');
-/* Redirect to edit page when page not found in wiki */
+
+/* 
+ * Redirect to edit page when page not found in wiki with parent set 
+ */
 
 function redirect_404() {
     if (is_404() && get_query_var('post_type') == 'wiki') {

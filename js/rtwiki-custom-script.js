@@ -9,7 +9,7 @@ jQuery(document).ready(function() {
 
     jQuery('.rtwiki_all_r').click(function() {
 
-        if (jQuery('.all_r').length === jQuery('.all_r:checked').length) {
+        if (jQuery('.rtwiki_all_r').length === jQuery('.rtwiki_all_r:checked').length) {
             jQuery('#public').attr('checked', 'checked');
         } else {
             jQuery('#public').removeAttr('checked');

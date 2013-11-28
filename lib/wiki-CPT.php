@@ -38,7 +38,7 @@ function create_wiki() {
         'has_archive' => true,
         'query_var' => true,
         'register_meta_box_cb' => null,
-        'taxonomies' => array('category', 'post_tag'),
+        //'taxonomies' => array('category', 'post_tag'),
         'show_ui' => null,
         'menu_icon' => null,
         'permalink_epmask' => EP_PERMALINK,
@@ -67,6 +67,10 @@ function wiki_permission_metabox() {
     add_meta_box('wiki_post_access', 'Permissions', 'display_wiki_post_access_metabox', 'wiki', 'normal', 'high');
 }
 
+
+/*
+ *  Permission And Group MetaBox for wiki CPT
+ */
 function display_wiki_post_access_metabox($post) {
     wp_nonce_field(plugin_basename(__FILE__), $post->post_type . '_noncename');
 
