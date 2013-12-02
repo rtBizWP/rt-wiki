@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * 
+ * Different Functions for showing sidebar widgets content
+ * in wiki CPT single page.
+ * 
+ */
+/*
+ * Check if contributers exists or not 
+ */
+
 function ifWikiContributers($postid) {
     if (get_query_var('post_type') == 'wiki') {
         $revision = wp_get_post_revisions($postid);
@@ -16,15 +26,15 @@ function ifWikiContributers($postid) {
 
 function getContributers($postid) {
     if (get_query_var('post_type') == 'wiki') {
-       
+
         $revision = wp_get_post_revisions($postid);
-        $authorId = array();       
+        $authorId = array();
         echo '<ul id="contributers">';
         foreach ($revision as $revisions) {
-           if (!in_array($revisions->post_author, $authorId, true)) {
+            if (!in_array($revisions->post_author, $authorId, true)) {
                 $id = $revisions->post_author;
                 echo '<li><a href="' . get_author_posts_url($id) . '">' . get_userdata($id)->display_name . '</a></li>';
-               $authorId[] = $revisions->post_author;
+                $authorId[] = $revisions->post_author;
             }
         }
         echo '</ul>';
@@ -32,7 +42,7 @@ function getContributers($postid) {
 }
 
 /*
- * Get SubPages
+ * Get Wiki post  SubPages
  */
 
 function getSubPages($parentId, $lvl) {
@@ -55,6 +65,10 @@ function getSubPages($parentId, $lvl) {
     }
 }
 
+/*
+ * Get wiki post taxonomies and its terms list 
+ */
+
 function wiki_custom_taxonomies($postid) {
 
     $post = &get_post($postid);
@@ -74,4 +88,17 @@ function wiki_custom_taxonomies($postid) {
     $out .= "</ul>";
     echo $out;
 }
-?>
+
+function getTopParent() {
+    global $post;
+    
+    if ($post->post_parent) {
+        $ancestors = get_post_ancestors($post->ID);
+        var_dump($ancestors);
+        $root = count($ancestors) - 1;
+        $parent = $ancestors[$root];
+        } else {
+        $parent = $post->ID;
+    }
+    echo $parent;
+}

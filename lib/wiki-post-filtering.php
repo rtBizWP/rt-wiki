@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * 
+ * Checks for the permission of each post at admin side
+ * and frontend side.Display content according to it
+ * 
+ */
+
+
+
 /*
  * Single Post Content Permission for Wiki CPT
  */
@@ -14,7 +23,6 @@ function single_post_filtering() {
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => false));
     $access_rights = get_post_meta($post->ID, 'access_rights', true);
-
 
     if (!is_user_logged_in()) {
         if ($access_rights['public'] == 1) {
@@ -136,8 +144,6 @@ function getAdminPanelSidePermission($pageID) {
             return false;
         }
     } else {
-
-
 
         foreach ($terms as $term) {
 

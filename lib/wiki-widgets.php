@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * 
+ *Custom Widgets for rtWiki Plugin. 
+ * 
+ * 
+ **/
+
+
+
 /*
  * rtWiki Post Contributers Widget
  */
@@ -81,7 +90,6 @@ class rt_wiki_taxonomies extends WP_Widget {
     function widget($args, $instance) {
         extract($args, EXTR_SKIP);
         global $post;
-
         echo $args['before_widget'];
         echo $args['before_title'] . 'Taxonomies' . $args['after_title'];
         wiki_custom_taxonomies($post->ID);

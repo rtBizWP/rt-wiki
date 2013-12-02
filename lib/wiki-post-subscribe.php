@@ -1,9 +1,10 @@
 <?php
 
-/*
+/**
  * Checks if subscribe ID is in the list or not 
+ * @global type $post
+ * @return boolean
  */
-
 function checkSubscribe() {
     global $post;
     $subscriberList = get_post_meta($post->ID, 'subcribers_list', true);
@@ -15,10 +16,10 @@ function checkSubscribe() {
     }
 }
 
-/*
+/**
  * Update subscriber list meta value for the particular post ID. 
+ * @global type $pagenow
  */
-
 function update() {
     global $pagenow;
     if (isset($_REQUEST['subscribe']) == '1') {
@@ -26,13 +27,14 @@ function update() {
         if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
             wp_redirect(wp_login_url(), 302);
         } else {
-            if(isset($_POST['update-postId']))
-            {
-            $id = $_POST['update-postId'];
-            $userId = get_current_user_id();
-            $subscribeId = get_post_meta($id, 'subcribers_list', true);
-            $subscribeId[] = $userId;
-            update_post_meta($id, 'subcribers_list', $subscribeId);
+            if (isset($_POST['update-postId'])) {
+                $id = $_POST['update-postId'];
+                $userId = get_current_user_id();
+                $subscribeId = get_post_meta($id, 'subcribers_list', true);
+                if (!in_array($id, $subscribeId, true)) {
+                    $subscribeId[] = $userId;
+                    update_post_meta($id, 'subcribers_list', $subscribeId);
+                }
             }
         }
     }
@@ -40,11 +42,10 @@ function update() {
 
 add_action('wp', 'update');
 
-
-/*
+/**
  * Update subscriber list meta value for the Sub Pages. 
+ * @global type $pagenow
  */
-
 function updateForAllSubPages() {
     global $pagenow;
     if (isset($_REQUEST['allSubscribe']) == '1') {
@@ -54,7 +55,7 @@ function updateForAllSubPages() {
             $id = $_POST['update-all-postId'];
 
             $userId = get_current_user_id();
-            //add_user_meta($userId, 'updates_for_all_pages', 1, false);
+            update_post_meta($id,'subpages_tracking',1);
             subcribeSubPages($id, 0, $userId);
         }
     }
@@ -85,6 +86,12 @@ function subcribeSubPages($parentId, $lvl, $userId) {
     }
 }
 
+/**
+ * Check if pages have any sub pages/child page
+ * 
+ * @param type $parentId
+ * @return boolean
+ */
 function ifSubPages($parentId) {
     $args = array('parent' => $parentId, 'post_type' => 'wiki');
     $pages = get_pages($args);
@@ -95,10 +102,13 @@ function ifSubPages($parentId) {
         return false;
 }
 
-/*
- * Send mail On post Update having body as diff of content  
+/**
+ * Send mail On post Update having body as diff of content 
+ * 
+ * @global type $post
+ * @param type $post
+ * @param type $email
  */
-
 function post_changes_send_mail($post, $email) {
     global $post;
     $revision = wp_get_post_revisions($post);
@@ -118,7 +128,7 @@ function post_changes_send_mail($post, $email) {
             $oldTitle[] = $revisions->post_title;
         }
     }
-    
+
     $args = array(
         'title' => 'Differences',
         'title_left' => $oldTitle[1],

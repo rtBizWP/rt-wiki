@@ -1,11 +1,14 @@
 <?php
+/**
+ * Creates A wiki CPT , along with permissions metabox .
+ * Adds email address custom field to user-group taxonomy.
+ */
 require_once dirname(__FILE__) . '/user-groups.php';
 require_once dirname(__FILE__) . '/wiki-post-filtering.php';
 
-/*
+/**
  * Creates wiki named CPT.
  */
-
 add_action('init', 'create_wiki');
 
 function create_wiki() {
@@ -67,10 +70,10 @@ function wiki_permission_metabox() {
     add_meta_box('wiki_post_access', 'Permissions', 'display_wiki_post_access_metabox', 'wiki', 'normal', 'high');
 }
 
-
 /*
  *  Permission And Group MetaBox for wiki CPT
  */
+
 function display_wiki_post_access_metabox($post) {
     wp_nonce_field(plugin_basename(__FILE__), $post->post_type . '_noncename');
 
@@ -141,8 +144,6 @@ function rtp_wiki_permission_save($post) {
             foreach ($terms as $term) {
                 $group[] = $term->name;
             }
-            // array_unshift($group, 'all');
-            
 
             foreach ($group as $g) {
                 foreach ($perm as $p) {
@@ -166,8 +167,6 @@ function rtp_wiki_permission_save($post) {
                 foreach ($perm as $p1) {
                     if ($_POST['access_rights']['all'] == $p1)
                         $access_rights['all'][$p1] = 1;
-                 
-                    
                 }
             }
             $access_rights['public'] = isset($_POST['public']) ? 1 : 0;
@@ -175,9 +174,59 @@ function rtp_wiki_permission_save($post) {
             update_post_meta($post, 'access_rights', $access_rights);
         }
     }
+
+    /* Checking and setting subscribers list for the post */
+
+    $subscriberList = get_post_meta($post->ID, 'subcribers_list', true);
+    $userId = get_current_user_id();
+    $terms = get_terms('user-group', array('hide_empty' => false));
+    $access_rights = get_post_meta($post->ID, 'access_rights', true);
+    $userflag = false;
+
+
+
+    if (in_array($userId, $subscriberList, true)) {
+        $userflag = true;
+    }
+
+    if ($userflag == true) {
+        foreach ($terms as $term) {
+            $ans = get_term_if_exists($term->slug, $userId);
+            if ($ans == $term->slug) {
+
+                if ($access_rights[$ans]['na'] == 1) {
+
+                    foreach ($subscriberList as $subscriber) {
+                        if ($subscriber == $userId)
+                            unset($subscriber);
+                    }
+                }
+
+                else if ($access_rights[$ans]['w'] == 1 || $access_rights[$ans]['r'] == 1) {
+                    if (!in_array($userId, $subscriberList, true)) {
+                        $subscribeId[] = $userId;
+                        update_post_meta($userId, 'subcribers_list', $subscribeId);
+                    }
+                    if (!in_array($userId, $subscriberList, true)) {
+                        $parent_ID = $post->post_parent;
+                        if ($parent_ID != '0') {
+                            $subPages = get_post_meta($parent_ID, 'subpages_tracking', true);
+                            if ($subPages == 1) {
+                                update_post_meta($post->ID, 'subcribers_list', $userId);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /* Subscribe page if parent subscription is set */
 }
 
 add_action('save_post', 'rtp_wiki_permission_save');
+
+
 
 
 /*
@@ -207,7 +256,7 @@ function user_group_taxonomy_edit_meta_field($term) {
     <tr class="form-field">
         <th scope="row" valign="top"><label for="term_meta[email_address]"><?php _e('Email Address', 'rtCamp'); ?></label></th>
         <td>
-            <input type="text" name="user-group[email_address]" id="user-group[email_address]" value="<?php echo esc_attr($term_meta[$t_id]['email_address']) ? esc_attr($term_meta[$t_id]['email_address']) : ''; ?>">
+            <input type="text" name="user-group[email_address]" id="user-group[email_address]" value="<?php echo esc_attr($term_meta[$t_id]['email_address']) ? esc_attr($term_meta[$t_id]['email_address']) : ''; ?>" />
             <p class="description"><?php _e('Enter a email address for this field', 'rtcamp'); ?></p>
         </td>
     </tr>

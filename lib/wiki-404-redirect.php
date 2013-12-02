@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * 
+ * Check for the page in wiki CPT. If not found(404), it would redirect to edit post page 
+ * with title and parent properly set.
+ * 
+ * @global type $wpdb
+ * @param type $name
+ * @return type
+ * 
+ * 
+ **/
+
+
 
 
 function rtwiki_get_page_id($name) {
@@ -8,16 +21,15 @@ function rtwiki_get_page_id($name) {
     return $page_id;
 }
 
-
 add_action('template_redirect', 'redirect_404');
 
-/* 
+/*
  * Redirect to edit page when page not found in wiki with parent set 
  */
 
 function redirect_404() {
     if (is_404() && get_query_var('post_type') == 'wiki') {
-        
+
         $page = $_SERVER['REQUEST_URI'];
         $segments = explode('/', trim($page, '/'));
         if ($segments[0] == 'wiki') {
@@ -25,16 +37,9 @@ function redirect_404() {
             for ($i = 1; $i < count($segments); $i++) {
 
                 $page = rtwiki_get_page_id($segments[$i]);
-
-                var_dump($page);
                 if ($i == 1) {
-
-
-                    if ($page != null) {
-                        
-                    } else {
-
-                        $my_post1 = array(
+                    if ($page == null) {
+                             $my_post1 = array(
                             'post_title' => $segments[$i],
                             'post_content' => '',
                             'post_status' => 'publish',
@@ -48,11 +53,8 @@ function redirect_404() {
 
                     $pid = $i - 1;
                     $parentId = rtwiki_get_page_id($segments[$pid]);
-                    if ($page != null) {
-                        
-                    } else {
-
-                        $my_post = array(
+                    if ($page == null)  {
+                            $my_post = array(
                             'post_title' => $segments[$i],
                             'post_content' => '',
                             'post_status' => 'publish',

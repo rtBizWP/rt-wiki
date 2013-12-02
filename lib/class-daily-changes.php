@@ -5,6 +5,7 @@
  *
  * @author prannoy
  */
+
 if (defined('WP_CLI') && WP_CLI) {
 
     class daily_changes extends WP_CLI_COMMAND {

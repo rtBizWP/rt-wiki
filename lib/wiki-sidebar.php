@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * Register rtWiki custom sidebar in the widget area.
+ * 
+ */
+
+
 function rt_wiki_sidebar() {
 
     register_sidebar(array(
