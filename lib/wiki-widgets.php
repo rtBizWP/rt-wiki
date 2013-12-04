@@ -2,12 +2,9 @@
 
 /**
  * 
- *Custom Widgets for rtWiki Plugin. 
+ * Custom Widgets for rtWiki Plugin.  
  * 
- * 
- **/
-
-
+ */
 
 /*
  * rtWiki Post Contributers Widget
@@ -25,7 +22,7 @@ class rt_wiki_contributers extends WP_Widget {
         global $post;
         if (ifWikiContributers($post->ID)) {
             echo $args['before_widget'];
-            echo $args['before_title'].'Contributers'.$args['after_title'];
+            echo $args['before_title'] . 'Contributers' . $args['after_title'];
             getContributers($post->ID);
             echo $args['after_widget'];
         }
@@ -57,7 +54,9 @@ class rt_wiki_subPages extends WP_Widget {
         extract($args, EXTR_SKIP);
         global $post;
         $isParent = ifSubPages($post->ID);
+
         if ($isParent) {
+
             echo $args['before_widget'];
             echo $args['before_title'] . 'Sub Pages' . $args['after_title'];
             getSubPages($post->ID, 0);
@@ -163,15 +162,23 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
         echo $args['before_widget'];
         $isParent = ifSubPages($post->ID);
         if ($isParent == true) {
-            echo $args['before_title'] . 'Subscribe For All Pages' . $args['after_title'];
-            ?>   
-            <form id="user-all-subscribe" method="post" action="?allSubscribe=1">
-                <input type="submit" name=post-update-subscribe" value="Subscribe To all subpages" >
-                <input type="hidden" name="update-all-postId"  value=<?php echo $post->ID ?>>
-            </form>
-            <?php
+            $parent_ID = $post->post_parent;
+            if ($parent_ID != '0' || $parent_ID != 0) {
+                $userId = get_current_user_id();
+                $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true);
+                if (!in_array($userId, $parentSubpageTracking, true)) {
+
+                    echo $args['before_title'] . 'Subscribe For All Pages' . $args['after_title'];
+                    ?>   
+                    <form id="user-all-subscribe" method="post" action="?allSubscribe=1">
+                        <input type="submit" name=post-update-subscribe" value="Subscribe To all subpages" >
+                        <input type="hidden" name="update-all-postId"  value=<?php echo $post->ID ?>>
+                    </form>
+                    <?php
+                }
+                echo $args['after_widget'];
+            }
         }
-        echo $args['after_widget'];
     }
 
     function update($new_instance, $old_instance) {

@@ -39,7 +39,6 @@ function update() {
         }
     }
 }
-
 add_action('wp', 'update');
 
 /**
@@ -53,15 +52,18 @@ function updateForAllSubPages() {
             wp_redirect(wp_login_url(), 302);
         } else {
             $id = $_POST['update-all-postId'];
-
             $userId = get_current_user_id();
-            update_post_meta($id,'subpages_tracking',1);
+            $subpagesTrackingList = get_post_meta($id, 'subpages_tracking', true);
+            if (!in_array($id, $subpagesTrackingList, true)) {
+                $subpagesTrackingList[] = $userId;
+                update_post_meta($id, 'subpages_tracking', $subpagesTrackingList);
+            }
             subcribeSubPages($id, 0, $userId);
         }
     }
 }
 
-//add_action('wp', 'updateForAllSubPages');
+add_action('wp', 'updateForAllSubPages');
 
 function subcribeSubPages($parentId, $lvl, $userId) {
     $args = array('parent' => $parentId, 'post_type' => 'wiki');
@@ -75,11 +77,14 @@ function subcribeSubPages($parentId, $lvl, $userId) {
 
             if ($permission == true) {
                 $subscribeId = get_post_meta($page->ID, 'subcribers_list', true);
+                $subpagesTrackingList = get_post_meta($page->ID, 'subpages_tracking', true);
                 if (!in_array($userId, $subscribeId, true)) {
                     $subscribeId[] = $userId;
                 }
-
-                update_post_meta($page->ID, 'subcribers_list', $subscribeId);
+                if (!in_array($userId, $subpagesTrackingList, true)) {
+                    $subpagesTrackingList[] = $userId;
+                    update_post_meta($page->ID, 'subpages_tracking', $subpagesTrackingList);
+                }
             }
             subcribeSubPages($page->ID, $lvl, $userId);
         }

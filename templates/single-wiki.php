@@ -15,7 +15,7 @@ echo $content;
 
 /* Wiki Sidebar */
 dynamic_sidebar('rtWiki');
-getTopParent();
+//getTopParent();
 
 
 /* Footer */

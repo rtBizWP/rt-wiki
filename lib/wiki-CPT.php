@@ -178,6 +178,7 @@ function rtp_wiki_permission_save($post) {
     /* Checking and setting subscribers list for the post */
 
     $subscriberList = get_post_meta($post->ID, 'subcribers_list', true);
+    $subpageTrackingList = get_post_meta($post->ID, 'subpages_tracking', true);
     $userId = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => false));
     $access_rights = get_post_meta($post->ID, 'access_rights', true);
@@ -200,19 +201,21 @@ function rtp_wiki_permission_save($post) {
                         if ($subscriber == $userId)
                             unset($subscriber);
                     }
+
+                    foreach ($subpageTrackingList as $subpagetracker) {
+                        if ($subpagetracker == $userId)
+                            unset($subpagetracker);
+                    }
                 }
 
                 else if ($access_rights[$ans]['w'] == 1 || $access_rights[$ans]['r'] == 1) {
-                    if (!in_array($userId, $subscriberList, true)) {
-                        $subscribeId[] = $userId;
-                        update_post_meta($userId, 'subcribers_list', $subscribeId);
-                    }
-                    if (!in_array($userId, $subscriberList, true)) {
-                        $parent_ID = $post->post_parent;
-                        if ($parent_ID != '0') {
-                            $subPages = get_post_meta($parent_ID, 'subpages_tracking', true);
-                            if ($subPages == 1) {
-                                update_post_meta($post->ID, 'subcribers_list', $userId);
+                    $parent_ID = $post->post_parent;
+                    if ($parent_ID != '0' || $parent_ID != 0) {
+                        $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true);
+                        if (in_array($userId, $parentSubpageTracking,true)) {
+                            if (!in_array($userId, $subscriberList, true)) {
+                                $subscribeId[] = $userId;
+                                update_post_meta($post->ID, 'subcribers_list', $subscribeId);
                             }
                         }
                     }
@@ -220,8 +223,6 @@ function rtp_wiki_permission_save($post) {
             }
         }
     }
-
-    /* Subscribe page if parent subscription is set */
 }
 
 add_action('save_post', 'rtp_wiki_permission_save');
