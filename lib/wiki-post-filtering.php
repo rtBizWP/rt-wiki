@@ -23,7 +23,7 @@ function single_post_filtering() {
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => false));
     $access_rights = get_post_meta($post->ID, 'access_rights', true);
-
+   
     if (!is_user_logged_in()) {
         if ($access_rights['public'] == 1) {
             return $post->post_content;
@@ -31,7 +31,7 @@ function single_post_filtering() {
             wp_die(__('Please <a href=' . wp_login_url($post->guid) . '>Login</a> To View the post Content'));
         }
     } else {
-
+   
         foreach ($terms as $term) {
 
             $ans = get_term_if_exists($term->slug, $user);
@@ -53,7 +53,6 @@ function single_post_filtering() {
             show_admin_bar(false);
             return $post->post_content;
         } else if ($noGroup == 1) {
-            //return $post->post_content;
             wp_redirect(home_url());
             wp_die(__('No Permissions found to access this Content'));
         } else if ($noflag == 1) {

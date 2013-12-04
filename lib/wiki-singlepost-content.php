@@ -6,6 +6,7 @@
  * in wiki CPT single page.
  * 
  */
+
 /*
  * Check if contributers exists or not 
  */
@@ -89,12 +90,16 @@ function wiki_custom_taxonomies($postid) {
     echo $out;
 }
 
+
+/* 
+ * gets Top level Parent 
+ */
+
 function getTopParent() {
     global $post;
     
     if ($post->post_parent) {
         $ancestors = get_post_ancestors($post->ID);
-        var_dump($ancestors);
         $root = count($ancestors) - 1;
         $parent = $ancestors[$root];
         } else {

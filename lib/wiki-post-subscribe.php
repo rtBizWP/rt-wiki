@@ -54,10 +54,18 @@ function updateForAllSubPages() {
             $id = $_POST['update-all-postId'];
             $userId = get_current_user_id();
             $subpagesTrackingList = get_post_meta($id, 'subpages_tracking', true);
+            $pageSubsciptionList=get_post_meta($id,'subcribers_list',true);
+            
+            if(!in_array($id, $pageSubsciptionList))
+            {
+                  $pageSubsciptionList[]=$id;
+                  update_post_meta($id, 'subpages_tracking', $pageSubsciptionList);
+            }
             if (!in_array($id, $subpagesTrackingList, true)) {
                 $subpagesTrackingList[] = $userId;
                 update_post_meta($id, 'subpages_tracking', $subpagesTrackingList);
             }
+            
             subcribeSubPages($id, 0, $userId);
         }
     }
@@ -80,6 +88,7 @@ function subcribeSubPages($parentId, $lvl, $userId) {
                 $subpagesTrackingList = get_post_meta($page->ID, 'subpages_tracking', true);
                 if (!in_array($userId, $subscribeId, true)) {
                     $subscribeId[] = $userId;
+                    update_post_meta($page->ID, 'subcribers_list', $subscribeId);
                 }
                 if (!in_array($userId, $subpagesTrackingList, true)) {
                     $subpagesTrackingList[] = $userId;
