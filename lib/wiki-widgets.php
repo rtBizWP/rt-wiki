@@ -5,7 +5,6 @@
  * Custom Widgets for rtWiki Plugin.  
  * 
  */
-
 /*
  * rtWiki Post Contributers Widget
  */
@@ -161,29 +160,37 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
         global $post;
         echo $args['before_widget'];
         $isParent = ifSubPages($post->ID);
+
         if ($isParent == true) {
             $parent_ID = $post->post_parent;
-            if ($parent_ID != '0' || $parent_ID != 0) {
-                $userId = get_current_user_id();
-                $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true);
-                $pageSubscription=get_post_meta($post->ID,'subcribers_list',true);
-                echo $args['before_title'] . 'Subscribe For All Pages' . $args['after_title'];
-                if (!in_array($userId, $parentSubpageTracking, true) && !in_array($userId,$pageSubscription,true)) { ?>
-                     
+
+
+            $userId = get_current_user_id(); //current user id
+            $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true); //Parent Post meta
+            $pageSubscription = get_post_meta($post->ID, 'subcribers_list', true); // Current post meta
+            
+            echo $args['before_title'] . 'Subscribe For All Pages' . $args['after_title'];
+            
+            /* Check whether parent post has subpage tracking meta key */
+            
+                /* Check whether current post  has userid in page and parent page meta value */  
+                if (!in_array($userId, $parentSubpageTracking, true) && !in_array($userId, $pageSubscription, true)) {
+                    ?>
+
                     <form id="user-all-subscribe" method="post" action="?allSubscribe=1">
                         <input type="submit" name=post-update-subscribe" value="Subscribe To all subpages" >
                         <input type="hidden" name="update-all-postId"  value=<?php echo $post->ID ?>>
                     </form>
                     <?php
-                }
-                else
-                {
+                } else {
                     echo 'You Are Already subscriped to this page and its sub pages';
                 }
-             
-            }
+        
+
+            
+           
         }
-           echo $args['after_widget'];
+       echo $args['after_widget'];  
     }
 
     function update($new_instance, $old_instance) {

@@ -98,7 +98,7 @@ function remove_quick_edit($actions) {
     return $actions;
 }
 
-add_filter('page_row_actions', 'remove_quick_edit', 1000);
+add_filter('page_row_actions', 'remove_quick_edit', 99);
 
 
 /*
@@ -196,7 +196,7 @@ function getPermission($pageID) {
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => false));
     $access_rights = get_post_meta($pageID, 'access_rights', true);
-
+    
     if (!is_user_logged_in()) {
         if ($access_rights['public'] == 1) {
             return true;

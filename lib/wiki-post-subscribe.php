@@ -56,10 +56,10 @@ function updateForAllSubPages() {
             $subpagesTrackingList = get_post_meta($id, 'subpages_tracking', true);
             $pageSubsciptionList=get_post_meta($id,'subcribers_list',true);
             
-            if(!in_array($id, $pageSubsciptionList))
+            if(!in_array($userId, $pageSubsciptionList,true))
             {
-                  $pageSubsciptionList[]=$id;
-                  update_post_meta($id, 'subpages_tracking', $pageSubsciptionList);
+                  $pageSubsciptionList[]=$userId;
+                  update_post_meta($id, 'subcribers_list', $pageSubsciptionList);
             }
             if (!in_array($id, $subpagesTrackingList, true)) {
                 $subpagesTrackingList[] = $userId;
