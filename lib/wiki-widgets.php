@@ -5,6 +5,7 @@
  * Custom Widgets for rtWiki Plugin.  
  * 
  */
+
 /*
  * rtWiki Post Contributers Widget
  */
@@ -19,12 +20,14 @@ class rt_wiki_contributers extends WP_Widget {
     function widget($args, $instance) {
         extract($args, EXTR_SKIP);
         global $post;
+        echo $args['before_widget'];
         if (ifWikiContributers($post->ID)) {
-            echo $args['before_widget'];
+            
             echo $args['before_title'] . 'Contributers' . $args['after_title'];
             getContributers($post->ID);
-            echo $args['after_widget'];
+            
         }
+        echo $args['after_widget'];
     }
 
     function update($new_instance, $old_instance) {
@@ -53,14 +56,15 @@ class rt_wiki_subPages extends WP_Widget {
         extract($args, EXTR_SKIP);
         global $post;
         $isParent = ifSubPages($post->ID);
-
+        echo $args['before_widget'];
         if ($isParent) {
-
-            echo $args['before_widget'];
-            echo $args['before_title'] . 'Sub Pages' . $args['after_title'];
-            getSubPages($post->ID, 0);
-            echo $args['after_widget'];
+            
+            if (rt_wiki_subpages_check($post->ID, true) == true) {
+                echo $args['before_title'] . 'Sub Pages' . $args['after_title'];
+                getSubPages($post->ID, 0);
+            }
         }
+        echo $args['after_widget'];
     }
 
     function update($new_instance, $old_instance) {
@@ -162,18 +166,20 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
         $isParent = ifSubPages($post->ID);
 
         if ($isParent == true) {
-            $parent_ID = $post->post_parent;
+
+            if (rt_wiki_subpages_check($post->ID, true) == true) {
+                $parent_ID = $post->post_parent;
 
 
-            $userId = get_current_user_id(); //current user id
-            $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true); //Parent Post meta
-            $pageSubscription = get_post_meta($post->ID, 'subcribers_list', true); // Current post meta
-            
-            echo $args['before_title'] . 'Subscribe For All Pages' . $args['after_title'];
-            
-            /* Check whether parent post has subpage tracking meta key */
-            
-                /* Check whether current post  has userid in page and parent page meta value */  
+                $userId = get_current_user_id(); //current user id
+                $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true); //Parent Post meta
+                $pageSubscription = get_post_meta($post->ID, 'subcribers_list', true); // Current post meta
+
+                echo $args['before_title'] . 'Subscribe For All Pages' . $args['after_title'];
+
+                /* Check whether parent post has subpage tracking meta key */
+
+                /* Check whether current post  has userid in page and parent page meta value */
                 if (!in_array($userId, $parentSubpageTracking, true) && !in_array($userId, $pageSubscription, true)) {
                     ?>
 
@@ -183,15 +189,14 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
                     </form>
                     <?php
                 } else {
-                    echo 'You Are Already subscriped to this page and its sub pages';
+                    echo 'You Are Subscribed to this page and its sub pages';
                 }
-        
-
+            }
             
-           
         }
-       echo $args['after_widget'];  
+        echo $args['after_widget'];
     }
+    
 
     function update($new_instance, $old_instance) {
         $instance = $old_instance;

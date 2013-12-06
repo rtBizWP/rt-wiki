@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * 
  * Different Functions for showing sidebar widgets content
  * in wiki CPT single page.
@@ -90,19 +90,18 @@ function wiki_custom_taxonomies($postid) {
     echo $out;
 }
 
-
-/* 
+/*
  * gets Top level Parent 
  */
 
 function getTopParent() {
     global $post;
-    
+
     if ($post->post_parent) {
         $ancestors = get_post_ancestors($post->ID);
         $root = count($ancestors) - 1;
         $parent = $ancestors[$root];
-        } else {
+    } else {
         $parent = $post->ID;
     }
     echo $parent;

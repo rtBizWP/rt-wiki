@@ -23,15 +23,16 @@ function single_post_filtering() {
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => false));
     $access_rights = get_post_meta($post->ID, 'access_rights', true);
-   
+    
     if (!is_user_logged_in()) {
+        
         if ($access_rights['public'] == 1) {
             return $post->post_content;
         } else {
             wp_die(__('Please <a href=' . wp_login_url($post->guid) . '>Login</a> To View the post Content'));
         }
     } else {
-   
+        
         foreach ($terms as $term) {
 
             $ans = get_term_if_exists($term->slug, $user);
@@ -52,21 +53,23 @@ function single_post_filtering() {
         if ($readOnly == 1) {
             show_admin_bar(false);
             return $post->post_content;
-        } else if ($noGroup == 1) {
-            wp_redirect(home_url());
-            wp_die(__('No Permissions found to access this Content'));
-        } else if ($noflag == 1) {
-
+        }  else if ($noflag == 1) {
+            
             wp_redirect(home_url());
             wp_die(__('You Do not have permission to access this Content'));
         }
-
+        else if ($noGroup == 1) {
+            wp_redirect(home_url());
+            wp_die(__('No Permissions found to access this Content'));
+        }
+         
         if ($access_rights['all']['w'] == 1) {
             return $post->post_content;
         } else if ($access_rights['all']['r'] == 1) {
             show_admin_bar(false);
             return $post->post_content;
         } else if ($access_rights['all']['na'] == 1) {
+            
             wp_redirect(home_url());
             wp_die(__('You Do not have permission to access this Content'));
         }

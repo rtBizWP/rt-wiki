@@ -39,6 +39,7 @@ function update() {
         }
     }
 }
+
 add_action('wp', 'update');
 
 /**
@@ -54,18 +55,17 @@ function updateForAllSubPages() {
             $id = $_POST['update-all-postId'];
             $userId = get_current_user_id();
             $subpagesTrackingList = get_post_meta($id, 'subpages_tracking', true);
-            $pageSubsciptionList=get_post_meta($id,'subcribers_list',true);
-            
-            if(!in_array($userId, $pageSubsciptionList,true))
-            {
-                  $pageSubsciptionList[]=$userId;
-                  update_post_meta($id, 'subcribers_list', $pageSubsciptionList);
+            $pageSubsciptionList = get_post_meta($id, 'subcribers_list', true);
+
+            if (!in_array($userId, $pageSubsciptionList, true)) {
+                $pageSubsciptionList[] = $userId;
+                update_post_meta($id, 'subcribers_list', $pageSubsciptionList);
             }
             if (!in_array($id, $subpagesTrackingList, true)) {
                 $subpagesTrackingList[] = $userId;
                 update_post_meta($id, 'subpages_tracking', $subpagesTrackingList);
             }
-            
+
             subcribeSubPages($id, 0, $userId);
         }
     }
@@ -116,6 +116,26 @@ function ifSubPages($parentId) {
         return false;
 }
 
+function rt_wiki_subpages_check($parentId,$subPage) {
+    $args = array('parent' => $parentId, 'post_type' => 'wiki');
+    $subPageFlag=$subPage;
+    $pages = get_pages($args);
+    if ($pages) {
+        foreach ($pages as $page) {
+            $permission = getPermission($page->ID);
+            if ($permission == true) {
+                return true;
+            }
+            else {
+            $subPageFlag=false;}
+            
+             getSubPages($page->ID,$subPageFlag);
+        }
+        if($subPageFlag == false)
+            return false;
+    }
+}
+
 /**
  * Send mail On post Update having body as diff of content 
  * 
@@ -124,7 +144,7 @@ function ifSubPages($parentId) {
  * @param type $email
  */
 function post_changes_send_mail($post, $email) {
-    global $post;
+    //global $post;
     $revision = wp_get_post_revisions($post);
     $latestContent = array();
     $oldContent = array();
@@ -151,12 +171,12 @@ function post_changes_send_mail($post, $email) {
     if (!empty($latestContent) && !empty($oldContent)) {
         $diff_table = wp_text_diff($oldContent[1], $latestContent[0], $args);
         add_filter('wp_mail_content_type', 'set_html_content_type');
-        wp_mail($email, 'Diff', $diff_table);
+        wp_mail($email, 'Difference of Page >>> '.$post->post_title, $diff_table);
         remove_filter('wp_mail_content_type', 'set_html_content_type');
     }
 }
 
-//add_action('wp', 'post_changes_send_mail');
+add_action('wp', 'post_changes_send_mail');
 
 function set_html_content_type() {
 

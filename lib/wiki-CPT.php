@@ -187,6 +187,7 @@ function rtp_wiki_permission_save($post) {
             if (in_array($userId, $subpageTrackingList, true)) {
                 $subPageStatus = true;
             }
+            
             /*
              * If user is already subscribed to this page,check for any changes according to the permissions set
              */

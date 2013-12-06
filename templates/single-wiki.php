@@ -15,7 +15,7 @@ $content = single_post_filtering();
 echo $content;
 
 /* Wiki Sidebar */
-dynamic_sidebar('rtWiki');
+dynamic_sidebar('rtWiki Widget Area');
 
 
 /* Footer */
