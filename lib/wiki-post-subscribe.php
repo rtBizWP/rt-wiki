@@ -22,10 +22,12 @@ function checkSubscribe() {
  */
 function update() {
     global $pagenow;
+    global $post;
     if (isset($_REQUEST['subscribe']) == '1') {
-
+        
         if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
-            wp_redirect(wp_login_url(), 302);
+            wp_redirect(wp_login_url($post->guid), 302);
+           
         } else {
             if (isset($_POST['update-postId'])) {
                 $id = $_POST['update-postId'];
@@ -48,9 +50,10 @@ add_action('wp', 'update');
  */
 function updateForAllSubPages() {
     global $pagenow;
+    global $post;
     if (isset($_REQUEST['allSubscribe']) == '1') {
         if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
-            wp_redirect(wp_login_url(), 302);
+            wp_redirect(wp_login_url($post->guid), 302);
         } else {
             $id = $_POST['update-all-postId'];
             $userId = get_current_user_id();
@@ -123,6 +126,7 @@ function rt_wiki_subpages_check($parentId,$subPage) {
     if ($pages) {
         foreach ($pages as $page) {
             $permission = getPermission($page->ID);
+            
             if ($permission == true) {
                 return true;
             }

@@ -56,11 +56,11 @@ function single_post_filtering() {
         }  else if ($noflag == 1) {
             
             wp_redirect(home_url());
-            wp_die(__('You Do not have permission to access this Content'));
+            wp_die(__('You Do not have permission to access this Content....<a href='. admin_url().'edit.php?post_type=wiki >Back to admin panel</a>'));
         }
         else if ($noGroup == 1) {
             wp_redirect(home_url());
-            wp_die(__('No Permissions found to access this Content'));
+            wp_die(__('No Permissions found to access this Content...<a href='. admin_url().'edit.php?post_type=wiki >Back to admin panel</a>'));
         }
          
 //        if ($access_rights['all']['w'] == 1) {
@@ -169,16 +169,10 @@ function getAdminPanelSidePermission($pageID) {
         }
 
 
-        if ($noflag == 1) {
+        if ($noflag == 1 || $readOnly == 1 || $noPublic == 1) {
             return false;
         }
-        if ($readOnly == 1) {
-            return false;
-        }
-
-        if ($noPublic == 1) {
-            return false;
-        }
+        
 
 //        if (isset($access_rights['all']['w']) == 1) {
 //            return true;

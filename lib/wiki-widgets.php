@@ -176,9 +176,6 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
                 $pageSubscription = get_post_meta($post->ID, 'subcribers_list', true); // Current post meta
 
                 echo $args['before_title'] . 'Subscribe For All Pages' . $args['after_title'];
-
-                /* Check whether parent post has subpage tracking meta key */
-
                 /* Check whether current post  has userid in page and parent page meta value */
                 if (!in_array($userId, $parentSubpageTracking, true) && !in_array($userId, $pageSubscription, true)) {
                     ?>

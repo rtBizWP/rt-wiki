@@ -109,9 +109,12 @@ function getTopParent() {
     echo $parent;
 }
 
-function rtwiki_single_shortcode() {
-    $content = single_post_filtering();
-    echo $content;
-}
 
+/**
+ * Custom Shortcode to show post content on single page according to the permission
+ */
+
+function rtwiki_single_shortcode() {
+    echo single_post_filtering();
+}
 add_shortcode("rtWikiSinglePost", "rtwiki_single_shortcode");
