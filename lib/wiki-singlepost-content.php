@@ -75,12 +75,12 @@ function wiki_custom_taxonomies($postid) {
     $post = &get_post($postid);
     $post_type = $post->post_type;
     $taxonomies = get_object_taxonomies($post_type);
-    
+
     $out = "<ul>";
     foreach ($taxonomies as $taxonomy) {
-        $taxonomyName=substr($taxonomy,3);
-        $out .= "<ul>".$taxonomyName;
-         
+        $taxonomyName = substr($taxonomy, 3);
+        $out .= "<ul>" . $taxonomyName;
+
         $terms = get_the_terms($post->ID, $taxonomy);
         if (!empty($terms)) {
             foreach ($terms as $term)
@@ -108,3 +108,10 @@ function getTopParent() {
     }
     echo $parent;
 }
+
+function rtwiki_single_shortcode() {
+    $content = single_post_filtering();
+    echo $content;
+}
+
+add_shortcode("rtWikiSinglePost", "rtwiki_single_shortcode");
