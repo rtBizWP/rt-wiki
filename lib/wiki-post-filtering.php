@@ -26,9 +26,9 @@ function single_post_filtering() {
     
     if (!is_user_logged_in()) {
         
-        if ($access_rights['public'] == 1) {
+        if ($access_rights['public']['r'] == 1) {
             return $post->post_content;
-        } else {
+        }if($access_rights['public']['na'] == 1){
             wp_die(__('Please <a href=' . wp_login_url($post->guid) . '>Login</a> To View the post Content'));
         }
     } else {
@@ -63,16 +63,16 @@ function single_post_filtering() {
             wp_die(__('No Permissions found to access this Content'));
         }
          
-        if ($access_rights['all']['w'] == 1) {
-            return $post->post_content;
-        } else if ($access_rights['all']['r'] == 1) {
-            show_admin_bar(false);
-            return $post->post_content;
-        } else if ($access_rights['all']['na'] == 1) {
-            
-            wp_redirect(home_url());
-            wp_die(__('You Do not have permission to access this Content'));
-        }
+//        if ($access_rights['all']['w'] == 1) {
+//            return $post->post_content;
+//        } else if ($access_rights['all']['r'] == 1) {
+//            show_admin_bar(false);
+//            return $post->post_content;
+//        } else if ($access_rights['all']['na'] == 1) {
+//            
+//            wp_redirect(home_url());
+//            wp_die(__('You Do not have permission to access this Content'));
+//        }
     }
 }
 
@@ -140,9 +140,9 @@ function getAdminPanelSidePermission($pageID) {
     $access_rights = get_post_meta($pageID, 'access_rights', true);
     
     if (!is_user_logged_in()) {
-        if ($access_rights['public'] == 1) {
+        if ($access_rights['public']['r'] == 1) {
             return true;
-        } else {
+        } else if($access_rights['public']['na'] == 1) {
             return false;
         }
     } else {
@@ -180,13 +180,13 @@ function getAdminPanelSidePermission($pageID) {
             return false;
         }
 
-        if (isset($access_rights['all']['w']) == 1) {
-            return true;
-        } else if (isset($access_rights['all']['r']) == 1) {
-            return false;
-        } else if (isset($access_rights['all']['na']) == 1) {
-            return false;
-        }
+//        if (isset($access_rights['all']['w']) == 1) {
+//            return true;
+//        } else if (isset($access_rights['all']['r']) == 1) {
+//            return false;
+//        } else if (isset($access_rights['all']['na']) == 1) {
+//            return false;
+//        }
     }
 }
 
@@ -204,9 +204,9 @@ function getPermission($pageID) {
     $access_rights = get_post_meta($pageID, 'access_rights', true);
     
     if (!is_user_logged_in()) {
-        if ($access_rights['public'] == 1) {
+        if ($access_rights['public']['r'] == 1) {
             return true;
-        } else {
+        } else if($access_rights['public']['na'] == 1) {
             return false;
         }
     } else {
@@ -231,11 +231,11 @@ function getPermission($pageID) {
             return false;
         }
 
-        if ($access_rights['all']['w'] == 1 || $access_rights['all']['r'] == 1) {
-            return true;
-        } else if ($access_rights['all']['na'] == 1) {
-            return false;
-        }
+//        if ($access_rights['all']['w'] == 1 || $access_rights['all']['r'] == 1) {
+//            return true;
+//        } else if ($access_rights['all']['na'] == 1) {
+//            return false;
+//        }
     }
 }
 

@@ -78,44 +78,60 @@ function display_wiki_post_access_metabox($post) {
     wp_nonce_field(plugin_basename(__FILE__), $post->post_type . '_noncename');
 
     $access_rights = get_post_meta($post->ID, 'access_rights', true);
+    
     ?>  
     <table>
-        <tr>
-            <td><h4>Public Permission:</h4></td>    
-            <td><input type="checkbox" id="public" name="public" <?php if ($access_rights['public'] == 1) { ?>checked="checked"<?php } ?> value="<?php echo $access_rights['public']; ?>"> </td>    
-        </tr>
-
-        <tr>
-            <th>Groups</th>
-            <th>No Access</th>
-            <th>Read</th>
-            <th>Write</th>
-        </tr>
-
-        <tr>
-            <td>All</td>
-            <td><input type="radio" class="rtwiki_all_na" name="access_rights[all]" <?php if (isset($access_rights['all']['na']) == 1) { ?>checked="checked"<?php } ?> value="na" /></td>
-            <td><input type="radio" class="rtwiki_all_r" name="access_rights[all]" <?php if (isset($access_rights['all']['r']) == 1) { ?>checked="checked"<?php } ?> value="r" /></td>
-            <td><input type="radio" class="rtwiki_all_w" name="access_rights[all]" <?php if (isset($access_rights['all']['w']) == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
-        </tr>
-
-        <?php
-        $args = array('orderby' => 'asc', 'hide_empty' => false);
-        $terms = get_terms('user-group', $args);
-        foreach ($terms as $term) {
-            $groupName = $term->name;
-            ?>
+        <tbody>
             <tr>
-                <td><?php echo $groupName ?></td>
-                <td><input type="radio" class="case" id="na" name="access_rights[<?php echo $groupName ?>]"  <?php if ($access_rights[$groupName]['na'] == 1) { ?>checked="checked"<?php } ?> value="na" /></td>
-                <td><input type="radio" class="case" id="r" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['r'] == 1) { ?>checked="checked"<?php } ?> value="r" /></td>
-                <td><input type="radio" class="case" id="w" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['w'] == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
+                <th>Groups</th>
+                <th>No Access</th>
+                <th>Read</th>
+                <th>Write</th>
             </tr>
-        <?php } ?> 
 
-        <input type="button" name="reset" id="reset" value="Reset">
+            <tr>
+                <td>All</td>
+                <td><input type="radio" class="rtwiki_all_na" name="access_rights[all]" <?php if (isset($access_rights['all']['na']) == 1) { ?>checked="checked"<?php } ?> value="na" /></td>
+                <td><input type="radio" class="rtwiki_all_r" name="access_rights[all]" <?php if (isset($access_rights['all']['r']) == 1) { ?>checked="checked"<?php } ?> value="r" /></td>
+                <td><input type="radio" class="rtwiki_all_w" name="access_rights[all]" <?php if (isset($access_rights['all']['w']) == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
+            </tr>
+
+            <?php
+            $args = array('orderby' => 'asc', 'hide_empty' => false);
+            $terms = get_terms('user-group', $args);
+            foreach ($terms as $term) {
+                $groupName = $term->name;
+                ?>
+                <tr>
+                    <td><?php echo $groupName ?></td>
+                    <td><input type="radio" class="case" id="na" name="access_rights[<?php echo $groupName ?>]"  <?php if ($access_rights[$groupName]['na'] == 1) { ?>checked="checked"<?php } ?> value="na" /></td>
+                    <td><input type="radio" class="case" id="r" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['r'] == 1) { ?>checked="checked"<?php } ?> value="r" /></td>
+                    <td><input type="radio" class="case" id="w" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['w'] == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
+                </tr>
+            <?php } ?> 
+
+
+        </tbody>    
     </table>
 
+    <table>
+        <tbody>
+            <tr><h4>Permission for public level</h4></tr>  
+            <tr>
+                <th></th>    
+                <th>No Access</th>
+                <th>Read</th>
+
+            </tr>
+            <tr>
+                <td>Public</td> 
+               
+                <td><input type="radio" id="rtwiki_public_na" name="access_rights[public]" <?php if ($access_rights['public']['na'] == 1) { ?>checked="checked"<?php } ?> value="na"/> </td>    
+                <td><input type="radio" id="rtwiki_public_r"  name="access_rights[public]" <?php if ($access_rights['public']['r'] == 1) { ?>checked="checked"<?php } ?>  value="r" /></td>
+            </tr>
+        </tbody>
+
+    </table>
     <?php
 }
 
@@ -164,14 +180,22 @@ function rtp_wiki_permission_save($post) {
                 }
             }
 
-            if (isset($_POST['access_rights']['all'])) {
-                foreach ($perm as $p1) {
-                    if ($_POST['access_rights']['all'] == $p1)
-                        $access_rights['all'][$p1] = 1;
+//            if (isset($_POST['access_rights']['all'])) {
+//                foreach ($perm as $p1) {
+//                    if ($_POST['access_rights']['all'] == $p1)
+//                        $access_rights['all'][$p1] = 1;
+//                }
+//            }
+            foreach ($perm as $p1) {
+                if (isset($_POST['access_rights']['public']) == $p1)
+                {
+                    if ($_POST['access_rights']['public'] == $p1)
+                    $access_rights['public'][$p1] = 1;
+                else
+                    $access_rights['public'][$p1] = 0;
+                    
                 }
             }
-            $access_rights['public'] = isset($_POST['public']) ? 1 : 0;
-
             update_post_meta($post, 'access_rights', $access_rights);
 
 
@@ -187,7 +211,7 @@ function rtp_wiki_permission_save($post) {
             if (in_array($userId, $subpageTrackingList, true)) {
                 $subPageStatus = true;
             }
-            
+
             /*
              * If user is already subscribed to this page,check for any changes according to the permissions set
              */

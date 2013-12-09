@@ -75,16 +75,18 @@ function wiki_custom_taxonomies($postid) {
     $post = &get_post($postid);
     $post_type = $post->post_type;
     $taxonomies = get_object_taxonomies($post_type);
+    
     $out = "<ul>";
     foreach ($taxonomies as $taxonomy) {
-        $out .= "<ul>" . $taxonomy;
-
+        $taxonomyName=substr($taxonomy,3);
+        $out .= "<ul>".$taxonomyName;
+         
         $terms = get_the_terms($post->ID, $taxonomy);
         if (!empty($terms)) {
             foreach ($terms as $term)
                 $out .= '<li><a href="' . get_term_link($term->slug, $taxonomy) . '" title="' . $term->name . '" >' . $term->name . '</a></li>';
         }
-        $out .= "</ul>";
+        $out .="</ul>";
     }
     $out .= "</ul>";
     echo $out;

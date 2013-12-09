@@ -51,7 +51,8 @@ function redirect_404() {
                     }
                 } else {
 
-                    $pid = $i - 1;
+                    $pid = $i - 1; 
+                    
                     $parentId = rtwiki_get_page_id($segments[$pid]);
                     if ($page == null)  {
                             $my_post = array(

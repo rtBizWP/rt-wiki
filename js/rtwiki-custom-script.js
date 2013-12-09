@@ -1,7 +1,9 @@
 jQuery(document).ready(function() {
-    jQuery('#public').click(function() {
-    jQuery(' .case#r , .rtwiki_all_r').prop('checked', this.checked);
-   });
+//    jQuery('#rtwiki_public_r').click(function() {
+//    jQuery(' .case#r').prop('checked', this.checked);
+//   });
+//   
+  
    
     jQuery('.rtwiki_all_na').click(function()
     {
