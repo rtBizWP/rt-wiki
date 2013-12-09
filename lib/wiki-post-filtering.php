@@ -138,7 +138,7 @@ function getAdminPanelSidePermission($pageID) {
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => false));
     $access_rights = get_post_meta($pageID, 'access_rights', true);
-
+    
     if (!is_user_logged_in()) {
         if ($access_rights['public'] == 1) {
             return true;
@@ -146,7 +146,10 @@ function getAdminPanelSidePermission($pageID) {
             return false;
         }
     } else {
-
+        if(empty($access_rights))
+        {
+            return true;
+        }
         foreach ($terms as $term) {
 
             $ans = get_term_if_exists($term->slug, $user);
