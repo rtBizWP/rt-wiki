@@ -43,7 +43,7 @@ function getContributers($postid) {
 }
 
 /*
- * Get Wiki post  SubPages
+ * Get Wiki post SubPages
  */
 
 function getSubPages($parentId, $lvl) {

@@ -146,10 +146,9 @@ function rt_wiki_subpages_check($parentId,$subPage) {
             if ($permission == true) {
                 return true;
             }
-            else {
-            $subPageFlag=false;}
-            
-             getSubPages($page->ID,$subPageFlag);
+            else { 
+            $subPageFlag=false; }
+            getSubPages($page->ID,$subPageFlag);
         }
         if($subPageFlag == false)
             return false;
