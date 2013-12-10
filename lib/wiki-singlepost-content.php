@@ -76,7 +76,7 @@ function wiki_custom_taxonomies($postid) {
     $post_type = $post->post_type;
     $taxonomies = get_object_taxonomies($post_type);
 
-    $out = "<ul>";
+   // $out = "<ul>";
     foreach ($taxonomies as $taxonomy) {
         $taxonomyName = substr($taxonomy, 3);
         $out .= "<ul>" . $taxonomyName;
@@ -88,7 +88,7 @@ function wiki_custom_taxonomies($postid) {
         }
         $out .="</ul>";
     }
-    $out .= "</ul>";
+    //$out .= "</ul>";
     echo $out;
 }
 

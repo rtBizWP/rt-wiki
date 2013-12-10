@@ -24,9 +24,17 @@ function update() {
     global $pagenow;
     global $post;
     if (isset($_REQUEST['subscribe']) == '1') {
+         
+        
+        $params=array_keys($_REQUEST);  //get the keys from request parameter
+        $actionParam=$params[0];        
+        $postID=$_REQUEST['update-postId'];  //get user id from the request parameter
+        $url=get_permalink( $postID );      //get permalink from user id
+        $redirectURl=$url.'?'.$actionParam.'=1'; //form the url
+        
         
         if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
-            wp_redirect(wp_login_url($post->guid), 302);
+            wp_redirect(wp_login_url($redirectURl), 302);
            
         } else {
             if (isset($_POST['update-postId'])) {
@@ -52,8 +60,16 @@ function updateForAllSubPages() {
     global $pagenow;
     global $post;
     if (isset($_REQUEST['allSubscribe']) == '1') {
+        
+        $params=array_keys($_REQUEST);  //get the keys from request parameter
+        $actionParam=$params[0];        
+        $postID=$_REQUEST['update-postId'];  //get user id from the request parameter
+        $url=get_permalink( $postID );      //get permalink from user id
+        $redirectURl=$url.'?'.$actionParam.'=1'; //form the url
+        
+        
         if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
-            wp_redirect(wp_login_url($post->guid), 302);
+            wp_redirect(wp_login_url($redirectURl), 302);
         } else {
             $id = $_POST['update-all-postId'];
             $userId = get_current_user_id();
