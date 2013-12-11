@@ -12,7 +12,7 @@ if (defined('WP_CLI') && WP_CLI) {
         function changes() {
             // global $post;
             query_posts('post_type=wiki');
-            $terms = get_terms('user-group', array('hide_empty' => false));
+            $terms = get_terms('user-group', array('hide_empty' => true));
 
             if (have_posts())
                 while (have_posts()) : the_post();

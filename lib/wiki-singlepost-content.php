@@ -74,12 +74,20 @@ function wiki_custom_taxonomies($postid) {
 
     $post = &get_post($postid);
     $post_type = $post->post_type;
-    $taxonomies = get_object_taxonomies($post_type);
+    //$taxonomies = get_object_taxonomies($post_type);
+    global $rtWikiAttributesModel;
+    $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
+    $attributes = $rtWikiAttributesModel->get_all_attributes();
 
-   // $out = "<ul>";
-    foreach ($taxonomies as $taxonomy) {
-        $taxonomyName = substr($taxonomy, 3);
-        $out .= "<ul>" . $taxonomyName;
+    $attr_term = array();
+    foreach ($attributes as $attr) {
+        $attr_term[] = $attr->attribute_name;
+    }
+    // $out = "<ul>";
+    foreach ($attr_term as $attr) {
+
+        $taxonomy = 'rt_' . $attr;
+        $out .= "<ul>" . $attr;
 
         $terms = get_the_terms($post->ID, $taxonomy);
         if (!empty($terms)) {
@@ -109,12 +117,13 @@ function getTopParent() {
     echo $parent;
 }
 
-
 /**
  * Custom Shortcode to show post content on single page according to the permission
  */
-
 function rtwiki_single_shortcode() {
-    echo single_post_filtering();
+    global $post;
+    if ($post->post_type == 'wiki')
+        echo single_post_filtering();
 }
+
 add_shortcode("rtWikiSinglePost", "rtwiki_single_shortcode");

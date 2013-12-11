@@ -18,7 +18,7 @@ function single_post_filtering() {
     $readOnly = 0;
 
     $user = get_current_user_id();
-    $terms = get_terms('user-group', array('hide_empty' => false));
+    $terms = get_terms('user-group', array('hide_empty' => true));
     $access_rights = get_post_meta($post->ID, 'access_rights', true);
 
     if (!is_user_logged_in()) {
@@ -112,14 +112,14 @@ function postCheck() {
     if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         $page = $_GET['post'];
 
-        $status = get_post_meta($page, '_edit_last');
+       // $status = get_post_meta($page, '_edit_last');
 
-        if ($status[0] == '1') {
+        //if ($status[0] == '1') {
             if (get_post_type($page) == 'wiki' && isset($_GET['message']) != 1) {
                 if (getAdminPanelSidePermission($page) == false) {
                     WP_DIE(__('You Dont have enough access rights to Edit this post'));
                 }
-            }
+           // }
         }
     }
 }
@@ -136,7 +136,7 @@ function getAdminPanelSidePermission($pageID) {
     $readOnly = 0;
     $noPublic = 0;
     $user = get_current_user_id();
-    $terms = get_terms('user-group', array('hide_empty' => false));
+    $terms = get_terms('user-group', array('hide_empty' => true));
     $access_rights = get_post_meta($pageID, 'access_rights', true);
 
     if (!is_user_logged_in()) {
@@ -201,7 +201,7 @@ function getPermission($pageID) {
     $noGroup = 0;
     $noPublic = 0;
     $user = get_current_user_id();
-    $terms = get_terms('user-group', array('hide_empty' => false));
+    $terms = get_terms('user-group', array('hide_empty' => true));
     $access_rights = get_post_meta($pageID, 'access_rights', true);
 
     if (!is_user_logged_in()) {

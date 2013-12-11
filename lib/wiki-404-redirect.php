@@ -43,7 +43,7 @@ function redirect_404() {
                             'post_title' => $segments[$i],
                             'post_content' => '',
                             'post_status' => 'publish',
-                            'post_author' => 1,
+                            //'post_author' => 1,
                             'post_type' => 'wiki',
                             'slug' => $segments[$i],
                         );
@@ -59,7 +59,7 @@ function redirect_404() {
                             'post_title' => $segments[$i],
                             'post_content' => '',
                             'post_status' => 'publish',
-                            'post_author' => 1,
+                            //'post_author' => 1,
                             'post_type' => 'wiki',
                             'slug' => $segments[$i],
                             'post_parent' => $parentId,

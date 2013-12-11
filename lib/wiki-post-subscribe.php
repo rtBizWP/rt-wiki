@@ -22,20 +22,19 @@ function checkSubscribe() {
  */
 function update() {
     global $pagenow;
-    global $post;
+
     if (isset($_REQUEST['subscribe']) == '1') {
-         
-        
-        $params=array_keys($_REQUEST);  //get the keys from request parameter
-        $actionParam=$params[0];        
-        $postID=$_REQUEST['update-postId'];  //get user id from the request parameter
-        $url=get_permalink( $postID );      //get permalink from user id
-        $redirectURl=$url.'?'.$actionParam.'=1'; //form the url
-        
-        
+
+
+        $params = array_keys($_REQUEST);  //get the keys from request parameter
+        $actionParam = $params[0];
+        $postID = $_REQUEST['update-postId'];  //get user id from the request parameter
+        $url = get_permalink($postID);      //get permalink from user id
+        $redirectURl = $url . '?' . $actionParam . '=1'; //form the url
+
+
         if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
             wp_redirect(wp_login_url($redirectURl), 302);
-           
         } else {
             if (isset($_POST['update-postId'])) {
                 $id = $_POST['update-postId'];
@@ -58,16 +57,16 @@ add_action('wp', 'update');
  */
 function updateForAllSubPages() {
     global $pagenow;
-    global $post;
+
     if (isset($_REQUEST['allSubscribe']) == '1') {
-        
-        $params=array_keys($_REQUEST);  //get the keys from request parameter
-        $actionParam=$params[0];        
-        $postID=$_REQUEST['update-postId'];  //get user id from the request parameter
-        $url=get_permalink( $postID );      //get permalink from user id
-        $redirectURl=$url.'?'.$actionParam.'=1'; //form the url
-        
-        
+
+        $params = array_keys($_REQUEST);  //get the keys from request parameter
+        $actionParam = $params[0];
+        $postID = $_REQUEST['update-postId'];  //get user id from the request parameter
+        $url = get_permalink($postID);      //get permalink from user id
+        $redirectURl = $url . '?' . $actionParam . '=1'; //form the url
+
+
         if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
             wp_redirect(wp_login_url($redirectURl), 302);
         } else {
@@ -135,22 +134,22 @@ function ifSubPages($parentId) {
         return false;
 }
 
-function rt_wiki_subpages_check($parentId,$subPage) {
+function rt_wiki_subpages_check($parentId, $subPage) {
     $args = array('parent' => $parentId, 'post_type' => 'wiki');
-    $subPageFlag=$subPage;
+    $subPageFlag = $subPage;
     $pages = get_pages($args);
     if ($pages) {
         foreach ($pages as $page) {
             $permission = getPermission($page->ID);
-            
+
             if ($permission == true) {
                 return true;
+            } else {
+                $subPageFlag = false;
             }
-            else { 
-            $subPageFlag=false; }
-            getSubPages($page->ID,$subPageFlag);
+            getSubPages($page->ID, $subPageFlag);
         }
-        if($subPageFlag == false)
+        if ($subPageFlag == false)
             return false;
     }
 }
@@ -162,9 +161,9 @@ function rt_wiki_subpages_check($parentId,$subPage) {
  * @param type $post
  * @param type $email
  */
-function post_changes_send_mail($post, $email) {
-    //global $post;
-    $revision = wp_get_post_revisions($post);
+function post_changes_send_mail($postID, $email) {
+
+    $revision = wp_get_post_revisions($postID);
     $latestContent = array();
     $oldContent = array();
     $latestTitle = array();
@@ -184,13 +183,18 @@ function post_changes_send_mail($post, $email) {
 
     $args = array(
         'title' => 'Differences',
-        'title_left' => $oldTitle[1],
+        'title_left' => $oldTitle[0],
         'title_right' => $latestTitle[0],
     );
     if (!empty($latestContent) && !empty($oldContent)) {
-        $diff_table = wp_text_diff($oldContent[1], $latestContent[0], $args);
+        $diff_table = wp_text_diff($oldContent[0], $latestContent[0], $args);
         add_filter('wp_mail_content_type', 'set_html_content_type');
-        wp_mail($email, 'Difference of Page >>> '.$post->post_title, $diff_table);
+        
+        $subject .= 'Message:Update for Page you are subscribed to.'. get_the_title($postID);
+        $subject .='Time: '. date("F j, Y, g:i a");
+        $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
+
+        wp_mail($email, $subject, $diff_table, $headers);
         remove_filter('wp_mail_content_type', 'set_html_content_type');
     }
 }
