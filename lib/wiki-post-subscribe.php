@@ -34,7 +34,7 @@ function update() {
 
 
         if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
-            wp_redirect(wp_login_url($redirectURl), 302);
+            wp_redirect(wp_login_url($redirectURl), 302); //after login and if permission is set , user would be subscribed to the page
         } else {
             if (isset($_POST['update-postId'])) {
                 $id = $_POST['update-postId'];
@@ -68,7 +68,7 @@ function updateForAllSubPages() {
 
 
         if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
-            wp_redirect(wp_login_url($redirectURl), 302);
+            wp_redirect(wp_login_url($redirectURl), 302); //after login and if permission is set , user would be subscribed to the page and its subpages
         } else {
             $id = $_POST['update-all-postId'];
             $userId = get_current_user_id();
@@ -161,7 +161,7 @@ function rt_wiki_subpages_check($parentId, $subPage) {
  * @param type $post
  * @param type $email
  */
-function post_changes_send_mail($postID, $email) {
+function post_changes_send_mail($postID,$email) {
 
     $revision = wp_get_post_revisions($postID);
     $latestContent = array();
@@ -199,7 +199,7 @@ function post_changes_send_mail($postID, $email) {
     }
 }
 
-add_action('wp', 'post_changes_send_mail');
+//add_action('wp', 'post_changes_send_mail');
 
 function set_html_content_type() {
 

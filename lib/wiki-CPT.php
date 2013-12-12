@@ -126,8 +126,8 @@ function display_wiki_post_access_metabox($post) {
             <tr>
                 <td>Public</td> 
                
-                <td><input type="radio" id="rtwiki_public_na" name="access_rights[public]" <?php if ($access_rights['public']['na'] == 1) { ?>checked="checked"<?php } ?> value="na"/> </td>    
-                <td><input type="radio" id="rtwiki_public_r"  name="access_rights[public]" <?php if ($access_rights['public']['r'] == 1) { ?>checked="checked"<?php } ?>  value="r" /></td>
+                <td><input type="radio" id="rtwiki_public_na" name="access_rights[public]" <?php if ($access_rights['public']['na'] == 1) { ?> checked="checked" <?php } ?> value="na" /> </td>    
+                <td><input type="radio" id="rtwiki_public_r"  name="access_rights[public]" <?php if ($access_rights['public']['r'] == 1) { ?> checked="checked" <?php } ?>  value="r" /></td>
             </tr>
         </tbody>
 

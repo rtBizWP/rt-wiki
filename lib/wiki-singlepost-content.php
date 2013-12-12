@@ -72,7 +72,7 @@ function getSubPages($parentId, $lvl) {
 
 function wiki_custom_taxonomies($postid) {
 
-    $post = &get_post($postid);
+    $post = get_post($postid);
     $post_type = $post->post_type;
     //$taxonomies = get_object_taxonomies($post_type);
     global $rtWikiAttributesModel;
@@ -83,11 +83,11 @@ function wiki_custom_taxonomies($postid) {
     foreach ($attributes as $attr) {
         $attr_term[] = $attr->attribute_name;
     }
-    // $out = "<ul>";
+     $out = '';
     foreach ($attr_term as $attr) {
 
         $taxonomy = 'rt_' . $attr;
-        $out .= "<ul>" . $attr;
+        $out.= "<ul>" . $attr;
 
         $terms = get_the_terms($post->ID, $taxonomy);
         if (!empty($terms)) {
