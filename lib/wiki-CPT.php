@@ -243,7 +243,9 @@ function rtp_wiki_permission_save($post) {
                                 $readWriteFlag = true;
                             }
                         }
-                    } if ($readWriteFlag == true) {
+                    } 
+                    
+                    if ($readWriteFlag == true) {
                         if (!in_array($userId, $subscriberList, true)) {
                             $subscribeList[] = $userId;
                             update_post_meta($post, 'subcribers_list', $subscribeList);

@@ -161,41 +161,39 @@ function rt_wiki_subpages_check($parentId, $subPage) {
  * @param type $post
  * @param type $email
  */
-function post_changes_send_mail($postID,$email) {
+function post_changes_send_mail($postID, $email ,$group) {
 
     $revision = wp_get_post_revisions($postID);
-    $latestContent = array();
-    $oldContent = array();
-    $latestTitle = array();
-    $oldTitle = array();
+    $content = array();
+    $title = array();
 
-    $currentDate = date('Y-m-d');
+    //$currentDate = date('Y-m-d');
 
     foreach ($revision as $revisions) {
-        if (mysql2date('Y-m-d', $revisions->post_date) == $currentDate) {
-            $latestContent[] = $revisions->post_content;
-            $latestTitle[] = $revisions->post_title;
-        } else {
-            $oldContent[] = $revisions->post_content;
-            $oldTitle[] = $revisions->post_title;
-        }
+        $content[] = $revisions->post_content;
+        $title[] = $revisions->post_title;
     }
 
     $args = array(
         'title' => 'Differences',
-        'title_left' => $oldTitle[0],
-        'title_right' => $latestTitle[0],
+        'title_left' => $title[1],
+        'title_right' => $title[0],
     );
-    if (!empty($latestContent) && !empty($oldContent)) {
-        $diff_table = wp_text_diff($oldContent[0], $latestContent[0], $args);
+    if (!empty($content)) {
+
+        $diff_table = wp_text_diff($content[1], $content[0], $args);
+
         add_filter('wp_mail_content_type', 'set_html_content_type');
-        
-        $subject .= 'Message:Update for Page you are subscribed to.'. get_the_title($postID);
-        $subject .='Time: '. date("F j, Y, g:i a");
+
+        $subject .= 'Message:Update for  >>> "' . strtoupper(get_the_title($postID)) .'" You are getting these updates as you belong to "'. $group .'" group';
+        $subject .=':Time: ' . date("F j, Y, g:i a");
         $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
 
         wp_mail($email, $subject, $diff_table, $headers);
+
         remove_filter('wp_mail_content_type', 'set_html_content_type');
+
+        
     }
 }
 
