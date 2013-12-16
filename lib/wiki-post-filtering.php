@@ -29,10 +29,10 @@ function single_post_filtering() {
             wp_die(__('Please <a href=' . wp_login_url($post->guid) . '>Login</a> To View the post Content'));
         }
     } else {
-
-        if ($post->post_author == $user)
+       if ($post->post_author == $user){
+            
             return $post->post_content;
-        else {
+        } else {
             foreach ($terms as $term) {
 
                 $ans = get_term_if_exists($term->slug, $user);
@@ -115,7 +115,7 @@ function postCheck() {
        // $status = get_post_meta($page, '_edit_last');
 
         //if ($status[0] == '1') {
-            if (get_post_type($page) == 'wiki' && isset($_GET['message']) != 1) {
+            if (get_post_type($page) == 'wiki') {
                 if (getAdminPanelSidePermission($page) == false) {
                     WP_DIE(__('You Dont have enough access rights to Edit this post'));
                 }
@@ -148,11 +148,10 @@ function getAdminPanelSidePermission($pageID) {
     } else {
 
         $post_meta = get_post($pageID);
-        if ($post_meta->post_author == $user)
-            return true;
-        else {
-
-
+        
+        if ($post_meta->post_author == $user){
+        return true;
+        } else {
             if (empty($access_rights)) {
                 return true;
             }
@@ -178,8 +177,6 @@ function getAdminPanelSidePermission($pageID) {
             if ($noflag == 1 || $readOnly == 1 || $noPublic == 1) {
                 return false;
             }
-
-
 //        if (isset($access_rights['all']['w']) == 1) {
 //            return true;
 //        } else if (isset($access_rights['all']['r']) == 1) {
@@ -198,7 +195,7 @@ function getAdminPanelSidePermission($pageID) {
 function getPermission($pageID) {
 
     $noflag = 0;
-    $noGroup = 0;
+    //$noGroup = 0;
     $noPublic = 0;
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => true));
@@ -211,11 +208,11 @@ function getPermission($pageID) {
             return false;
         }
     } else {
-
-        $post_meta = get_post($pageID);
-        if ($post_meta->post_author == $user)
+         $post_meta = get_post($pageID);
+        
+        if ($post_meta->post_author == $user){
             return true;
-        else {
+        } else {
             foreach ($terms as $term) {
                 $ans = get_term_if_exists($term->slug, $user);
 

@@ -172,7 +172,7 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
                 $userId = get_current_user_id(); //current user id
                 $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true); //Parent Post meta
                 $pageSubscription = get_post_meta($post->ID, 'subcribers_list', true); // Current post meta
-               
+                $subPageSubscription = get_post_meta($post->ID, 'subpages_tracking', true);
                 /* Check if post has any parent or not */
                 if ($parent_ID == 0)
                     $parentIdFlag = false;
@@ -181,7 +181,7 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
                 
                 echo $args['before_title'] . 'Subscribe For All Pages' . $args['after_title'];
                 /* Check whether current post  has userid in page and parent page meta value */
-                if ($parentIdFlag && !in_array($userId, $pageSubscription, true)) {
+                if (!in_array($userId, $subPageSubscription, true)) {
                     ?>
 
                     <form id="user-all-subscribe" method="post" action="?allSubscribe=1">

@@ -73,7 +73,7 @@ function getSubPages($parentId, $lvl) {
 function wiki_custom_taxonomies($postid) {
 
     $post = get_post($postid);
-    $post_type = $post->post_type;
+    //$post_type = $post->post_type;
     //$taxonomies = get_object_taxonomies($post_type);
     global $rtWikiAttributesModel;
     $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();

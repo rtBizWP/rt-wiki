@@ -17,9 +17,7 @@ function rt_wiki_sidebar() {
         'after_widget' => "</div>",
         'before_title' => '<h3>',
         'after_title' => '</h3>',
-    ));
-
-    
+    ));    
 }
 
 add_action('widgets_init', 'rt_wiki_sidebar');

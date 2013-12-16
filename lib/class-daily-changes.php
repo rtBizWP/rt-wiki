@@ -25,8 +25,7 @@ if (defined('WP_CLI') && WP_CLI) {
                     $access_rights = get_post_meta($postID, 'access_rights', true);
 
                     if ($access_rights != null) {
-                        //var_dump('For Post >>' .$postObject->post_title);
-                       // var_dump($access_rights);
+                        
                         $term_meta = get_option("user-group-meta");
 
                         foreach ($terms as $term) {
@@ -34,8 +33,7 @@ if (defined('WP_CLI') && WP_CLI) {
                             if (isset($access_rights[$term->slug]) && ( $access_rights[$term->slug]['w'] == 1 || $access_rights[$term->slug]['r'] == 1)) {
                                 $termId = $term->term_id;
                                 $email = $term_meta[$termId]['email_address'];
-                                 //var_dump('email>>'.$email);
-                                
+                                 
                                 post_changes_send_mail($postID, $email ,strtoupper($term->slug));
                             }
                         }

@@ -1,3 +1,4 @@
+
 <?php
 
 /**
@@ -11,9 +12,6 @@
  * 
  * 
  **/
-
-
-
 
 function rtwiki_get_page_id($name) {
     global $wpdb;
