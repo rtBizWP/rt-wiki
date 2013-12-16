@@ -38,6 +38,7 @@ function rc_tc_get_template_hierarchy( $template ) {
         $file = RC_TC_BASE_DIR . '/templates/' . $template;
     }
  
+    $file = RC_TC_BASE_DIR . '/templates/' . $template;
     return apply_filters( 'rc_repl_template_' . $template, $file );
 }
  

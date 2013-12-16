@@ -191,9 +191,7 @@ function post_changes_send_mail($postID, $email ,$group) {
 
         wp_mail($email, $subject, $diff_table, $headers);
 
-        remove_filter('wp_mail_content_type', 'set_html_content_type');
-
-        
+        remove_filter('wp_mail_content_type', 'set_html_content_type');        
     }
 }
 

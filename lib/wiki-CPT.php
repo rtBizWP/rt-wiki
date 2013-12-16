@@ -208,13 +208,13 @@ function rtp_wiki_permission_save($post) {
             if (in_array($userId, $subpageTrackingList, true)) {
                 $subPageStatus = true;
             }
-
+                 
             /*
              * If user is already subscribed to this page,check for any changes according to the permissions set
              */
 
             $postObject = get_post($post);
-            if ($postObject->post_author != $userId) {
+            
                 if (in_array($userId, $subscriberList, true)) {
                     //var_dump($terms);
                     foreach ($terms as $term) {
@@ -243,8 +243,8 @@ function rtp_wiki_permission_save($post) {
                                 $readWriteFlag = true;
                             }
                         }
-                    } 
-                    
+                    }
+
                     if ($readWriteFlag == true) {
                         if (!in_array($userId, $subscriberList, true)) {
                             $subscribeList[] = $userId;
@@ -269,10 +269,10 @@ function rtp_wiki_permission_save($post) {
                         }
                     }
                 }
-            }
+            } 
         }
     }
-}
+
 
 add_action('save_post', 'rtp_wiki_permission_save');
 

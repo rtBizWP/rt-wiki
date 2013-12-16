@@ -28,8 +28,8 @@ add_action('template_redirect', 'redirect_404');
  */
 
 function redirect_404() {
-    if (is_404() && get_query_var('post_type') == 'wiki') {
-
+      if (is_404() && get_query_var('post_type') == 'wiki') {
+          
         $page = $_SERVER['REQUEST_URI'];
         $segments = explode('/', trim($page, '/'));
         if ($segments[0] == 'wiki') {
