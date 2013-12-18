@@ -40,11 +40,8 @@ function update() {
                 $id = $_POST['update-postId'];
                 $userId = get_current_user_id();
                 $subscribeId = get_post_meta($id, 'subcribers_list', true);
-                if (!in_array($id, $subscribeId, true)) {
-                    $subscribeId[] = $userId;
-                    update_post_meta($id, 'subcribers_list', $subscribeId);
-                }
-            }
+                pageSubscription($id, $userId, $subscribeId);
+              }
         }
     }
 }
@@ -74,16 +71,10 @@ function updateForAllSubPages() {
             $userId = get_current_user_id();
             $subpagesTrackingList = get_post_meta($id, 'subpages_tracking', true);
             $pageSubsciptionList = get_post_meta($id, 'subcribers_list', true);
-
-            if (!in_array($userId, $pageSubsciptionList, true)) {
-                $pageSubsciptionList[] = $userId;
-                update_post_meta($id, 'subcribers_list', $pageSubsciptionList);
-            }
-            if (!in_array($id, $subpagesTrackingList, true)) {
-                $subpagesTrackingList[] = $userId;
-                update_post_meta($id, 'subpages_tracking', $subpagesTrackingList);
-            }
-
+            
+            pageSubscription($id, $userId, $pageSubsciptionList);
+            subPageSubscription($id, $userId, $subpagesTrackingList);
+            
             subcribeSubPages($id, 0, $userId);
         }
     }
@@ -104,14 +95,10 @@ function subcribeSubPages($parentId, $lvl, $userId) {
             if ($permission == true) {
                 $subscribeId = get_post_meta($page->ID, 'subcribers_list', true);
                 $subpagesTrackingList = get_post_meta($page->ID, 'subpages_tracking', true);
-                if (!in_array($userId, $subscribeId, true)) {
-                    $subscribeId[] = $userId;
-                    update_post_meta($page->ID, 'subcribers_list', $subscribeId);
-                }
-                if (!in_array($userId, $subpagesTrackingList, true)) {
-                    $subpagesTrackingList[] = $userId;
-                    update_post_meta($page->ID, 'subpages_tracking', $subpagesTrackingList);
-                }
+                
+                pageSubscription($page->ID, $userId, $subscribeId);
+                subPageSubscription($page->ID, $userId, $subpagesTrackingList);
+                
             }
             subcribeSubPages($page->ID, $lvl, $userId);
         }

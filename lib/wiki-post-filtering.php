@@ -29,8 +29,8 @@ function single_post_filtering() {
             wp_die(__('Please <a href=' . wp_login_url($post->guid) . '>Login</a> To View the post Content'));
         }
     } else {
-       if ($post->post_author == $user){
-            
+        if ($post->post_author == $user) {
+
             return $post->post_content;
         } else {
             foreach ($terms as $term) {
@@ -112,14 +112,13 @@ function postCheck() {
     if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         $page = $_GET['post'];
 
-       // $status = get_post_meta($page, '_edit_last');
-
+        // $status = get_post_meta($page, '_edit_last');
         //if ($status[0] == '1') {
-            if (get_post_type($page) == 'wiki') {
-                if (getAdminPanelSidePermission($page) == false) {
-                    WP_DIE(__('You Dont have enough access rights to Edit this post'));
-                }
-           // }
+        if (get_post_type($page) == 'wiki') {
+            if (getAdminPanelSidePermission($page) == false) {
+                WP_DIE(__('You Dont have enough access rights to Edit this post'));
+            }
+            // }
         }
     }
 }
@@ -148,9 +147,9 @@ function getAdminPanelSidePermission($pageID) {
     } else {
 
         $post_meta = get_post($pageID);
-        
-        if ($post_meta->post_author == $user){
-        return true;
+
+        if ($post_meta->post_author == $user) {
+            return true;
         } else {
             if (empty($access_rights)) {
                 return true;
@@ -208,9 +207,9 @@ function getPermission($pageID) {
             return false;
         }
     } else {
-         $post_meta = get_post($pageID);
-        
-        if ($post_meta->post_author == $user){
+        $post_details = get_post($pageID);
+
+        if ($post_details->post_author == $user) {
             return true;
         } else {
             foreach ($terms as $term) {
@@ -243,3 +242,22 @@ function getPermission($pageID) {
 }
 
 add_filter('bulk_actions-' . 'edit-wiki', '__return_empty_array');
+
+
+/* 
+ * Function to subscribe page and subpages 
+ */
+
+function pageSubscription($postid, $userid, $list) {
+    if (!in_array($userid, $list, true)) {
+        $list[] = $userid;
+        update_post_meta($postid, 'subcribers_list', $list);
+    }
+}
+
+function subPageSubscription($postid, $userid, $list) {
+    if (!in_array($userid, $list, true)) {
+        $list[] = $userid;
+        update_post_meta($postid, 'subpages_tracking', $list);
+    }
+}

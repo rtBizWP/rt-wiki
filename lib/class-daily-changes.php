@@ -2,7 +2,7 @@
 
 /**
  * Description of class-daily-changes
- *
+ * Use  "wp rtwiki changes" to run the CLI command.
  * @author prannoy
  */
 if (defined('WP_CLI') && WP_CLI) {

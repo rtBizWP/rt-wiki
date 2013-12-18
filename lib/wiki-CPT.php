@@ -215,16 +215,12 @@ function rtp_wiki_permission_save($post) {
 
             $postObject = get_post($post);
             if ($postObject->post_author == $userId) {
-                if (!in_array($userId, $subscriberList, true)) {
-                    $subscriberList[] = $userId;
-                    update_post_meta($post, 'subcribers_list', $subscriberList);
-                }
+                
+                pageSubscription($post,$userId,$subscriberList);
+                
                 if ($subPageStatus == true) {
-                    if (!in_array($userId, $subpageTrackingList, true)) {
-                        $subpageTrackingList[] = $userId;
-                        update_post_meta($post, 'subpages_tracking', $subpageTrackingList);
-                    }
-                }
+                 subPageSubscription($post,$userId, $subpageTrackingList);
+                  }
             } else {
                 if (in_array($userId, $subscriberList, true)) {
                     //var_dump($terms);
@@ -257,15 +253,11 @@ function rtp_wiki_permission_save($post) {
                     }
 
                     if ($readWriteFlag == true) {
-                        if (!in_array($userId, $subscriberList, true)) {
-                            $subscribeList[] = $userId;
-                            update_post_meta($post, 'subcribers_list', $subscribeList);
-                        }
+                        
+                        pageSubscription($post,$userId,$subscriberList);
+                        
                         if ($subPageStatus == true) {
-                            if (!in_array($userId, $subpageTrackingList, true)) {
-                                $subpageTrackingList[] = $userId;
-                                update_post_meta($post, 'subpages_tracking', $subpageTrackingList);
-                            }
+                            subPageSubscription($post,$userId, $subpageTrackingList);
                         }
                         /* Check if parent has the userid for subscription of subpages */
                         $parent_ID = $post->post_parent;
@@ -338,6 +330,7 @@ function save_taxonomy_custom_meta($term_id) {
             wp_safe_redirect($_POST['_wp_original_http_referer']);
             exit();
         }
+        
     }
 }
 
