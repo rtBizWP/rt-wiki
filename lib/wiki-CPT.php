@@ -217,10 +217,10 @@ function rtp_wiki_permission_save($post) {
             if ($postObject->post_author == $userId) {
                 
                 pageSubscription($post,$userId,$subscriberList);
-                
-                if ($subPageStatus == true) {
-                 subPageSubscription($post,$userId, $subpageTrackingList);
-                  }
+                subPageSubscription($post,$userId,$subpageTrackingList);
+//                if ($subPageStatus == true) {
+//                 subPageSubscription($post,$userId, $subpageTrackingList);
+//                  }
             } else {
                 if (in_array($userId, $subscriberList, true)) {
                     //var_dump($terms);
