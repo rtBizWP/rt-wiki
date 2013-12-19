@@ -46,16 +46,20 @@ function getContributers($postid) {
  * Get Wiki post SubPages
  */
 
-function getSubPages($parentId, $lvl) {
-    $args = array('parent' => $parentId, 'post_type' => 'wiki');
+function getSubPages($parentId, $lvl,$post_type='wiki') {
+    $args = array('parent' => $parentId, 'post_type' => $post_type);
     $pages = get_pages($args);
 
     if ($pages) {
         $lvl++;
         echo '<ul>';
         foreach ($pages as $page) {
-
-            $permission = getPermission($page->ID);
+            if($post_type == 'wiki'){ 
+                $permission = getPermission($page->ID);
+            }else {
+                $permission = true;
+            }
+                
             if ($permission == true) {
                 echo '<li><a href=' . $page->guid . '>' . $page->post_title . "</a></li>";
             }
@@ -127,3 +131,19 @@ function rtwiki_single_shortcode() {
 }
 
 add_shortcode("rtWikiSinglePost", "rtwiki_single_shortcode");
+
+
+function subpages_non_wiki($attr){
+    
+    $type=$attr['post_type'];
+    $id=$attr['post_id'];
+    $subpageList=get_option('rtWiki_subpages_options');
+   
+    if(in_array($type,$subpageList,true))
+    {
+      if($subpageList['subpages'][$type] == 1 )
+      getSubPages ($id,1,$type);    
+       
+    }
+ }
+add_shortcode("rtwikiSubPages","subpages_non_wiki");
