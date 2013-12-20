@@ -147,3 +147,17 @@ function subpages_non_wiki($attr){
     }
  }
 add_shortcode("rtwikiSubPages","subpages_non_wiki");
+
+
+function subscribe_non_wiki($attr){
+    $subscribe=get_option('rtWiki_subscribe_options');
+    $id=$attr['postId'];
+    $type=$attr['post_type'];
+  if(in_array($type,$subscribe,true))
+  {
+     if($subscribe['subscribe'][$type] == 1)
+     {}
+  }
+    
+}
+add_shortcode("rtwikiSubscribe","subscribe_non_wiki");

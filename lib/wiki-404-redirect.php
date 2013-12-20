@@ -27,7 +27,7 @@ add_action('template_redirect', 'redirect_404');
 
 function redirect_404() {
       if (is_404() && get_query_var('post_type') == 'wiki') {
-          
+        $userId=get_current_user_id();
         $page = $_SERVER['REQUEST_URI'];
         $segments = explode('/', trim($page, '/'));
         if ($segments[0] == 'wiki') {
@@ -41,7 +41,7 @@ function redirect_404() {
                             'post_title' => $segments[$i],
                             'post_content' => '',
                             'post_status' => 'publish',
-                            //'post_author' => 1,
+                            'post_author' => $userId,
                             'post_type' => 'wiki',
                             'slug' => $segments[$i],
                         );
@@ -57,7 +57,7 @@ function redirect_404() {
                             'post_title' => $segments[$i],
                             'post_content' => '',
                             'post_status' => 'publish',
-                            //'post_author' => 1,
+                            'post_author' => $userId,
                             'post_type' => 'wiki',
                             'slug' => $segments[$i],
                             'post_parent' => $parentId,
