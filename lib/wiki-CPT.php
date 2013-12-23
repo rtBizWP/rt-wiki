@@ -52,6 +52,7 @@ function create_wiki() {
         'hierarchical' => true,
         'public' => true,
         'menu_position' => 10,
+        'exclude_from_search' => true,
         'supports' =>
         array('title', 'editor', 'comments',
             'thumbnail', 'revisions'),
