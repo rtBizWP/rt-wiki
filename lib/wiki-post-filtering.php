@@ -6,7 +6,7 @@
  * and frontend side.Display content according to it
  * 
  */
-require (ABSPATH . WPINC . '/feed.php');
+//require (ABSPATH . WPINC . '/feed.php');
 
 /*
  * Single Post Content Permission for Wiki CPT
@@ -265,15 +265,26 @@ function subPageSubscription($postid, $userid, $list) {
 }
 
 /*Function to disable feeds for wiki CPT */
-function fb_disable_feed() {
-    global $post;
-    if($post->post_type == 'wiki'){
-	wp_die( __('No feed available,please visit our <a href="'. get_bloginfo('url') .'">homepage</a>!') );
+remove_action('do_feed_rdf', 'do_feed_rdf', 10, 1);
+remove_action('do_feed_rss', 'do_feed_rss', 10, 1);
+remove_action('do_feed_rss2', 'do_feed_rss2', 10, 1);
+remove_action('do_feed_atom', 'do_feed_atom', 10, 1);
+
+// Now we add our own actions, which point to our own feed function
+add_action('do_feed_rdf', 'my_do_feed', 10, 1);
+add_action('do_feed_rss', 'my_do_feed', 10, 1);
+add_action('do_feed_rss2', 'my_do_feed', 10, 1);
+add_action('do_feed_atom', 'my_do_feed', 10, 1);
+
+// Finally, we do the post type check, and generate feeds conditionally
+function my_do_feed() {
+    global $wp_query;
+    $no_feed = array('wiki');
+    if(in_array($wp_query->query_vars['post_type'], $no_feed)) {
+        wp_die(__('This is not a valid feed address.', 'textdomain'));
+    }
+    else {
+        do_feed_rss2($wp_query->is_comment_feed);
+        
     }
 }
-
-add_action('do_feed', 'fb_disable_feed', 1);
-add_action('do_feed_rdf', 'fb_disable_feed', 1);
-add_action('do_feed_rss', 'fb_disable_feed', 1);
-add_action('do_feed_rss2', 'fb_disable_feed', 1);
-add_action('do_feed_atom', 'fb_disable_feed', 1);

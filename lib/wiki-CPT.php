@@ -31,7 +31,6 @@ function create_wiki() {
         ),
         'description' => __('Wiki', 'rtCamp'),
         'publicly_queryable' => null,
-        'exclude_from_search' => null,
         'capability_type' => 'post',
         'capabilities' => array(),
         'map_meta_cap' => null,
