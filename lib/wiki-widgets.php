@@ -90,9 +90,9 @@ class rt_non_wiki_subPages extends WP_Widget {
         extract($args, EXTR_SKIP);
         global $post;
 
-        if ($post->post_type != 'wiki') {
+        if ($post->post_type != 'wiki' && !is_single()) {
             
-            if (subpages_non_wiki($post->post_type) == true) {
+            if (subpages_non_wiki($post->post_type) == true && is_page()) {
 
             $isParent = ifSubPages($post->ID, $post->post_type);
             
@@ -201,7 +201,7 @@ class rt_non_wiki_single_page_subscribe extends WP_Widget {
     function widget($args, $instance) {
         extract($args, EXTR_SKIP);
         global $post;
-        if ($post->post_type != 'wiki') {
+        if ($post->post_type != 'wiki' && !is_single()) {
             echo $args['before_widget'];
             echo $args['before_title'] . 'Subscribe For Updates' . $args['after_title'];
 

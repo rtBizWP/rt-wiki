@@ -36,6 +36,7 @@ function rtWiki_display_settings() {
             <h4>Extra Settings for different post types </h4>
             
              Note: <span style="margin-left:20px; font-style:italic; font-weight: bold;"> Check the checkbox if you want to enable  functionality as same as wiki CPT for different post types</span>
+             <h4>To show on Frontend , add widgets to the sidebars.</h4>
             <table class="form-table">
                 <input type="hidden" name="rtWiki_hidden" value="Y" />
                 <tbody> 
