@@ -64,7 +64,7 @@ function getSubPages($parentId, $lvl,$post_type='wiki') {
                 echo '<li><a href=' . $page->guid . '>' . $page->post_title . "</a></li>";
             }
 
-            getSubPages($page->ID, $lvl);
+            getSubPages($page->ID, $lvl,$post_type);
         }
         echo '</ul>';
     }
@@ -133,30 +133,30 @@ function rtwiki_single_shortcode() {
 add_shortcode("rtWikiSinglePost", "rtwiki_single_shortcode");
 
 
-function subpages_non_wiki($attr){
+function subpages_non_wiki($post_type){
     
-    $type=$attr['post_type'];
-    $id=$attr['post_id'];
+    
     $subpageList=get_option('rtWiki_subpages_options');
-   
-    if(in_array($type,$subpageList,true))
+    $list=$subpageList['subpages'];
+    
+    if(in_array($post_type,$list))
     {
-      if($subpageList['subpages'][$type] == 1 )
-      getSubPages ($id,1,$type);    
+      if($list[$post_type] == 1 )
+      return true;    
        
     }
  }
 add_shortcode("rtwikiSubPages","subpages_non_wiki");
 
 
-function subscribe_non_wiki($attr){
+function subscribe_non_wiki($post_type){
     $subscribe=get_option('rtWiki_subscribe_options');
-    $id=$attr['postId'];
-    $type=$attr['post_type'];
-  if(in_array($type,$subscribe,true))
+    $list=$subscribe['subscribe'];
+   
+  if(in_array($post_type,$list))
   {
-     if($subscribe['subscribe'][$type] == 1)
-     {}
+     if($list[$post_type] == 1)
+     {return true;}
   }
     
 }

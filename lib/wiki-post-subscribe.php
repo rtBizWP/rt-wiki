@@ -28,8 +28,8 @@ function update() {
 
         $params = array_keys($_REQUEST);  //get the keys from request parameter
         $actionParam = $params[0];
-        $postID = $_REQUEST['update-postId'];  //get user id from the request parameter
-        $url = get_permalink($postID);      //get permalink from user id
+        $postID = $_REQUEST['update-postId'];  //get post id from the request parameter
+        $url = get_permalink($postID);      //get permalink from post id
         $redirectURl = $url . '?' . $actionParam . '=1'; //form the url
 
 
@@ -59,8 +59,8 @@ function updateForAllSubPages() {
 
         $params = array_keys($_REQUEST);  //get the keys from request parameter
         $actionParam = $params[0];
-        $postID = $_REQUEST['update-postId'];  //get user id from the request parameter
-        $url = get_permalink($postID);      //get permalink from user id
+        $postID = $_REQUEST['update-postId'];  //get post id from the request parameter
+        $url = get_permalink($postID);      //get permalink from post id
         $redirectURl = $url . '?' . $actionParam . '=1'; //form the url
 
 
@@ -111,8 +111,9 @@ function subcribeSubPages($parentId, $lvl, $userId) {
  * @param type $parentId
  * @return boolean
  */
-function ifSubPages($parentId) {
-    $args = array('parent' => $parentId, 'post_type' => 'wiki');
+function ifSubPages($parentId,$post_type ='wiki') {
+    
+    $args = array('parent' => $parentId, 'post_type' => $post_type);
     $pages = get_pages($args);
 
     if ($pages)

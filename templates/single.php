@@ -25,14 +25,14 @@ get_header();
                 
                 <?php
                 if (function_exists('rtwiki_single_shortcode')) {
-                    do_shortcode('[rtwikiSubPages post_type="'.$postType.'"  post_id="'.$post->ID.'"]');
+                    //do_shortcode('[rtwikiSubPages post_type="'.$postType.'"  post_id="'.$post->ID.'"]');
                     do_shortcode('[rtWikiSinglePost]');
                 } else {
                     echo single_post_filtering();
                 }
             } else {
                 
-                do_shortcode('[rtwikiSubPages postType="'.$postType.'"]');
+                //do_shortcode('[rtwikiSubPages postType="'.$postType.'"]');
                 get_template_part('content', get_post_format());
                 
             }

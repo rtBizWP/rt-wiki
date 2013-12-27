@@ -10,9 +10,11 @@ if (defined('WP_CLI') && WP_CLI) {
     class daily_changes extends WP_CLI_COMMAND {
 
         function changes() {
-
+ 
             // query_posts('post_type=wiki');
-            $wp_query = new WP_Query(array('post_type' => 'wiki', 'posts_per_page' => -1));
+            $args = array('hierarchical' => true);
+            $post_types = get_post_types($args);
+            $wp_query = new WP_Query(array('post_type' => $post_types , 'posts_per_page' => -1));
 
             $terms = get_terms('user-group', array('hide_empty' => true));
 

@@ -34,6 +34,8 @@ function rtWiki_display_settings() {
             <h2>Select Your Settings</h2> <?php wp_nonce_field('update-options'); ?>
 
             <h4>Extra Settings for different post types </h4>
+            
+             Note: <span style="margin-left:20px; font-style:italic; font-weight: bold;"> Check the checkbox if you want to enable  functionality as same as wiki CPT for different post types</span>
             <table class="form-table">
                 <input type="hidden" name="rtWiki_hidden" value="Y" />
                 <tbody> 
@@ -55,14 +57,12 @@ function rtWiki_display_settings() {
                             <td> <input type="checkbox" name="subscribe[<?php echo $types; ?>]" <?php if ($subscribeOptions['subscribe'][$types] == 1) { ?>checked="checked"<?php } ?> /> </td>
                         </tr>
                     <?php } ?>
-                     <tr>
-                    <th>Example Shortcode</th>
-                    <th style="font-style:italic;">[rtwikiSubPages post_type="page"  post_id="25"]</th>
-                    <th></th>
-                    </tr>   
+                      
                         
                 </tbody>
             </table>
+            
+           
             <div class="submit">  
                 <input type="submit" value="Update Options" />  
             </div>
@@ -76,8 +76,8 @@ function rtwiki_save_settings() {
     //var_dump($_POST['subpages']);    
 
     $args = array(
-        'public' => true,
-        '_builtin' => true,
+       // 'public' => true,
+        //'_builtin' => true,
         'hierarchical' => true,
     );
     $post_types = get_post_types($args);
