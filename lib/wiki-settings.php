@@ -83,8 +83,8 @@ function rtwiki_save_settings() {
     );
     $post_types = get_post_types($args);
 
-
-    if ($_POST['rtWiki_hidden'] == 'Y') {
+     $rtWikiHidden=isset($_GET['rtWiki_hidden']) ? $_GET['rtWiki_hidden'] : '' ; 
+    if ($rtWikiHidden == 'Y') {
         //Form data sent  
 
         foreach ($post_types as $types) {

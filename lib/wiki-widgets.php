@@ -19,13 +19,14 @@ class rt_wiki_contributers extends WP_Widget {
     function widget($args, $instance) {
         extract($args, EXTR_SKIP);
         global $post;
-        echo $args['before_widget'];
+        
         if (ifWikiContributers($post->ID)) {
-
+            echo $args['before_widget'];
             echo $args['before_title'] . 'Contributers' . $args['after_title'];
             getContributers($post->ID);
+            echo $args['after_widget'];
         }
-        echo $args['after_widget'];
+       
     }
 
     function update($new_instance, $old_instance) {
@@ -55,15 +56,16 @@ class rt_wiki_subPages extends WP_Widget {
         global $post;
        
                 $isParent = ifSubPages($post->ID);
-                echo $args['before_widget'];
+               
                 if ($isParent) {
-
+                     echo $args['before_widget'];
                     if (rt_wiki_subpages_check($post->ID, true) == true) {
                         echo $args['before_title'] . 'Sub Pages' . $args['after_title'];
                         getSubPages($post->ID, 0);
                     }
+                    echo $args['after_widget'];
                 }
-                echo $args['after_widget'];
+                
             }
         
     
@@ -247,7 +249,7 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
     function widget($args, $instance) {
         extract($args, EXTR_SKIP);
         global $post;
-        echo $args['before_widget'];
+        
         $isParent = ifSubPages($post->ID);
 
         if ($isParent == true) {
@@ -266,11 +268,13 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
                 else
                     $parentIdFlag = in_array($userId, $parentSubpageTracking, true);
 
-                echo $args['before_title'] . 'Subscribe For All Pages' . $args['after_title'];
+               
                 /* Check whether current post  has userid in page and parent page meta value */
+                echo $args['before_widget'];
+                 echo $args['before_title'] . 'Subscribe For All Pages' . $args['after_title'];
                 if (!in_array($userId, $subPageSubscription, true)) {
                     ?>
-
+                    
                     <form id="user-all-subscribe" method="post" action="?allSubscribe=1">
                         <input type="submit" name=post-update-subscribe" value="Subscribe To all subpages" >
                         <input type="hidden" name="update-all-postId"  value=<?php echo $post->ID ?>>
@@ -279,9 +283,10 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
                 } else {
                     echo 'You Are Subscribed to this page and its sub pages';
                 }
+                echo $args['after_widget'];
             }
         }
-        echo $args['after_widget'];
+        
     }
 
     function update($new_instance, $old_instance) {

@@ -13,9 +13,9 @@ function rt_wiki_sidebar() {
         'name' => __('rtWiki Widget Area', 'rtCamp'),
         'id' => 'rt-wiki-sidebar',
         'description' => __('An optional sidebar for the rtWiki Widget', 'rtCamp'),
-        'before_widget' => '<div id="%1$s" class="headwidget %2$s">',
-        'after_widget' => "</div>",
-        'before_title' => '<h3>',
+        'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+        'after_widget' => '</aside>',
+        'before_title' => '<h3 class="widget-title">',
         'after_title' => '</h3>',
     ));    
 }

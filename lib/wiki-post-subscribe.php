@@ -9,11 +9,16 @@ function checkSubscribe() {
     global $post;
     $subscriberList = get_post_meta($post->ID, 'subcribers_list', true);
     $userId = get_current_user_id();
+    if(!empty($subscriberList))
+    {
     if (in_array($userId, $subscriberList, true)) {
         return true;
     } else {
         return false;
     }
+    }
+    
+    
 }
 
 /**
@@ -182,6 +187,43 @@ function post_changes_send_mail($postID, $email ,$group) {
         remove_filter('wp_mail_content_type', 'set_html_content_type');        
     }
 }
+
+
+function nonWiki_page_changes_send_mail($postID, $email) {
+
+    $revision = wp_get_post_revisions($postID);
+    $content = array();
+    $title = array();
+
+    //$currentDate = date('Y-m-d');
+
+    foreach ($revision as $revisions) {
+        $content[] = $revisions->post_content;
+        $title[] = $revisions->post_title;
+    }
+
+    $args = array(
+        'title' => 'Differences',
+        'title_left' => $title[1],
+        'title_right' => $title[0],
+    );
+    if (!empty($content)) {
+
+        $diff_table = wp_text_diff($content[1], $content[0], $args);
+
+        add_filter('wp_mail_content_type', 'set_html_content_type');
+
+        $subject .= 'Message:Update for  >>> "' . strtoupper(get_the_title($postID)) .'" You are getting these updates as you are subscribed to this page';
+        $subject .=':Time: ' . date("F j, Y, g:i a");
+        $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
+
+        wp_mail($email, $subject, $diff_table, $headers);
+
+        remove_filter('wp_mail_content_type', 'set_html_content_type');        
+    }
+}
+
+
 
 //add_action('wp', 'post_changes_send_mail');
 

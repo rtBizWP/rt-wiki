@@ -13,7 +13,11 @@ function rc_tc_template_chooser($template) {
 
     // Else use custom template
     if (is_single()) {
-        return rc_tc_get_template_hierarchy('single');
+        return rc_tc_get_template_hierarchy('single-wiki');
+    }
+    if(is_archive())
+    {
+        return rc_tc_get_template_hierarchy('archive-wiki');
     }
 }
 
