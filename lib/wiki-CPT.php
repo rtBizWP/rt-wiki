@@ -12,6 +12,8 @@ require_once dirname(__FILE__) . '/wiki-post-filtering.php';
 add_action('init', 'create_wiki');
 
 function create_wiki() {
+
+
     register_post_type('wiki', array(
         'labels' => array(
             'name' => __('Wiki', 'post type general name', 'rtCamp'),
@@ -31,9 +33,21 @@ function create_wiki() {
         ),
         'description' => __('Wiki', 'rtCamp'),
         'publicly_queryable' => null,
-        'capability_type' => 'post',
-        'capabilities' => array(),
-        'map_meta_cap' => null,
+        'map_meta_cap' => true,
+        'capability_type' => 'wiki',
+        'capabilities' => array(
+            'read_post' => 'read_wiki',
+            'publish_posts' => 'publish_wiki',
+            'edit_posts' => 'edit_wiki',
+            'edit_others_posts' => 'edit_others_wiki',
+            'delete_posts' => 'delete_wiki',
+            'delete_others_posts' => 'delete_others_wiki',
+            'read_private_posts' => 'read_private_wiki',
+            'edit_post' => 'edit_wiki',
+            'delete_post' => 'delete_wiki',
+            'edit_published_posts' => 'edit_published_wiki',
+            'delete_published_posts' => 'delete_published_wiki' 
+        ),
         '_builtin' => false,
         '_edit_link' => 'post.php?post=%d',
         'rewrite' => true,
@@ -59,6 +73,97 @@ function create_wiki() {
             )
     );
 }
+
+function add_wiki_caps() {
+    $roles = array(get_role('administrator'), get_role('editor'), get_role('author'), get_role('editor'), get_role('contributor'));
+    foreach ($roles as $role) {
+        $role->add_cap('edit_wiki');
+        $role->add_cap('edit_wiki');
+        $role->add_cap('edit_others_wiki');
+        $role->add_cap('publish_wiki');
+        $role->add_cap('read_wiki');
+        $role->add_cap('read_private_wiki');
+        $role->add_cap('delete_wiki');
+        $role->add_cap('edit_published_wiki');
+        $role->add_cap('delete_published_wiki');
+        $role->add_cap('delete_others_wiki');
+    }
+}
+
+add_action('admin_init', 'add_wiki_caps');
+
+//add_filter( 'map_meta_cap', 'my_map_meta_cap', 10, 4 );
+
+function my_map_meta_cap($caps, $cap, $user_id, $args) {
+
+    /* If editing, deleting, or reading a movie, get the post and post type object. */
+    if ('edit_wiki' == $cap || 'delete_wiki' == $cap || 'read_wiki' == $cap) {
+        $post = get_post($args[0]);
+        $post_type = get_post_type_object($post->post_type);
+
+        /* Set an empty array for the caps. */
+        $caps = array();
+    }
+
+    /* If editing a movie, assign the required capability. */
+    if ('edit_wiki' == $cap) {
+        if ($user_id == $post->post_author)
+            $caps[] = $post_type->cap->edit_posts;
+        else
+            $caps[] = $post_type->cap->edit_others_posts;
+    }
+
+    /* If deleting a movie, assign the required capability. */
+    elseif ('delete_movie' == $cap) {
+        if ($user_id == $post->post_author)
+            $caps[] = $post_type->cap->delete_posts;
+        else
+            $caps[] = $post_type->cap->delete_others_posts;
+    }
+
+    /* If reading a private movie, assign the required capability. */
+    elseif ('read_wiki' == $cap) {
+
+        if ('private' != $post->post_status)
+            $caps[] = 'read';
+        elseif ($user_id == $post->post_author)
+            $caps[] = 'read';
+        else
+            $caps[] = $post_type->cap->read_private_posts;
+    }
+
+    /* Return the capabilities required by the user. */
+    return $caps;
+}
+
+//function add_testimonial_caps_to_admin() {
+//  $caps = array(
+//    'read',
+//    'read_Wiki',
+//    'read_private_Wiki',
+//    'edit_Wiki',
+//    'edit_private_Wiki',
+//    'edit_published_Wiki',
+//    'edit_others_Wiki',
+//    'publish_Wiki',
+//    'delete_Wiki',
+//    'delete_private_Wiki',
+//    'delete_published_Wiki',
+//    'delete_others_Wiki',
+//  );
+//  $roles = array(
+//   // get_role( 'administrator' ),
+//    get_role( 'editor' ),
+//  );
+//  foreach ($roles as $role) {
+//    foreach ($caps as $cap) {
+//      $role->add_cap( $cap );
+//    }
+//  }
+//}
+//add_action( 'after_setup_theme', 'add_testimonial_caps_to_admin' );
+
+
 
 /*
  * Add User group and permission type metabox  
@@ -95,12 +200,12 @@ function display_wiki_post_access_metabox($post) {
                 <td><input type="radio" class="rtwiki_all_w" name="access_rights[all]" <?php if (isset($access_rights['all']['w']) == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
             </tr>
 
-            <?php
-            $args = array('orderby' => 'asc', 'hide_empty' => false);
-            $terms = get_terms('user-group', $args);
-            foreach ($terms as $term) {
-                $groupName = $term->name;
-                ?>
+    <?php
+    $args = array('orderby' => 'asc', 'hide_empty' => false);
+    $terms = get_terms('user-group', $args);
+    foreach ($terms as $term) {
+        $groupName = $term->name;
+        ?>
                 <tr>
                     <td><?php echo $groupName ?></td>
                     <td><input type="radio" class="case" id="na" name="access_rights[<?php echo $groupName ?>]"  <?php if ($access_rights[$groupName]['na'] == 1) { ?>checked="checked"<?php } ?> value="na" /></td>
@@ -215,9 +320,9 @@ function rtp_wiki_permission_save($post) {
 
             $postObject = get_post($post);
             if ($postObject->post_author == $userId) {
-                
-                pageSubscription($post,$userId,$subscriberList);
-                subPageSubscription($post,$userId,$subpageTrackingList);
+
+                pageSubscription($post, $userId, $subscriberList);
+                subPageSubscription($post, $userId, $subpageTrackingList);
 //                if ($subPageStatus == true) {
 //                 subPageSubscription($post,$userId, $subpageTrackingList);
 //                  }
@@ -253,11 +358,11 @@ function rtp_wiki_permission_save($post) {
                     }
 
                     if ($readWriteFlag == true) {
-                        
-                        pageSubscription($post,$userId,$subscriberList);
-                        
+
+                        pageSubscription($post, $userId, $subscriberList);
+
                         if ($subPageStatus == true) {
-                            subPageSubscription($post,$userId, $subpageTrackingList);
+                            subPageSubscription($post, $userId, $subpageTrackingList);
                         }
                         /* Check if parent has the userid for subscription of subpages */
                         $parent_ID = $post->post_parent;
@@ -330,7 +435,6 @@ function save_taxonomy_custom_meta($term_id) {
             wp_safe_redirect($_POST['_wp_original_http_referer']);
             exit();
         }
-        
     }
 }
 

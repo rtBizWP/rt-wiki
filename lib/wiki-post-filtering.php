@@ -103,7 +103,7 @@ function remove_quick_edit($actions) {
     return $actions;
 }
 
-add_filter('page_row_actions', 'remove_quick_edit', 99);
+add_filter('page_row_actions', 'remove_quick_edit', 10);
 
 
 /*

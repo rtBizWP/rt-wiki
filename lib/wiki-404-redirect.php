@@ -28,12 +28,14 @@ add_action('template_redirect', 'redirect_404');
 function redirect_404() {
       if (is_404() && get_query_var('post_type') == 'wiki') {
         $userId=get_current_user_id();
+        if($userId == 0)
+        { $userId = 1; }
         $page = $_SERVER['REQUEST_URI'];
         $segments = explode('/', trim($page, '/'));
         if ($segments[0] == 'wiki') {
             $postid = '';
             for ($i = 1; $i < count($segments); $i++) {
-
+     
                 $page = rtwiki_get_page_id($segments[$i]);
                 if ($i == 1) {
                     if ($page == null) {
