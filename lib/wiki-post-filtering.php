@@ -246,7 +246,36 @@ function getPermission($pageID) {
 add_filter('bulk_actions-' . 'edit-wiki', '__return_empty_array');
 
 
-/* 
+/*
+ * Function to unsubscribe/remove userid from post meta
+ */
+
+function unSubscription($postid, $userid, $list) {
+    if (in_array($userid, $list, true)) {
+
+        if (($key = array_search($userid, $list)) !== false) {
+            
+            unset($list[$key]);
+            $newSubpageTrackingList = $list;
+        }
+        update_post_meta($postid, 'subcribers_list', $newSubpageTrackingList);
+    }
+}
+
+function subpageUnSubscription($postid, $userid, $list) {
+    if (in_array($userid, $list, true)) {
+
+        if (($key = array_search($userid, $list)) !== false) {
+            unset($list[$key]);
+            $newSubpageTrackingList = $list;
+        }
+        update_post_meta($postid, 'subpages_tracking', $newSubpageTrackingList);
+    }
+}
+
+
+
+/*
  * Function to subscribe page and subpages 
  */
 
@@ -264,7 +293,7 @@ function subPageSubscription($postid, $userid, $list) {
     }
 }
 
-/*Function to disable feeds for wiki CPT */
+/* Function to disable feeds for wiki CPT */
 remove_action('do_feed_rdf', 'do_feed_rdf', 10, 1);
 remove_action('do_feed_rss', 'do_feed_rss', 10, 1);
 remove_action('do_feed_rss2', 'do_feed_rss2', 10, 1);
@@ -280,11 +309,9 @@ add_action('do_feed_atom', 'my_do_feed', 10, 1);
 function my_do_feed() {
     global $wp_query;
     $no_feed = array('wiki');
-    if(in_array($wp_query->query_vars['post_type'], $no_feed)) {
+    if (in_array($wp_query->query_vars['post_type'], $no_feed)) {
         wp_die(__('This is not a valid feed address.', 'textdomain'));
-    }
-    else {
+    } else {
         do_feed_rss2($wp_query->is_comment_feed);
-        
     }
 }

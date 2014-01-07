@@ -13,6 +13,7 @@ get_header();
 
         <?php
         /* The loop */
+        
         global $post;
         $postType = $post->post_type;
         ?>
@@ -20,9 +21,11 @@ get_header();
             <h2> <?php //echo the_title();  ?></h2>
             <?php
             if (getPermission($post->ID) == true) {
+                
                 get_template_part('content', get_post_format());
             } else {
-                wp_die(__('Not Enough Access To View the Content'));
+                echo 'Not Enough Rights to View The Content';
+               // wp_die(__('Not Enough Access To View the Content'));
             }
 //            if (function_exists('rtwiki_single_shortcode')) {
 //                do_shortcode('[rtWikiSinglePost]');

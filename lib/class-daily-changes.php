@@ -2,14 +2,14 @@
 
 /**
  * Description of class-daily-changes
- * Use  "wp rtwiki changes" to run the CLI command.
+ * Use  "wp rtwiki wikiChanges" and "wp rtwiki nonWikiChanges" to run the CLI command.
  * @author prannoy
  */
 if (defined('WP_CLI') && WP_CLI) {
 
     class daily_changes extends WP_CLI_COMMAND {
 
-        function changes() {
+        function wikiChanges() {
 
             // query_posts('post_type=wiki');
             $args = array('hierarchical' => true);
@@ -45,7 +45,7 @@ if (defined('WP_CLI') && WP_CLI) {
             wp_reset_query();
         }
 
-        function nonWiki_changes() {
+        function nonWikiChanges() {
             $args = array('hierarchical' => true);
             $post_types = get_post_types($args);
             $wp_query = new WP_Query(array('post_type' => $post_types, 'posts_per_page' => -1));
@@ -55,7 +55,10 @@ if (defined('WP_CLI') && WP_CLI) {
 
                     $postID = get_the_ID();
                     $subscribersList = get_post_meta($postID, 'subcribers_list', true);              
+                   // echo $subscribersList;
+                    //$subscribersList = isset($subscribersList) ? $subscribersList : array();
                     foreach ($subscribersList as $subscribers) {
+                       
                         $user_info = get_userdata($subscribers);
                         nonWiki_page_changes_send_mail($postID, $user_info->user_email);
                     }

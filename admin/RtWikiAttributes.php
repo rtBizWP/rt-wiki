@@ -30,6 +30,7 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 			global $rtWikiAttributesModel;
 			$tax = $rtWikiAttributesModel->get_attribute( $attr_id );
 			$name = rtwiki_attribute_taxonomy_name( $tax->attribute_name );
+                        $pname=substr($name,3);
 			$hierarchical = true;
 			if ($name) {
 
@@ -65,6 +66,7 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 						'show_in_nav_menus' 		=> $show_in_nav_menus,
 //						'rewrite' 					=> array( 'slug' => $product_attribute_base . sanitize_title( $tax->attribute_name ), 'with_front' => false, 'hierarchical' => $hierarchical ),
 						'rewrite' => true,
+                                                //'rewrite' => array( 'slug' => $pname )                                                                        
 					) )
 				);
 			}
