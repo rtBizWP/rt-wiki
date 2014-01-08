@@ -9,7 +9,9 @@ if (defined('WP_CLI') && WP_CLI) {
 
     class daily_changes extends WP_CLI_COMMAND {
 
-        function wikiChanges() {
+ /* Function for sending email to User Group */
+        
+        function wikiGroup() {
 
             // query_posts('post_type=wiki');
             $args = array('hierarchical' => true);
@@ -45,7 +47,36 @@ if (defined('WP_CLI') && WP_CLI) {
             wp_reset_query();
         }
 
-        function nonWikiChanges() {
+        
+/* Function for sending email to Wiki Post Subscribe Users */  
+        
+        function wikiUser()
+        {
+           $wp_query = new WP_Query(array('post_type' => 'wiki', 'posts_per_page' => -1));
+            if ($wp_query->have_posts()) {
+                while ($wp_query->have_posts()) {
+                    $wp_query->the_post();
+
+                    $postID = get_the_ID();
+                   
+                    $subscribersList = get_post_meta($postID, 'subcribers_list', true);              
+                   
+                    foreach ($subscribersList as $subscribers) {
+                       
+                        $user_info = get_userdata($subscribers);
+                        nonWiki_page_changes_send_mail($postID, $user_info->user_email);
+                    }
+                }
+            }
+            wp_reset_query();
+            
+            
+            
+        }
+
+/* Function for sending email to Non Wiki Post Subscribe Users */        
+        
+        function nonWikiUsers() {
             $args = array('hierarchical' => true);
             $post_types = get_post_types($args);
             $wp_query = new WP_Query(array('post_type' => $post_types, 'posts_per_page' => -1));
@@ -55,8 +86,7 @@ if (defined('WP_CLI') && WP_CLI) {
 
                     $postID = get_the_ID();
                     $subscribersList = get_post_meta($postID, 'subcribers_list', true);              
-                   // echo $subscribersList;
-                    //$subscribersList = isset($subscribersList) ? $subscribersList : array();
+                  
                     foreach ($subscribersList as $subscribers) {
                        
                         $user_info = get_userdata($subscribers);

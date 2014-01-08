@@ -243,6 +243,8 @@ function getPermission($pageID) {
     }
 }
 
+
+
 add_filter('bulk_actions-' . 'edit-wiki', '__return_empty_array');
 
 
@@ -254,11 +256,11 @@ function unSubscription($postid, $userid, $list) {
     if (in_array($userid, $list, true)) {
 
         if (($key = array_search($userid, $list)) !== false) {
-            
+
             unset($list[$key]);
             $newSubpageTrackingList = $list;
+            update_post_meta($postid, 'subcribers_list', $newSubpageTrackingList);
         }
-        update_post_meta($postid, 'subcribers_list', $newSubpageTrackingList);
     }
 }
 
@@ -268,8 +270,8 @@ function subpageUnSubscription($postid, $userid, $list) {
         if (($key = array_search($userid, $list)) !== false) {
             unset($list[$key]);
             $newSubpageTrackingList = $list;
+            update_post_meta($postid, 'subpages_tracking', $newSubpageTrackingList);
         }
-        update_post_meta($postid, 'subpages_tracking', $newSubpageTrackingList);
     }
 }
 
@@ -293,6 +295,10 @@ function subPageSubscription($postid, $userid, $list) {
     }
 }
 
+
+
+
+
 /* Function to disable feeds for wiki CPT */
 remove_action('do_feed_rdf', 'do_feed_rdf', 10, 1);
 remove_action('do_feed_rss', 'do_feed_rss', 10, 1);
@@ -313,5 +319,34 @@ function my_do_feed() {
         wp_die(__('This is not a valid feed address.', 'textdomain'));
     } else {
         do_feed_rss2($wp_query->is_comment_feed);
+    }
+}
+
+
+
+/* Changing taxnonmy query for wiki CPT */
+add_action('pre_get_posts', 'add_wiki_taxonomy');
+
+function add_wiki_taxonomy($query) {
+    //global $post;
+
+    if (is_admin()) {
+        return false;
+    }
+
+    if (is_archive() && is_tax()) {
+
+        $tax = get_queried_object();
+        $objectArray = get_taxonomy($tax->taxonomy);
+
+        if (array_key_exists('object_type', $objectArray)) {
+            $post_types = $objectArray->object_type;
+
+            if (in_array('wiki', $post_types)) {
+                if ($query->is_tax()) {
+                    $query->set('post_type', 'wiki');
+                }
+            }
+        }
     }
 }

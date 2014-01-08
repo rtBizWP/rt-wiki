@@ -163,13 +163,13 @@ class rt_wiki_page_subscribe extends WP_Widget {
         extract($args, EXTR_SKIP);
         global $post;
         $currentPageStatus = '';
-        $currentPageMessage='';
+        $currentPageMessage = '';
         $subpageStatus = '';
         $subpageStatusMessage = '';
-        $singleCheck='';
-        $subPageCheck='';
-        
-        $parentStatus=false;
+        $singleCheck = '';
+        $subPageCheck = '';
+
+        $parentStatus = false;
         echo $args['before_widget'];
         echo $args['before_title'] . 'Subscribe For Updates' . $args['after_title'];
 
@@ -185,11 +185,11 @@ class rt_wiki_page_subscribe extends WP_Widget {
         $isParent = ifSubPages($post->ID);
 
         if ($isParent == true) {
-             $parentStatus=true;
+           
             if (rt_wiki_subpages_check($post->ID, true) == true) {
                 $parent_ID = $post->post_parent;
                 $parentIdFlag = false;
-
+                 $parentStatus = true;
                 $userId = get_current_user_id(); //current user id
                 $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true); //Parent Post meta
                 $pageSubscription = get_post_meta($post->ID, 'subcribers_list', true); // Current post meta
@@ -206,32 +206,28 @@ class rt_wiki_page_subscribe extends WP_Widget {
                     $subpageStatus = 1;
                 }
             }
-        } 
-        if ($currentPageStatus == 1)
-        {
-            
-            $singleCheck= "checked"; 
         }
-        else
-        {
-            
-            $singleCheck='';
+        if ($currentPageStatus == 1) {
+
+            $singleCheck = "checked";
+        } else {
+
+            $singleCheck = '';
         }
-        if($subpageStatus == 1)
-        {
-            $subPageCheck="checked";
-        }else{
-            $subPageCheck='';
+        if ($subpageStatus == 1) {
+            $subPageCheck = "checked";
+        } else {
+            $subPageCheck = '';
         }
-            echo '<form id="user-subscribe" method="post" action="?wikiPageSubscribe=1">
-                <input type="checkbox" name="single-subscribe" value="current" '.$singleCheck.' >Subscribe to this page <br/>';
-                if($parentStatus == true){
-                echo '<input type="checkbox" name="subPage-subscribe" value="subpage" '.$subPageCheck.' >Subscribe to Sub Pages <br />';    
-                }
-                echo '<input type="submit" name=post-update-subscribe" value="Submit" >
+        echo '<form id="user-subscribe" method="post" action="?wikiPageSubscribe=1">
+                <input type="checkbox" name="single-subscribe" value="current"  '. $singleCheck .' >Subscribe to this page <br/>';
+        if ($parentStatus == true) {
+            echo '<input type="checkbox" name="subPage-subscribe" value="subpage"  '. $subPageCheck .' >Subscribe to this page and  Sub Pages <br />';
+        }
+        echo '<input type="submit" name=post-update-subscribe" value="Submit" >
                 <input type="hidden" name="update-postId"  value=' . $post->ID . '>
             </form>';
-        
+
         echo $args['after_widget'];
     }
 
@@ -268,9 +264,9 @@ class rt_non_wiki_single_page_subscribe extends WP_Widget {
                 <input type="hidden" name="unSubscribe-postId"  value=' . $post->ID . '>
             </form>';
                 } else {
-                    echo '<form id="user-subscribe" method="post" action="?subscribe=1">
+                    echo '<form id="user-subscribe-non-wiki" method="post" action="?subscribe=1">
                 <input type="submit" name=post-update-subscribe" value="Subscribe For Updates" >
-                <input type="hidden" name="update-postId"  value=' . $post->ID . '>
+                <input type="hidden" name="nonWikiPost"  value='. $post->ID .'>
             </form>';
                 }
             } else {
@@ -360,7 +356,7 @@ function rt_wiki_register_widgets() {
     register_widget('rt_wiki_subPages');
     register_widget('rt_non_wiki_subPages');
     register_widget('rt_wiki_page_subscribe');
-   // register_widget('rt_wiki_subpage_subscribe');
+    // register_widget('rt_wiki_subpage_subscribe');
     register_widget('rt_wiki_taxonomies');
     register_widget('rt_non_wiki_single_page_subscribe');
 }

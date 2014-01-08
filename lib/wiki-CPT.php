@@ -245,6 +245,7 @@ function rtp_wiki_permission_save($post) {
              * If user is already subscribed to this page,check for any changes according to the permissions set
              */
 
+            // checks if user is author itself 
             $postObject = get_post($post);
             if ($postObject->post_author == $userId) {
 

@@ -90,13 +90,14 @@ function wiki_custom_taxonomies($postid) {
      $out = '';
     foreach ($attr_term as $attr) {
 
-        $taxonomy = 'rt_' . $attr;
+        $taxonomy = $attr;
         $out.= "<ul>" . $attr;
-
+        //echo $taxonomy;
         $terms = get_the_terms($post->ID, $taxonomy);
         if (!empty($terms)) {
             foreach ($terms as $term)
-                $out .= '<li><a href="' . get_term_link($term->slug, $taxonomy) . '" title="' . $term->name . '" >' . $term->name . '</a></li>';
+               // var_dump($term);
+                $out .= '<li><a href="' . get_term_link($term->slug,$taxonomy) . '" title="' . $term->name . '" >' . $term->name . '</a></li>';
         }
         $out .="</ul>";
     }

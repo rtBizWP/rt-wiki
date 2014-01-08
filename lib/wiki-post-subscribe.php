@@ -18,6 +18,37 @@ function checkSubscribe() {
     }
 }
 
+function nonWikiSubscribe() {
+    global $pagenow;
+
+    if (isset($_REQUEST['subscribe']) == '1') {
+
+
+        $params = array_keys($_REQUEST);  //get the keys from request parameter
+        $actionParam = $params[0];
+        $postID = $_REQUEST['nonWikiPost'];  //get post id from the request parameter
+        $url = get_permalink($postID);      //get permalink from post id
+        $redirectURl = $url . '?' . $actionParam . '=1'; //form the url
+
+
+        if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
+            wp_redirect(wp_login_url($redirectURl), 302); //after login and if permission is set , user would be subscribed to the page
+        } else {
+            //var_dump($_POST['nonWikiPost']);
+
+            if (isset($_POST['nonWikiPost'])) {
+
+                $id = $_POST['nonWikiPost'];
+                $userId = get_current_user_id();
+                $subscribeId = get_post_meta($id, 'subcribers_list', true);
+                pageSubscription($id, $userId, $subscribeId);
+            }
+        }
+    }
+}
+
+add_action('wp', 'nonWikiSubscribe');
+
 function unSubscribe() {
     global $pagenow;
 
@@ -94,7 +125,7 @@ function update() {
                 //var_dump($pageSubsciptionList);
 
                 unSubscription($postID, $userId, $pageSubsciptionList);
-                subPageSubscription($postID, $userId, $subpagesTrackingList);
+                subpageUnSubscription($postID, $userId, $subpagesTrackingList);
 
                 unSubcribeSubPages($postID, 0, $userId);
             }
@@ -256,15 +287,15 @@ function post_changes_send_mail($postID, $email, $group) {
     );
     if (!empty($content)) {
 
-        $diff_table = wp_text_diff($content[1], $content[0], $args);
-
+        //$diff_table = wp_text_diff($content[1], $content[0], $args);
+        $body = rtcrm_text_diff($title[1], $title[0], $content[1], $content[0]);
         add_filter('wp_mail_content_type', 'set_html_content_type');
 
         $subject .= 'Message:Update for  >>> "' . strtoupper(get_the_title($postID)) . '" You are getting these updates as you belong to "' . $group . '" group';
         $subject .=':Time: ' . date("F j, Y, g:i a");
         $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
 
-        wp_mail($email, $subject, $diff_table, $headers);
+        wp_mail($email, $subject, $body, $headers);
 
         remove_filter('wp_mail_content_type', 'set_html_content_type');
     }
@@ -290,15 +321,15 @@ function nonWiki_page_changes_send_mail($postID, $email) {
     );
     if (!empty($content)) {
 
-        $diff_table = wp_text_diff($content[1], $content[0], $args);
-
+        //$diff_table = wp_text_diff($content[1], $content[0], $args);
+        $body = rtcrm_text_diff($title[1], $title[0], $content[1], $content[0]);
         add_filter('wp_mail_content_type', 'set_html_content_type');
 
         $subject .= 'Message:Update for  >>> "' . strtoupper(get_the_title($postID)) . '" You are getting these updates as you are subscribed to this page';
         $subject .=':Time: ' . date("F j, Y, g:i a");
         $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
 
-        wp_mail($email, $subject, $diff_table, $headers);
+        wp_mail($email, $subject, $body, $headers);
 
         remove_filter('wp_mail_content_type', 'set_html_content_type');
     }
@@ -310,4 +341,64 @@ function set_html_content_type() {
 
     return 'text/html';
 }
+
+/*
+ * Function Called when a Wiki post is Upated 
+ * Sends Email to Subscribers of Wiki Posts
+ */
+
+function sendMailonPostUpdateWiki($post) {
+    $postObject = get_post($post);
+
+
+    if ($postObject->post_type == 'wiki') {
+        // If this is just a revision, don't send the email.
+
+        if (wp_is_post_revision($postObject->ID)) {
+            return;
+        }
+
+        $subscribersList = get_post_meta($postObject->ID, 'subcribers_list', true);
+        if (!empty($subscribersList) || $subscribersList != NULL) {
+            foreach ($subscribersList as $subscribers) {
+
+                $user_info = get_userdata($subscribers);
+                nonWiki_page_changes_send_mail($postObject->ID, $user_info->user_email);
+            }
+        }
+    }
+}
+
+add_action('save_post', 'sendMailonPostUpdateWiki');
+
+/*
+ * Function Called when a Non Wiki post type is Updated 
+ * Sends Email to Subscribers of Non Wiki Posts
+ */
+
+function sendMailNonWiki($post) {
+    $postObject = get_post($post);
+    $args = array('hierarchical' => true);
+    $post_types = get_post_types($args);
+
+    if ($postObject->post_type != 'wiki') {
+
+        if (wp_is_post_revision($postObject->ID)) {
+            return;
+        }
+
+        if (in_array($postObject->post_type, $post_types)) {
+            $subscribersList = get_post_meta($postObject->ID, 'subcribers_list', true);
+            if (!empty($subscribersList) || $subscribersList != NULL) {
+                foreach ($subscribersList as $subscribers) {
+                    $user_info = get_userdata($subscribers);
+                    nonWiki_page_changes_send_mail($postObject->ID, $user_info->user_email);
+                }
+            }
+        }
+    }
+}
+
+add_action('save_post', 'sendMailNonWiki');
+
 

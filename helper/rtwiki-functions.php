@@ -18,5 +18,5 @@ function rtwiki_sanitize_taxonomy_name( $taxonomy ) {
 }
 
 function rtwiki_attribute_taxonomy_name( $name ) {
-	return 'rt_' . rtwiki_sanitize_taxonomy_name( $name );
+	return  rtwiki_sanitize_taxonomy_name( $name );
 }

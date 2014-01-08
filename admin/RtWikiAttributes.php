@@ -30,7 +30,7 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 			global $rtWikiAttributesModel;
 			$tax = $rtWikiAttributesModel->get_attribute( $attr_id );
 			$name = rtwiki_attribute_taxonomy_name( $tax->attribute_name );
-                        $pname=substr($name,3);
+                       // $pname=substr($name,3);
 			$hierarchical = true;
 			if ($name) {
 
@@ -179,7 +179,7 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 							$wpdb->update(
 								$wpdb->term_taxonomy,
 								array( 'taxonomy' => rtwiki_attribute_taxonomy_name( $attribute_name ) ),
-								array( 'taxonomy' => 'rt_' . $old_attribute_name )
+								array( 'taxonomy' => $old_attribute_name )
 							);
 
 //							// Update taxonomy ordering term meta

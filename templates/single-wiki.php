@@ -17,27 +17,19 @@ get_header();
         global $post;
         $postType = $post->post_type;
         ?>
-        <?php while (have_posts()) : the_post(); ?>
             <h2> <?php //echo the_title();  ?></h2>
-            <?php
-            if (getPermission($post->ID) == true) {
-                
-                get_template_part('content', get_post_format());
-            } else {
-                echo 'Not Enough Rights to View The Content';
-               // wp_die(__('Not Enough Access To View the Content'));
-            }
-//            if (function_exists('rtwiki_single_shortcode')) {
-//                do_shortcode('[rtWikiSinglePost]');
-//            } else {
-//                echo single_post_filtering();
-//            }
-
-        endwhile;
-
-        //twentythirteen_post_nav();
-        comments_template();
-        ?>
+            <div id="content-wrapper">
+                <?php
+            
+            if (getPermission($post->ID) == true) { ?>
+                <h2><?php echo the_title(); ?></h2>
+                <p><?php echo the_content(); ?></p>
+                             
+               <?php  } else { ?>
+              <p> <?php echo 'Not Enough Rights to View The Content'; ?>  </p>
+             
+           <?php } ?>
+            </div>  
     </div><!-- #content -->
 </div><!-- #primary -->
 
