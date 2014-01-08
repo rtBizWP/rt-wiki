@@ -291,8 +291,8 @@ function post_changes_send_mail($postID, $email, $group) {
         $body = rtcrm_text_diff($title[1], $title[0], $content[1], $content[0]);
         add_filter('wp_mail_content_type', 'set_html_content_type');
 
-        $subject .= 'Message:Update for  >>> "' . strtoupper(get_the_title($postID)) . '" You are getting these updates as you belong to "' . $group . '" group';
-        $subject .=':Time: ' . date("F j, Y, g:i a");
+        $subject .= 'Message:Updates for "' . strtoupper(get_the_title($postID)) . '"';
+        //$subject .=':Time: ' . date("F j, Y, g:i a");
         $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
 
         wp_mail($email, $subject, $body, $headers);
@@ -325,8 +325,8 @@ function nonWiki_page_changes_send_mail($postID, $email) {
         $body = rtcrm_text_diff($title[1], $title[0], $content[1], $content[0]);
         add_filter('wp_mail_content_type', 'set_html_content_type');
 
-        $subject .= 'Message:Update for  >>> "' . strtoupper(get_the_title($postID)) . '" You are getting these updates as you are subscribed to this page';
-        $subject .=':Time: ' . date("F j, Y, g:i a");
+        $subject .= 'Message:Updates for "' . strtoupper(get_the_title($postID)) . '"';
+       // $subject .=':Time: ' . date("F j, Y, g:i a");
         $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
 
         wp_mail($email, $subject, $body, $headers);
