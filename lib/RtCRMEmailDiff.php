@@ -59,8 +59,8 @@ if (!class_exists('RtCRMEmailDiff')) {
 // wp1_text_diff
 if (!function_exists('rtcrm_text_diff')) {
 
-    function rtcrm_text_diff($left_string, $right_string, $left_content, $right_content, $args = null) {
-        $defaults = array('title' => 'Updates', 'title_left' => $left_string, 'title_right' => $right_string);
+    function rtcrm_text_diff($left_title, $right_title, $left_content, $right_content, $args = null) {
+        $defaults = array('title' => 'Updates', 'title_left' => $left_title, 'title_right' => $right_title);
         $args = wp_parse_args($args, $defaults);
 
         $left_string = normalize_whitespace($left_content);
@@ -94,5 +94,54 @@ if (!function_exists('rtcrm_text_diff')) {
         $r .= "</table>";
         return $r;
     }
+    
+    
+    function rtcrm_text_diff_taxonomy($left_string, $right_string, $args = null) {
+//                 echo '<pre>';
+//        print_r('left'.$left_string);
+//           echo '</pre>';
+//                echo '<pre>';
+//        print_r('right'.$right_string);
+//           echo '</pre>';
+               
+        
+		$defaults = array('title' => '', 'title_left' => '', 'title_right' => '');
+		$args = wp_parse_args($args, $defaults);
+
+		$left_string = normalize_whitespace($left_string);
+		$right_string = normalize_whitespace($right_string);
+		$left_lines = explode("\n", $left_string);
+		$right_lines = explode("\n", $right_string);
+
+		$text_diff = new Text_Diff($left_lines, $right_lines);
+//                var_dump($text_diff);
+//                die;
+		$renderer = new RtCRMEmailDiff();
+		$diff = $renderer->render($text_diff);
+                
+		if (!$diff)
+	        return '';
+
+		$r = "<table class='diff' style='width: 100%;background: white;margin-bottom: 1.25em;border: solid 1px #dddddd;border-radius: 3px;margin: 0 0 18px;'>\n";
+		$r .= "<col class='ltype' /><col class='content' /><col class='ltype' /><col class='content' />";
+
+		if ($args['title'] || $args['title_left'] || $args['title_right'])
+			$r .= "<thead>";
+		if ($args['title'])
+			$r .= "<tr class='diff-title'><th colspan='4'>$args[title]</th></tr>\n";
+		if ($args['title_left'] || $args['title_right']) {
+			$r .= "<tr class='diff-sub-title'>\n";
+			$r .= "\t<td></td><th>$args[title_left]</th>\n";
+			$r .= "\t<td></td><th>$args[title_right]</th>\n";
+			$r .= "</tr>\n";
+		}
+		if ($args['title'] || $args['title_left'] || $args['title_right'])
+	        $r .= "</thead>\n";
+		$r .= "<tbody>\n$diff\n</tbody>\n";
+		$r .= "</table>";
+		return $r;
+	}
+    
+    
 
 }

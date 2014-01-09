@@ -272,7 +272,26 @@ function post_changes_send_mail($postID, $email, $group) {
     $revision = wp_get_post_revisions($postID);
     $content = array();
     $title = array();
+    $termid = array();
+    $taxo = $_REQUEST['tax_input'];
+   
+    $diff = '';
+   if(isset($taxo))
+   {
+    foreach ($taxo as $key => $value) {
 
+        foreach ($value as $val) {
+           if ($val != 0) {
+                $termid[] = $val;
+            }
+        }
+        if (!empty($termid)) {
+
+            $diff.=contacts_diff_on_lead($postID, $termid, $key);
+        }
+        unset($termid);
+    }
+   }
     //$currentDate = date('Y-m-d');
 
     foreach ($revision as $revisions) {
@@ -289,9 +308,10 @@ function post_changes_send_mail($postID, $email, $group) {
 
         //$diff_table = wp_text_diff($content[1], $content[0], $args);
         $body = rtcrm_text_diff($title[1], $title[0], $content[1], $content[0]);
+        $body.=$diff;
         add_filter('wp_mail_content_type', 'set_html_content_type');
 
-        $subject .= 'Message:Updates for "' . strtoupper(get_the_title($postID)) . '"';
+        $subject .= 'Updates for "' . strtoupper(get_the_title($postID)) . '"';
         //$subject .=':Time: ' . date("F j, Y, g:i a");
         $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
 
@@ -301,12 +321,43 @@ function post_changes_send_mail($postID, $email, $group) {
     }
 }
 
+//function filter_handler( $data , $postarr ) {
+//  // do something with the post data
+//  return $data;
+//}
+
+
+
+
+
 function nonWiki_page_changes_send_mail($postID, $email) {
 
     $revision = wp_get_post_revisions($postID);
     $content = array();
     $title = array();
+    
+    $termid = array();
+    $taxo = $_REQUEST['tax_input'];
+   
+    $diff = '';
+   if(isset($taxo))
+   {
+    foreach ($taxo as $key => $value) {
 
+        foreach ($value as $val) {
+           if ($val != 0) {
+                $termid[] = $val;
+            }
+        }
+        if (!empty($termid)) {
+
+            $diff.=contacts_diff_on_lead($postID, $termid, $key);
+        }
+        unset($termid);
+    }
+   }
+   //die();
+    //var_dump($diff);
     //$currentDate = date('Y-m-d');
 
     foreach ($revision as $revisions) {
@@ -323,10 +374,11 @@ function nonWiki_page_changes_send_mail($postID, $email) {
 
         //$diff_table = wp_text_diff($content[1], $content[0], $args);
         $body = rtcrm_text_diff($title[1], $title[0], $content[1], $content[0]);
+        $body.=$diff;
         add_filter('wp_mail_content_type', 'set_html_content_type');
 
-        $subject .= 'Message:Updates for "' . strtoupper(get_the_title($postID)) . '"';
-       // $subject .=':Time: ' . date("F j, Y, g:i a");
+        $subject .= 'Updates for "' . strtoupper(get_the_title($postID)) . '"';
+        // $subject .=':Time: ' . date("F j, Y, g:i a");
         $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
 
         wp_mail($email, $subject, $body, $headers);
@@ -369,7 +421,7 @@ function sendMailonPostUpdateWiki($post) {
     }
 }
 
-add_action('save_post', 'sendMailonPostUpdateWiki');
+add_action('save_post', 'sendMailonPostUpdateWiki',10, 2);
 
 /*
  * Function Called when a Non Wiki post type is Updated 
@@ -401,4 +453,15 @@ function sendMailNonWiki($post) {
 
 add_action('save_post', 'sendMailNonWiki');
 
+function saveTaxonomyForRevisions($post) {
+    $postObject = get_post($post);
 
+    //display();     
+}
+
+//add_action('save_post', 'saveTaxonomyForRevisions');
+add_action('pre_post_update','get_terms_before_update');
+function get_terms_before_update($post_id,$tax){
+    $data=post_term_to_string( $post_id, $tax );
+    return $data; 
+}
