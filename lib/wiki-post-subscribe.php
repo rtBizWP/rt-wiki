@@ -321,14 +321,6 @@ function post_changes_send_mail($postID, $email, $group) {
     }
 }
 
-//function filter_handler( $data , $postarr ) {
-//  // do something with the post data
-//  return $data;
-//}
-
-
-
-
 
 function nonWiki_page_changes_send_mail($postID, $email) {
 
@@ -356,10 +348,7 @@ function nonWiki_page_changes_send_mail($postID, $email) {
         unset($termid);
     }
    }
-   //die();
-    //var_dump($diff);
-    //$currentDate = date('Y-m-d');
-
+   
     foreach ($revision as $revisions) {
         $content[] = $revisions->post_content;
         $title[] = $revisions->post_title;
@@ -401,8 +390,15 @@ function set_html_content_type() {
 
 function sendMailonPostUpdateWiki($post) {
     $postObject = get_post($post);
-
-
+//    echo '<pre>';
+//    print_r($post_after);
+//    echo '</pre>';
+//    
+//    echo '<pre>';
+//    print_r($post_before);
+//    echo '</pre>';
+    //exit; 
+    
     if ($postObject->post_type == 'wiki') {
         // If this is just a revision, don't send the email.
 
@@ -421,8 +417,22 @@ function sendMailonPostUpdateWiki($post) {
     }
 }
 
-add_action('save_post', 'sendMailonPostUpdateWiki',10, 2);
+add_action('save_post', 'sendMailonPostUpdateWiki');
 
+
+//function getOldTerms($post,$post_after,$post_before)
+//{
+//    echo '<pre>';
+//    print_r($post_after);
+//    echo '</pre>';
+//    
+//    echo '<pre>';
+//    print_r($post_before);
+//    echo '</pre>';
+//    exit;
+//    
+//}
+//add_action('post_updated','getOldTerms',99,3);
 /*
  * Function Called when a Non Wiki post type is Updated 
  * Sends Email to Subscribers of Non Wiki Posts
@@ -453,15 +463,3 @@ function sendMailNonWiki($post) {
 
 add_action('save_post', 'sendMailNonWiki');
 
-function saveTaxonomyForRevisions($post) {
-    $postObject = get_post($post);
-
-    //display();     
-}
-
-//add_action('save_post', 'saveTaxonomyForRevisions');
-add_action('pre_post_update','get_terms_before_update');
-function get_terms_before_update($post_id,$tax){
-    $data=post_term_to_string( $post_id, $tax );
-    return $data; 
-}
