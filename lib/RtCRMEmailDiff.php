@@ -97,12 +97,6 @@ if (!function_exists('rtcrm_text_diff')) {
     
     
     function rtcrm_text_diff_taxonomy($left_string, $right_string, $args = null) {
-//                 echo '<pre>';
-//        print_r('left'.$left_string);
-//           echo '</pre>';
-//                echo '<pre>';
-//        print_r('right'.$right_string);
-//           echo '</pre>';
                
         
 		$defaults = array('title' => '', 'title_left' => '', 'title_right' => '');
@@ -114,8 +108,6 @@ if (!function_exists('rtcrm_text_diff')) {
 		$right_lines = explode("\n", $right_string);
 
 		$text_diff = new Text_Diff($left_lines, $right_lines);
-//                var_dump($text_diff);
-//                die;
 		$renderer = new RtCRMEmailDiff();
 		$diff = $renderer->render($text_diff);
                 

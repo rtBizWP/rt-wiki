@@ -1,12 +1,8 @@
 <?php
-function contacts_diff_on_lead( $post_id, $newLead,$tax) {
+function contacts_diff_on_lead( $post_id, $newLead,$oldLead,$tax) {
 
 	$diffHTML = '';
-         echo '<pre>';
-        print_r($newLead);
-        echo '</pre>';
-        
-         
+     
 	if ( !isset( $newLead ) ) {
 		$newLead= array();
 	}
@@ -18,18 +14,18 @@ function contacts_diff_on_lead( $post_id, $newLead,$tax) {
 	// String of Old Terms
         /* Change this function name. Defined below */
 	//$oldContactsString = post_term_to_string( $post_id, $tax );
-       
-	// String of New Terms
+        $oldContactsString=  implode(',',$oldLead);
+
 	$newContactsString = '';
 	if(!empty($contacts)) {
-                //echo 'inside';
+
 		$contactsArr = array();
 		foreach ( $contacts as $contact ) {
 			$newC = get_term_by( $post_id, $contact, $tax );
 			$contactsArr[] = $newC->name;
 		}
 		$newContactsString = implode(',', $contactsArr);
-                    
+       
 	}
 	$diff = rtcrm_text_diff_taxonomy($oldContactsString,$newContactsString);
 	if ( $diff ) {
@@ -43,10 +39,6 @@ function contacts_diff_on_lead( $post_id, $newLead,$tax) {
 /* Change this function name */
 function post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
 	$termsArr = get_the_terms( $postid, $taxonomy );
-//        echo '<pre>';
-//        print_r($termsArr);
-//        echo '</pre>';
-        //var_dump($termsArr);
 	$tmpStr = '';
 	if ( $termsArr ) {
 		$sep = '';
