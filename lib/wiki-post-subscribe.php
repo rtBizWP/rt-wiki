@@ -571,5 +571,5 @@ function sendMailNonWiki($post) {
     }
 }
 
-add_action('save_post', 'sendMailNonWiki');
+add_action('pre_post_update', 'sendMailNonWiki',99,1);
 
