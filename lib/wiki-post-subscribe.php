@@ -272,25 +272,26 @@ function post_changes_send_mail($postID, $email, $group) {
     $revision = wp_get_post_revisions($postID);
     $content = array();
     $title = array();
-    $termid = array();
-    $taxo = $_REQUEST['tax_input'];
+//    $termid = array();
+//    $taxo = $_REQUEST['tax_input'];
 
-    $diff = '';
-    if (isset($taxo)) {
-        foreach ($taxo as $key => $value) {
-
-            foreach ($value as $val) {
-                if ($val != 0) {
-                    $termid[] = $val;
-                }
-            }
-            if (!empty($termid)) {
-
-                $diff.=contacts_diff_on_lead($postID, $termid, $key);
-            }
-            unset($termid);
-        }
-    }
+//    $diff = '';
+//    if (isset($taxo)) {
+//        foreach ($taxo as $key => $value) {
+//
+//            foreach ($value as $val) {
+//                if ($val != 0) {
+//                    $termid[] = $val;
+//                }
+//            }
+//            if (!empty($termid)) {
+//
+//                $diff.=contacts_diff_on_lead($postID, $termid, $key);
+//            }
+//            unset($termid);
+//            }
+//        }
+    
     //$currentDate = date('Y-m-d');
 
     foreach ($revision as $revisions) {
