@@ -38,7 +38,7 @@ if (defined('WP_CLI') && WP_CLI) {
                                 $termId = $term->term_id;
                                 $email = $term_meta[$termId]['email_address'];
 
-                                post_changes_send_mail($postID, $email, strtoupper($term->slug));
+                                post_changes_send_mail($postID, $email, strtoupper($term->slug),get_permalink($postID));
                             }
                         }
                     }
@@ -64,7 +64,7 @@ if (defined('WP_CLI') && WP_CLI) {
                     foreach ($subscribersList as $subscribers) {
                        
                         $user_info = get_userdata($subscribers);
-                        nonWiki_page_changes_send_mail($postID, $user_info->user_email);
+                        nonWiki_page_changes_send_mail($postID, $user_info->user_email,'',get_permalink($postID));
                     }
                 }
             }
@@ -90,7 +90,7 @@ if (defined('WP_CLI') && WP_CLI) {
                     foreach ($subscribersList as $subscribers) {
                        
                         $user_info = get_userdata($subscribers);
-                        nonWiki_page_changes_send_mail($postID, $user_info->user_email);
+                        nonWiki_page_changes_send_mail($postID, $user_info->user_email,'',get_permalink($postID));
                     }
                 }
             }

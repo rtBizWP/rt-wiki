@@ -75,7 +75,7 @@ function create_wiki() {
 }
 
 function add_wiki_caps() {
-    $roles = array(get_role('administrator'), get_role('editor'), get_role('author'), get_role('editor'), get_role('contributor'));
+    $roles = array(get_role('administrator'), get_role('author'), get_role('editor'), get_role('contributor'));
     foreach ($roles as $role) {
         $role->add_cap('edit_wiki');
         $role->add_cap('edit_wiki');
@@ -361,7 +361,7 @@ function save_taxonomy_custom_meta($term_id) {
 
         if (isset($_POST['_wp_original_http_referer'])) {
             wp_safe_redirect($_POST['_wp_original_http_referer']);
-            exit();
+            //exit();
         }
     }
 }

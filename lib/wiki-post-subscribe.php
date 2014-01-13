@@ -267,66 +267,47 @@ function rt_wiki_subpages_check($parentId, $subPage) {
  * @param type $post
  * @param type $email
  */
-function post_changes_send_mail($postID, $email, $group) {
+function post_changes_send_mail($postID, $email, $group, $url = '') {
 
     $revision = wp_get_post_revisions($postID);
     $content = array();
     $title = array();
-//    $termid = array();
-//    $taxo = $_REQUEST['tax_input'];
-
-//    $diff = '';
-//    if (isset($taxo)) {
-//        foreach ($taxo as $key => $value) {
-//
-//            foreach ($value as $val) {
-//                if ($val != 0) {
-//                    $termid[] = $val;
-//                }
-//            }
-//            if (!empty($termid)) {
-//
-//                $diff.=contacts_diff_on_lead($postID, $termid, $key);
-//            }
-//            unset($termid);
-//            }
-//        }
-    
-    //$currentDate = date('Y-m-d');
 
     foreach ($revision as $revisions) {
         $content[] = $revisions->post_content;
         $title[] = $revisions->post_title;
     }
 
-    $args = array(
-        'title' => 'Differences',
-        'title_left' => $title[1],
-        'title_right' => $title[0],
-    );
-    if (!empty($content)) {
+//    $args = array(
+//        'title' => 'Differences',
+//        'title_left' => $title[1],
+//        'title_right' => $title[0],
+//    );
 
+    if (!empty($content)) {
+        $url = 'Page Link:' . $url . '<br>';
         //$diff_table = wp_text_diff($content[1], $content[0], $args);
         $body = rtcrm_text_diff($title[1], $title[0], $content[1], $content[0]);
         $body.=$diff;
+        $finalBody = $url . '<br>' . $body;
         add_filter('wp_mail_content_type', 'set_html_content_type');
 
         $subject .= 'Updates for "' . strtoupper(get_the_title($postID)) . '"';
         //$subject .=':Time: ' . date("F j, Y, g:i a");
         $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
 
-        wp_mail($email, $subject, $body, $headers);
+        wp_mail($email, $subject, $finalBody, $headers);
 
         remove_filter('wp_mail_content_type', 'set_html_content_type');
     }
 }
 
-function nonWiki_page_changes_send_mail($postID, $email,$tax_diff='') {
+function nonWiki_page_changes_send_mail($postID, $email, $tax_diff = '', $url = '') {
 
     $revision = wp_get_post_revisions($postID);
     $content = array();
     $title = array();
-    
+
 //    $termid = array();
 //    $taxo = $_REQUEST['tax_input'];
 //
@@ -347,29 +328,31 @@ function nonWiki_page_changes_send_mail($postID, $email,$tax_diff='') {
 //        }
 //    }
 
-    
+
     foreach ($revision as $revisions) {
         $content[] = $revisions->post_content;
         $title[] = $revisions->post_title;
     }
 
-    $args = array(
-        'title' => 'Differences',
-        'title_left' => $title[1],
-        'title_right' => $title[0],
-    );
-    if (!empty($content)) {
+//    $args = array(
+//        'title' => 'Differences',
+//        'title_left' => $title[1],
+//        'title_right' => $title[0],
+//    );
 
+    if (!empty($content)) {
+        $url = 'Page Link:' . $url . '<br>';
         //$diff_table = wp_text_diff($content[1], $content[0], $args);
         $body = rtcrm_text_diff($title[1], $title[0], $content[1], $content[0]);
         $body.=$tax_diff;
+        $finalBody = $url . '<br>' . $body;
         add_filter('wp_mail_content_type', 'set_html_content_type');
 
         $subject .= 'Updates for "' . strtoupper(get_the_title($postID)) . '"';
         // $subject .=':Time: ' . date("F j, Y, g:i a");
         $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
 
-        wp_mail($email, $subject, $body, $headers);
+        wp_mail($email, $subject, $finalBody, $headers);
 
         remove_filter('wp_mail_content_type', 'set_html_content_type');
     }
@@ -382,111 +365,113 @@ function set_html_content_type() {
     return 'text/html';
 }
 
+//function sendMailonPostUpdateWiki($post) {
+//    $postObject = get_post($post);
+//    if ($postObject->post_type == 'wiki') {
+//        // If this is just a revision, don't send the email.
+//
+//        if (wp_is_post_revision($postObject->ID)) {
+//            return;
+//        }
+//
+//        $subscribersList = get_post_meta($postObject->ID, 'subcribers_list', true);
+//        if (!empty($subscribersList) || $subscribersList != NULL) {
+//            foreach ($subscribersList as $subscribers) {
+//
+//                $user_info = get_userdata($subscribers);
+//                nonWiki_page_changes_send_mail($postObject->ID, $user_info->user_email);
+//            }
+//        }
+//    }
+//}
+//add_action('save_post', 'sendMailonPostUpdateWiki');
+
+
 /*
  * Function Called when a Wiki post is Upated 
  * Sends Email to Subscribers of Wiki Posts
  */
 
 function sendMailonPostUpdateWiki($post) {
+
     $postObject = get_post($post);
     if ($postObject->post_type == 'wiki') {
-        // If this is just a revision, don't send the email.
 
         if (wp_is_post_revision($postObject->ID)) {
             return;
         }
 
-        $subscribersList = get_post_meta($postObject->ID, 'subcribers_list', true);
-        if (!empty($subscribersList) || $subscribersList != NULL) {
-            foreach ($subscribersList as $subscribers) {
-
-                $user_info = get_userdata($subscribers);
-                nonWiki_page_changes_send_mail($postObject->ID, $user_info->user_email);
-            }
+        global $rtWikiAttributesModel;
+        $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
+        $attributes = $rtWikiAttributesModel->get_all_attributes();
+        $mainTermArray = array();
+        $termArray = array();
+        $attr_term = array();
+        foreach ($attributes as $attr) {
+            $attr_term[] = $attr->attribute_name;
         }
-    }
-}
+        $taxo = $_REQUEST['tax_input'];
+        foreach ($attr_term as $attr) {
+            $terms = get_the_terms($post, $attr);
 
-//add_action('save_post', 'sendMailonPostUpdateWiki');
-
-function getOldTerms($post) {
-    
-    $postObject = get_post($post);
-    if ($postObject->post_type == 'wiki') {
-    
-     if (wp_is_post_revision($postObject->ID)) {
-            return;
-        }   
-        
-    global $rtWikiAttributesModel;
-    $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
-    $attributes = $rtWikiAttributesModel->get_all_attributes();
-    $mainTermArray = array();
-    $termArray = array();
-    $attr_term = array();
-    foreach ($attributes as $attr) {
-        $attr_term[] = $attr->attribute_name;
-    }
-    $taxo = $_REQUEST['tax_input'];
-    foreach ($attr_term as $attr) {
-        $terms = get_the_terms($post, $attr);
-        
-        foreach ($terms as $term) {
-            $termArray[] = $term->name;
-        }
-        
-        $mainTermArray[$attr] = $termArray;
-        unset($termArray);
-    }
-
-    $newTermId = array();
-    $oldTermId = array();
-    $iterator = new MultipleIterator;
-    $iterator->attachIterator(new ArrayIterator($taxo));
-    $iterator->attachIterator(new ArrayIterator($mainTermArray));
-    $diff = '';
-    foreach ($iterator as $key => $values) {
-
-        if ($key[0] == $key[1]) {
-
-            foreach ($values[0] as $val) {
-                     $newTermId[] = $val;
+            foreach ($terms as $term) {
+                $termArray[] = $term->name;
             }
-            
-            foreach ($values[1] as $val1) {
-                
-                if ($key[1] == NULL ) {
-                    
-                    //unset($oldTermId);
-                    $oldTermId[]='--';
-                } else {
-                    if(!empty($val1)){
-                    $oldTermId[] = $val1;} 
-                    else{$oldTermId[]=' ';}   
+
+            $mainTermArray[$attr] = $termArray;
+            unset($termArray);
+        }
+
+        $newTermId = array();
+        $oldTermId = array();
+        $iterator = new MultipleIterator;
+        $iterator->attachIterator(new ArrayIterator($taxo));
+        $iterator->attachIterator(new ArrayIterator($mainTermArray));
+        $diff = '';
+        foreach ($iterator as $key => $values) {
+
+            if ($key[0] == $key[1]) {
+
+                foreach ($values[0] as $val) {
+                    $newTermId[] = $val;
                 }
+
+                foreach ($values[1] as $val1) {
+
+                    if ($key[1] == NULL) {
+
+                        //unset($oldTermId);
+                        $oldTermId[] = '-';
+                    } else {
+                        if (!empty($val1)) {
+                            $oldTermId[] = $val1;
+                        } else {
+                            $oldTermId[] = ' ';
+                        }
+                    }
+                }
+
+                $diff.=contacts_diff_on_lead($post, $newTermId, $oldTermId, $key[0]);
+
+                unset($oldTermId);
+                unset($newTermId);
             }
-           
-            $diff.=contacts_diff_on_lead($post, $newTermId, $oldTermId, $key[0]);
-           
-            unset($oldTermId);
-            unset($newTermId);
-            }
-    }
-     
+        }
+
         $subscribersList = get_post_meta($postObject->ID, 'subcribers_list', true);
         if (!empty($subscribersList) || $subscribersList != NULL) {
             foreach ($subscribersList as $subscribers) {
 
                 $user_info = get_userdata($subscribers);
-                nonWiki_page_changes_send_mail($postObject->ID, $user_info->user_email,$diff);
+                nonWiki_page_changes_send_mail($postObject->ID, $user_info->user_email, $diff, get_permalink($postObject->ID));
             }
         }
-    
-    //echo $diff;
+
+        //echo $diff;
     }
 }
 
-add_action('pre_post_update', 'getOldTerms', 99, 1);
+add_action('pre_post_update', 'sendMailonPostUpdateWiki', 99, 1);
 
 /*
  * Function Called when a Non Wiki post type is Updated 
@@ -505,72 +490,74 @@ function sendMailNonWiki($post) {
         }
 
         global $rtWikiAttributesModel;
-    $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
-    $attributes = $rtWikiAttributesModel->get_all_attributes();
-    $mainTermArray = array();
-    $termArray = array();
-    $attr_term = array();
-    foreach ($attributes as $attr) {
-        $attr_term[] = $attr->attribute_name;
-    }
-    $taxo = $_REQUEST['tax_input'];
-    foreach ($attr_term as $attr) {
-        $terms = get_the_terms($post, $attr);
-        
-        foreach ($terms as $term) {
-            $termArray[] = $term->name;
+        $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
+        $attributes = $rtWikiAttributesModel->get_all_attributes();
+        $mainTermArray = array();
+        $termArray = array();
+        $attr_term = array();
+        foreach ($attributes as $attr) {
+            $attr_term[] = $attr->attribute_name;
         }
-        
-        $mainTermArray[$attr] = $termArray;
-        unset($termArray);
-    }
+        $taxo = $_REQUEST['tax_input'];
+        foreach ($attr_term as $attr) {
+            $terms = get_the_terms($post, $attr);
 
-    $newTermId = array();
-    $oldTermId = array();
-    $iterator = new MultipleIterator;
-    $iterator->attachIterator(new ArrayIterator($taxo));
-    $iterator->attachIterator(new ArrayIterator($mainTermArray));
-    $diff = '';
-    foreach ($iterator as $key => $values) {
-
-        if ($key[0] == $key[1]) {
-
-            foreach ($values[0] as $val) {
-                     $newTermId[] = $val;
+            foreach ($terms as $term) {
+                $termArray[] = $term->name;
             }
-            
-            foreach ($values[1] as $val1) {
-                
-                if ($key[1] == NULL ) {
-                    
-                    //unset($oldTermId);
-                    $oldTermId[]='--';
-                } else {
-                    if(!empty($val1)){
-                    $oldTermId[] = $val1;} 
-                    else{$oldTermId[]=' ';}   
+
+            $mainTermArray[$attr] = $termArray;
+            unset($termArray);
+        }
+
+        $newTermId = array();
+        $oldTermId = array();
+        $iterator = new MultipleIterator;
+        $iterator->attachIterator(new ArrayIterator($taxo));
+        $iterator->attachIterator(new ArrayIterator($mainTermArray));
+        $diff = '';
+        foreach ($iterator as $key => $values) {
+
+            if ($key[0] == $key[1]) {
+
+                foreach ($values[0] as $val) {
+                    $newTermId[] = $val;
                 }
+
+                foreach ($values[1] as $val1) {
+
+                    if ($key[1] == NULL) {
+
+                        //unset($oldTermId);
+                        $oldTermId[] = '-';
+                    } else {
+                        if (!empty($val1)) {
+                            $oldTermId[] = $val1;
+                        } else {
+                            $oldTermId[] = ' ';
+                        }
+                    }
+                }
+
+                $diff.=contacts_diff_on_lead($post, $newTermId, $oldTermId, $key[0]);
+
+                unset($oldTermId);
+                unset($newTermId);
             }
-           
-            $diff.=contacts_diff_on_lead($post, $newTermId, $oldTermId, $key[0]);
-           
-            unset($oldTermId);
-            unset($newTermId);
-            }
-    }
-        
-        
+        }
+
+
         if (in_array($postObject->post_type, $post_types)) {
             $subscribersList = get_post_meta($postObject->ID, 'subcribers_list', true);
             if (!empty($subscribersList) || $subscribersList != NULL) {
                 foreach ($subscribersList as $subscribers) {
                     $user_info = get_userdata($subscribers);
-                    nonWiki_page_changes_send_mail($postObject->ID, $user_info->user_email,$diff);
+                    nonWiki_page_changes_send_mail($postObject->ID, $user_info->user_email, $diff, get_permalink($postObject->ID));
                 }
             }
         }
     }
 }
 
-add_action('pre_post_update', 'sendMailNonWiki',99,1);
+add_action('pre_post_update', 'sendMailNonWiki', 99, 1);
 
