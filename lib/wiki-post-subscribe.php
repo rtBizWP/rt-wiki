@@ -489,62 +489,62 @@ function sendMailNonWiki($post) {
             return;
         }
 
-        global $rtWikiAttributesModel;
-        $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
-        $attributes = $rtWikiAttributesModel->get_all_attributes();
-        $mainTermArray = array();
-        $termArray = array();
-        $attr_term = array();
-        foreach ($attributes as $attr) {
-            $attr_term[] = $attr->attribute_name;
-        }
-        $taxo = $_REQUEST['tax_input'];
-        foreach ($attr_term as $attr) {
-            $terms = get_the_terms($post, $attr);
-
-            foreach ($terms as $term) {
-                $termArray[] = $term->name;
-            }
-
-            $mainTermArray[$attr] = $termArray;
-            unset($termArray);
-        }
-
-        $newTermId = array();
-        $oldTermId = array();
-        $iterator = new MultipleIterator;
-        $iterator->attachIterator(new ArrayIterator($taxo));
-        $iterator->attachIterator(new ArrayIterator($mainTermArray));
-        $diff = '';
-        foreach ($iterator as $key => $values) {
-
-            if ($key[0] == $key[1]) {
-
-                foreach ($values[0] as $val) {
-                    $newTermId[] = $val;
-                }
-
-                foreach ($values[1] as $val1) {
-
-                    if ($key[1] == NULL) {
-
-                        //unset($oldTermId);
-                        $oldTermId[] = '-';
-                    } else {
-                        if (!empty($val1)) {
-                            $oldTermId[] = $val1;
-                        } else {
-                            $oldTermId[] = ' ';
-                        }
-                    }
-                }
-
-                $diff.=contacts_diff_on_lead($post, $newTermId, $oldTermId, $key[0]);
-
-                unset($oldTermId);
-                unset($newTermId);
-            }
-        }
+//        global $rtWikiAttributesModel;
+//        $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
+//        $attributes = $rtWikiAttributesModel->get_all_attributes();
+//        $mainTermArray = array();
+//        $termArray = array();
+//        $attr_term = array();
+//        foreach ($attributes as $attr) {
+//            $attr_term[] = $attr->attribute_name;
+//        }
+//        $taxo = $_REQUEST['tax_input'];
+//        foreach ($attr_term as $attr) {
+//            $terms = get_the_terms($post, $attr);
+//
+//            foreach ($terms as $term) {
+//                $termArray[] = $term->name;
+//            }
+//
+//            $mainTermArray[$attr] = $termArray;
+//            unset($termArray);
+//        }
+//
+//        $newTermId = array();
+//        $oldTermId = array();
+//        $iterator = new MultipleIterator;
+//        $iterator->attachIterator(new ArrayIterator($taxo));
+//        $iterator->attachIterator(new ArrayIterator($mainTermArray));
+//        $diff = '';
+//        foreach ($iterator as $key => $values) {
+//
+//            if ($key[0] == $key[1]) {
+//
+//                foreach ($values[0] as $val) {
+//                    $newTermId[] = $val;
+//                }
+//
+//                foreach ($values[1] as $val1) {
+//
+//                    if ($key[1] == NULL) {
+//
+//                        //unset($oldTermId);
+//                        $oldTermId[] = '-';
+//                    } else {
+//                        if (!empty($val1)) {
+//                            $oldTermId[] = $val1;
+//                        } else {
+//                            $oldTermId[] = ' ';
+//                        }
+//                    }
+//                }
+//
+//                $diff.=contacts_diff_on_lead($post, $newTermId, $oldTermId, $key[0]);
+//
+//                unset($oldTermId);
+//                unset($newTermId);
+//            }
+//        }
 
 
         if (in_array($postObject->post_type, $post_types)) {
@@ -552,12 +552,12 @@ function sendMailNonWiki($post) {
             if (!empty($subscribersList) || $subscribersList != NULL) {
                 foreach ($subscribersList as $subscribers) {
                     $user_info = get_userdata($subscribers);
-                    nonWiki_page_changes_send_mail($postObject->ID, $user_info->user_email, $diff, get_permalink($postObject->ID));
+                    nonWiki_page_changes_send_mail($postObject->ID, $user_info->user_email, '', get_permalink($postObject->ID));
                 }
             }
         }
     }
 }
 
-add_action('pre_post_update', 'sendMailNonWiki', 99, 1);
+add_action('save_post', 'sendMailNonWiki', 99, 1);
 

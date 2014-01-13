@@ -361,7 +361,7 @@ function save_taxonomy_custom_meta($term_id) {
 
         if (isset($_POST['_wp_original_http_referer'])) {
             wp_safe_redirect($_POST['_wp_original_http_referer']);
-            //exit();
+            exit();
         }
     }
 }
