@@ -20,4 +20,4 @@ function rt_wiki_sidebar() {
     ));    
 }
 
-//add_action('widgets_init', 'rt_wiki_sidebar');
+add_action('widgets_init', 'rt_wiki_sidebar');

@@ -31,34 +31,15 @@ if ( !class_exists( 'RtWikiAdmin' ) ) {
 
 		function register_taxonomies() {
 			global $rtWikiAttributesModel, $rtWikiAttributes;
-                        $rtwiki_settings = '';
-                        if ( is_multisite() ) {
-                            $rtwiki_settings = get_site_option( 'rtwiki_settings', true );
-                        }
-                        else {
-                            $rtwiki_settings = get_option( 'rtwiki_settings', true );
-                        }
-                        $tax_attributes = $rtwiki_settings['attribute'];
-                        foreach ($tax_attributes as $value) {
-                            $attributes = $rtWikiAttributesModel->get_all_attributes( $value );
-                            foreach ($attributes as $attr) {
-                                $rtWikiAttributes->register_taxonomy( $value, $attr->id );
-                            }
-                        }
+			$attributes = $rtWikiAttributesModel->get_all_attributes();
+			foreach ($attributes as $attr) {
+				$rtWikiAttributes->register_taxonomy( 'wiki', $attr->id );
+			}
 		}
 
 		function register_pages() {
 			global $rtWikiAttributes;
-                        $rtwiki_settings = '';
-                        if ( is_multisite() ) {
-                            $rtwiki_settings = get_site_option( 'rtwiki_settings', true );
-                        }
-                        else {
-                            $rtwiki_settings = get_option( 'rtwiki_settings', true );
-                        }
-                        $attributes = $rtwiki_settings['attribute'];
-                        foreach( $attributes as $attribute )
-                            add_submenu_page( 'edit.php?post_type='.$attribute, __( 'Attributes' ), __( 'Attributes' ), 'administrator', 'rtwiki-attributes', array( $rtWikiAttributes, 'attributes_page' ) );
+			add_submenu_page( 'edit.php?post_type=wiki', __( 'Attributes' ), __( 'Attributes' ), 'administrator', 'rtwiki-attributes', array( $rtWikiAttributes, 'attributes_page' ) );
 		}
 
 		function init_attributes() {

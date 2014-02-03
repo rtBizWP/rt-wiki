@@ -98,7 +98,6 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 				$attribute_label       = ( isset( $_POST['attribute_label'] ) )   ? (string) stripslashes( $_POST['attribute_label'] ) : '';
 				$attribute_name        = ( isset( $_POST['attribute_name'] ) )    ? rtwiki_sanitize_taxonomy_name( stripslashes( (string) $_POST['attribute_name'] ) ) : '';
 				$attribute_orderby     = ( isset( $_POST['attribute_orderby'] ) ) ? (string) stripslashes( $_POST['attribute_orderby'] ) : '';
-				$attribute_post_type   = ( isset( $_POST['p_type'] ) ) ? sanitize_title( $_POST['p_type'] ):'wiki';
 
 				// Auto-generate the label or slug if only one of both was provided
 				if ( ! $attribute_label ) {
@@ -150,10 +149,9 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 					if ( 'add' === $action ) {
 
 						$attribute = array(
-							'attribute_label'       => $attribute_label,
-							'attribute_name'        => $attribute_name,
-							'attribute_orderby'     => $attribute_orderby,
-                                                        'attribute_post_type'   => $attribute_post_type
+							'attribute_label'   => $attribute_label,
+							'attribute_name'    => $attribute_name,
+							'attribute_orderby' => $attribute_orderby,
 						);
 
 						$rtWikiAttributesModel->add_attribute( $attribute );
@@ -168,7 +166,8 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 
 						$attribute = array(
 							'attribute_label'   => $attribute_label,
-							'attribute_orderby' => $attribute_orderby
+							'attribute_name'    => $attribute_name,
+							'attribute_orderby' => $attribute_orderby,
 						);
 
 						$rtWikiAttributesModel->update_attribute( $attribute, array( 'id' => $attribute_id ) );
@@ -247,8 +246,7 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 
 			// If an attribute was added, edited or deleted: clear cache and redirect
 			if ( ! empty( $action_completed ) ) {
-                            if( wp_redirect( admin_url( 'admin.php?post_type='.$_GET['post_type'].'&page=rtwiki-attributes' ) ) )
-                                die();
+				wp_redirect( admin_url( 'admin.php?page=rtwiki-attributes' ) );
 			}
 
 			// Show admin interface
@@ -266,11 +264,12 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 			$attribute_to_edit = $rtWikiAttributesModel->get_attribute( $edit );
 
 			$att_label 	= $attribute_to_edit->attribute_label;
+			$att_name 	= $attribute_to_edit->attribute_name;
 			$att_orderby 	= $attribute_to_edit->attribute_orderby;
 			?>
 			<div class="wrap">
 				<h2><i class="icon-tag"></i> <?php _e( 'Edit Attribute' ) ?></h2>
-				<form action="admin.php?page=rtwiki-attributes&amp;edit=<?php echo absint( $edit ); ?>&amp;p_type=<?php echo isset( $_GET['p_type'] )?$_GET['p_type']:( ( isset( $_GET['post_type'] )?$_GET['post_type']:'' ) ) ?>" method="post">
+				<form action="admin.php?page=rtwiki-attributes&amp;edit=<?php echo absint( $edit ); ?>" method="post">
 					<table class="form-table">
 						<tbody>
 							<tr class="form-field form-required">
@@ -287,7 +286,7 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 									<label for="attribute_name"><?php _e( 'Slug' ); ?></label>
 								</th>
 								<td>
-									<span type="text"><?php echo esc_attr( $att_name ); ?></span>
+									<input name="attribute_name" id="attribute_name" type="text" value="<?php echo esc_attr( $att_name ); ?>" maxlength="28" />
 									<p class="description"><?php _e( 'Unique slug/reference for the attribute; must be shorter than 28 characters.' ); ?></p>
 								</td>
 							</tr>
@@ -306,7 +305,6 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 							</tr>
 						</tbody>
 					</table>
-                                        <input type='hidden' name='p_type' value='<?php echo isset( $_GET['p_type'] )?$_GET['p_type']:( ( isset( $_GET['post_type'] )?$_GET['post_type']:'' ) ); ?>' />
 					<p class="submit"><input type="submit" name="save_attribute" id="submit" class="button-primary" value="<?php _e( 'Update' ); ?>"></p>
 					<?php //nonce ?>
 				</form>
@@ -344,15 +342,14 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 								</thead>
 								<tbody>
 									<?php
-                                                                                $post_type = ( isset( $_GET['p_type'] )?$_GET['p_type']:( ( isset( $_GET['post_type'] )?$_GET['post_type']:'' ) ) );
-										$attribute_taxonomies = $rtWikiAttributesModel->get_all_attributes( $post_type );
+										$attribute_taxonomies = $rtWikiAttributesModel->get_all_attributes();
 										if ( $attribute_taxonomies ) :
 											foreach ($attribute_taxonomies as $tax) :
 												?><tr>
 
 													<td><a href="edit-tags.php?taxonomy=<?php echo esc_html(rtwiki_attribute_taxonomy_name($tax->attribute_name)); ?>&amp;post_type=wiki"><?php echo esc_html( $tax->attribute_label ); ?></a>
 
-													<div class="row-actions"><span class="edit"><a href="<?php echo esc_url( add_query_arg('edit', $tax->id, 'admin.php?page=rtwiki-attributes&amp;p_type='.$post_type ) ); ?>"><?php _e( 'Edit' ); ?></a> | </span><span class="delete"><a class="delete" href="<?php echo esc_url( add_query_arg('delete', $tax->id, 'admin.php?page=rtwiki-attributes&amp;p_type='.$post_type ) ); ?>"><?php _e( 'Delete' ); ?></a></span></div>
+													<div class="row-actions"><span class="edit"><a href="<?php echo esc_url( add_query_arg('edit', $tax->id, 'admin.php?page=rtwiki-attributes') ); ?>"><?php _e( 'Edit' ); ?></a> | </span><span class="delete"><a class="delete" href="<?php echo esc_url( add_query_arg('delete', $tax->id, 'admin.php?page=rtwiki-attributes') ); ?>"><?php _e( 'Delete' ); ?></a></span></div>
 													</td>
 													<td><?php echo esc_html( $tax->attribute_name ); ?></td>
 													<td><?php
@@ -400,8 +397,7 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 							<div class="form-wrap">
 								<h3><?php _e( 'Add New Attribute' ) ?></h3>
 								<p><?php _e( '' ); ?></p>
-                                                                <?php $post_type =( isset( $_GET['p_type'] )?$_GET['p_type']:( ( isset( $_GET['post_type'] )?$_GET['post_type']:'' ) ) ); ?>
-								<form action="admin.php?page=rtwiki-attributes&amp;p_type=<?php echo $post_type; ?>" method="post">
+								<form action="admin.php?page=rtwiki-attributes" method="post">
 									<div class="form-field">
 										<label for="attribute_label"><?php _e( 'Name' ); ?></label>
 										<input name="attribute_label" id="attribute_label" type="text" value="" />
@@ -423,7 +419,7 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 										</select>
 										<p class="description"><?php _e( 'Determines the sort order on the frontend for this attribute.' ); ?></p>
 									</div>
-                                                                        <input type='hidden' name='p_type' value='<?php echo $post_type; ?>' />
+
 									<p class="submit"><input type="submit" name="add_new_attribute" id="submit" class="button" value="<?php _e( 'Add Attribute' ); ?>"></p>
 									<?php //nonce ?>
 								</form>

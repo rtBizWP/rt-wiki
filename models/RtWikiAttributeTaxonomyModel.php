@@ -32,17 +32,8 @@ if ( !class_exists( 'RtWikiAttributeTaxonomyModel' ) ) {
 			return false;
 		}
 
-		function get_all_attributes( $post_type = '' ) {
-                        $args = array();
-                        if( !empty ( $post_type ) ){
-                            $args['attribute_post_type'] = array(
-                                'compare' => '=',
-                                'value'   => array( 
-                                                $post_type 
-                                            )
-                            );
-                        }
-			return parent::get( $args );
+		function get_all_attributes() {
+			return parent::get( array() );
 		}
 
 		function get_attribute( $attribute_id ) {

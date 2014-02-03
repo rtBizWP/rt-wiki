@@ -13,93 +13,71 @@ add_action('init', 'create_wiki');
 
 function create_wiki() {
 
-    $rtwiki_settings = '';
-    $rtwiki_custom = '';
-    if( is_multisite() ) {
-        $rtwiki_settings = get_site_option ( "rtwiki_settings", true );
-        $rtwiki_custom = get_site_option ( "rtwiki_custom", true );
-    }
-    else {
-        $rtwiki_settings = get_option ( "rtwiki_settings", true );
-        $rtwiki_custom = get_option ( "rtwiki_custom", true );
-    }
-    
-    $post_name = array( $rtwiki_settings['default'] );
-    if( ( 'y' == $rtwiki_settings['custom_post'] ) && ( count ( $rtwiki_custom ) > 0 ) ) {
-        $post_name[1] = $rtwiki_custom[0];
-    }
-    
-    foreach ( $post_name as $name ){
 
-        register_post_type($name['slug'], array(
-            'labels' => array(
-                'name' => __(ucwords( $name['label'] ), 'post type general name', 'rtCamp'),
-                'singular_name' => __(ucwords( $name['label'] ), 'post type singular name', 'rtCamp'),
-                'add_new' => __('Add New', ucwords( $name['label'] ), 'rtCamp'),
-                'add_new_item' => __('Add New '. ucwords( $name['label'] ), 'rtCamp'),
-                'edit' => __('Edit', ucwords( $name['label'] ), 'rtCamp'),
-                'edit_item' => __('Edit '. ucwords( $name['label'] ), 'rtCamp'),
-                'new_item' => __('New '. ucwords( $name['label'] ), 'rtCamp'),
-                'view' => __('View', ucwords( $name['label'] ), 'rtCamp'),
-                'view_item' => __('View ' . ucwords( $name['label'] ), 'rtCamp'),
-                'search_items' => __('Search ' . ucwords( $name['label'] ), 'rtCamp'),
-                'not_found' => __('No ' . ucwords( $name['label'] ) . ' found', 'rtCamp'),
-                'not_found_in_trash' => __('No ' . ucwords( $name['label'] ) . ' found in Trash', 'rtCamp'),
-                'all_items' => __('All ' . ucwords( $name['label'] ), 'rtCamp'),
-                'parent' => 'Parent ' . ucwords( $name['label'] )
-            ),
-            'description' => __( ucwords( $name['label'] ), 'rtCamp'),
-            'publicly_queryable' => null,
-            'map_meta_cap' => true,
-            'capability_type' => 'wiki',
-            'capabilities' => array(
-                'read_post' => 'read_wiki',
-                'publish_posts' => 'publish_wiki',
-                'edit_posts' => 'edit_wiki',
-                'edit_others_posts' => 'edit_others_wiki',
-                'delete_posts' => 'delete_wiki',
-                'delete_others_posts' => 'delete_others_wiki',
-                'read_private_posts' => 'read_private_wiki',
-                'edit_post' => 'edit_wiki',
-                'delete_post' => 'delete_wiki',
-                'edit_published_posts' => 'edit_published_wiki',
-                'delete_published_posts' => 'delete_published_wiki' 
-            ),
-            '_builtin' => false,
-            '_edit_link' => 'post.php?post=%d',
-            'rewrite' => true,
-            'has_archive' => true,
-            'query_var' => true,
-            'register_meta_box_cb' => null,
-            //'taxonomies' => array('category', 'post_tag'),
-            'show_ui' => true,
-            'menu_icon' => true,
-            'permalink_epmask' => EP_PERMALINK,
-            'can_export' => true,
-            'show_in_nav_menus' => true,
-            'show_in_menu' => true,
-            'show_in_admin_bar' => true,
-            'hierarchical' => true,
-            'public' => true,
-            'menu_position' => 10,
-            'exclude_from_search' => true,
-            'supports' => array( 
-                        'title', 
-                        'editor', 
-                        'comments',
-                        'thumbnail', 
-                        'revisions', 
-                        'page-attributes',
-                        'excerpt'
-                    ),
+    register_post_type('wiki', array(
+        'labels' => array(
+            'name' => __('Wiki', 'post type general name', 'rtCamp'),
+            'singular_name' => __('wiki', 'post type singular name', 'rtCamp'),
+            'add_new' => __('Add New', 'wiki', 'rtCamp'),
+            'add_new_item' => __('Add New wiki', 'rtCamp'),
+            'edit' => __('Edit', 'wiki', 'rtCamp'),
+            'edit_item' => __('Edit wiki', 'rtCamp'),
+            'new_item' => __('New wiki', 'rtCamp'),
+            'view' => __('View', 'wiki', 'rtCamp'),
+            'view_item' => __('View wiki', 'rtCamp'),
+            'search_items' => __('Search Wiki', 'rtCamp'),
+            'not_found' => __('No wiki found', 'rtCamp'),
+            'not_found_in_trash' => __('No Wiki found in Trash', 'rtCamp'),
+            'all_items' => __('All Wiki', 'rtCamp'),
+            'parent' => 'Parent wiki'
+        ),
+        'description' => __('Wiki', 'rtCamp'),
+        'publicly_queryable' => null,
+        'map_meta_cap' => true,
+        'capability_type' => 'wiki',
+        'capabilities' => array(
+            'read_post' => 'read_wiki',
+            'publish_posts' => 'publish_wiki',
+            'edit_posts' => 'edit_wiki',
+            'edit_others_posts' => 'edit_others_wiki',
+            'delete_posts' => 'delete_wiki',
+            'delete_others_posts' => 'delete_others_wiki',
+            'read_private_posts' => 'read_private_wiki',
+            'edit_post' => 'edit_wiki',
+            'delete_post' => 'delete_wiki',
+            'edit_published_posts' => 'edit_published_wiki',
+            'delete_published_posts' => 'delete_published_wiki' 
+        ),
+        '_builtin' => false,
+        '_edit_link' => 'post.php?post=%d',
+        'rewrite' => true,
+        'has_archive' => true,
+        'query_var' => true,
+        'register_meta_box_cb' => null,
+        //'taxonomies' => array('category', 'post_tag'),
+        'show_ui' => null,
+        'menu_icon' => null,
+        'permalink_epmask' => EP_PERMALINK,
+        'can_export' => true,
+        'show_in_nav_menus' => null,
+        'show_in_menu' => null,
+        'show_in_admin_bar' => null,
+        'hierarchical' => true,
+        'public' => true,
+        'menu_position' => 10,
+        'exclude_from_search' => true,
+        'supports' =>
+        array('title', 'editor', 'comments',
+            'thumbnail', 'revisions'),
+        'has_archive' => true
             )
-        );
-    }
+    );
 }
 
 function add_wiki_caps() {
     $roles = array(get_role('administrator'), get_role('author'), get_role('editor'), get_role('contributor'));
     foreach ($roles as $role) {
+        $role->add_cap('edit_wiki');
         $role->add_cap('edit_wiki');
         $role->add_cap('edit_others_wiki');
         $role->add_cap('publish_wiki');
@@ -121,15 +99,7 @@ add_action('admin_init', 'add_wiki_caps');
 add_action('admin_init', 'wiki_permission_metabox');
 
 function wiki_permission_metabox() {
-    $rtwiki_settings = '';
-    if ( is_multisite() )
-        $rtwiki_settings = get_site_option( 'rtwiki_settings', true );
-    else
-        $rtwiki_settings = get_option( 'rtwiki_settings', true );
-    
-    $attributes = $rtwiki_settings['attribute'];
-    foreach ( $attributes as $attribute )
-        add_meta_box($attribute.'_post_access', 'Permissions', 'display_wiki_post_access_metabox', $attribute, 'normal', 'high');
+    add_meta_box('wiki_post_access', 'Permissions', 'display_wiki_post_access_metabox', 'wiki', 'normal', 'high');
 }
 
 /*
@@ -140,10 +110,6 @@ function display_wiki_post_access_metabox($post) {
     wp_nonce_field(plugin_basename(__FILE__), $post->post_type . '_noncename');
 
     $access_rights = get_post_meta($post->ID, 'access_rights', true);
-    $disabled = '';
-
-    if( 1 == $access_rights['public'] )
-        $disabled = 'disabled=""';
     ?>  
     <table>
         <tbody>
@@ -156,9 +122,9 @@ function display_wiki_post_access_metabox($post) {
 
             <tr>
                 <td>All</td>
-                <td><input type="radio" <?php echo $disabled; ?> class="rtwiki_all_na rtwiki_na" name="access_rights[all]" <?php if (isset($access_rights['all']['na']) == 1) { ?>checked="checked"<?php } ?> value="na" /></td>
-                <td><input type="radio" class="rtwiki_all_r rtwiki_r" name="access_rights[all]" <?php if (isset($access_rights['all']['r']) == 1) { ?>checked="checked"<?php } ?> value="r" /></td>
-                <td><input type="radio" class="rtwiki_all_w rtwiki_w" name="access_rights[all]" <?php if (isset($access_rights['all']['w']) == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
+                <td><input type="radio" class="rtwiki_all_na" name="access_rights[all]" <?php if (isset($access_rights['all']['na']) == 1) { ?>checked="checked"<?php } ?> value="na" /></td>
+                <td><input type="radio" class="rtwiki_all_r" name="access_rights[all]" <?php if (isset($access_rights['all']['r']) == 1) { ?>checked="checked"<?php } ?> value="r" /></td>
+                <td><input type="radio" class="rtwiki_all_w" name="access_rights[all]" <?php if (isset($access_rights['all']['w']) == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
             </tr>
 
     <?php
@@ -169,9 +135,9 @@ function display_wiki_post_access_metabox($post) {
         ?>
                 <tr>
                     <td><?php echo $groupName ?></td>
-                    <td><input type="radio" class="case rtwiki_na" <?php echo $disabled; ?> id="na" name="access_rights[<?php echo $groupName ?>]"  <?php if ($access_rights[$groupName]['na'] == 1) { ?>checked="checked"<?php } ?> value="na" /></td>
-                    <td><input type="radio" class="case rtwiki_r" id="r" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['r'] == 1) { ?>checked="checked"<?php } ?> value="r" /></td>
-                    <td><input type="radio" class="case rtwiki_w" id="w" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['w'] == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
+                    <td><input type="radio" class="case" id="na" name="access_rights[<?php echo $groupName ?>]"  <?php if ($access_rights[$groupName]['na'] == 1) { ?>checked="checked"<?php } ?> value="na" /></td>
+                    <td><input type="radio" class="case" id="r" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['r'] == 1) { ?>checked="checked"<?php } ?> value="r" /></td>
+                    <td><input type="radio" class="case" id="w" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['w'] == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
                 </tr>
             <?php } ?> 
 
@@ -181,11 +147,19 @@ function display_wiki_post_access_metabox($post) {
 
     <table>
         <tbody>
-            <tr><th colspan='2'><h4>Permission for public level</h4></th></tr>
-        <tr>
-            <td>Public</td> 
-            <td colspan='2'><input type="checkbox" onclick='if(this.checked) { jQuery(".rtwiki_na").prop("checked", false); jQuery(".rtwiki_na").prop("disabled", true); } else jQuery(".rtwiki_na").prop("disabled", false);' id="rtwiki_public_na" name="access_rights[public]" <?php if ( 1 == $access_rights['public'] ) { ?> checked="checked" <?php } ?> value='1' /> </td>    
-        </tr>
+            <tr><h4>Permission for public level</h4></tr>  
+    <tr>
+        <th></th>    
+        <th>No Access</th>
+        <th>Read</th>
+
+    </tr>
+    <tr>
+        <td>Public</td> 
+
+        <td><input type="radio" id="rtwiki_public_na" name="access_rights[public]" <?php if ($access_rights['public']['na'] == 1) { ?> checked="checked" <?php } ?> value="na" /> </td>    
+        <td><input type="radio" id="rtwiki_public_r"  name="access_rights[public]" <?php if ($access_rights['public']['r'] == 1) { ?> checked="checked" <?php } ?>  value="r" /></td>
+    </tr>
     </tbody>
 
     </table>
@@ -243,11 +217,14 @@ function rtp_wiki_permission_save($post) {
 //                        $access_rights['all'][$p1] = 1;
 //                }
 //            }
-            if ( isset( $_POST['access_rights']['public'] ) )
-                $access_rights['public'] = 1;
-            else
-                $access_rights['public'] = 0;
-              
+            foreach ($perm as $p1) {
+                if (isset($_POST['access_rights']['public']) == $p1) {
+                    if ($_POST['access_rights']['public'] == $p1)
+                        $access_rights['public'][$p1] = 1;
+                    else
+                        $access_rights['public'][$p1] = 0;
+                }
+            }
             update_post_meta($post, 'access_rights', $access_rights);
 
 
@@ -357,11 +334,7 @@ add_action('user-group_add_form_fields', 'user_group_taxonomy_add_new_meta_field
 
 function user_group_taxonomy_edit_meta_field($term) {
     $t_id = $term->term_id;
-    $term_meta = '';
-    if( is_multisite() )
-        $term_meta = get_site_option('user-group-meta');
-    else
-        $term_meta = get_option('user-group-meta');
+    $term_meta = get_option("user-group-meta");
     ?>
     <tr class="form-field">
         <th scope="row" valign="top"><label for="term_meta[email_address]"><?php _e('Email Address', 'rtCamp'); ?></label></th>
@@ -382,16 +355,9 @@ add_action('user-group_edit_form_fields', 'user_group_taxonomy_edit_meta_field',
 function save_taxonomy_custom_meta($term_id) {
 
     if (isset($_POST['user-group'])) {
-        $term_meta = '';
-        if( is_multisite() )
-            $term_meta = (array) get_site_option('user-group-meta');
-        else
-            $term_meta = (array) get_option('user-group-meta');
+        $term_meta = (array) get_option('user-group-meta');
         $term_meta[$term_id] = (array) $_POST['user-group'];
-        if( is_multisite() )
-            update_site_option('user-group-meta', $term_meta);
-        else
-            update_option('user-group-meta', $term_meta);
+        update_option('user-group-meta', $term_meta);
 
         if (isset($_POST['_wp_original_http_referer'])) {
             wp_safe_redirect($_POST['_wp_original_http_referer']);
