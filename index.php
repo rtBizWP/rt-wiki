@@ -2,7 +2,7 @@
 /*
   Plugin Name: rtWiki
   Description: Creates a Wiki CPT. Check for pages inside it. If not found will create it. Post filtering for different user groups
-  Version: 1.0
+  Version: 1.1
   Author: Prannoy Tank
  */
 
