@@ -362,3 +362,69 @@ function rt_wiki_register_widgets() {
 }
 
 add_action('widgets_init', 'rt_wiki_register_widgets');
+
+/*
+ * Function to add wiki activity to the dashboard.
+ */
+function rt_list_wikis() {
+    
+    if( is_multisite() )
+        $rtwiki_settings = get_site_option( 'rtwiki_settings', true );
+    else
+        $rtwiki_settings = get_option( 'rtwiki_settings', true );
+    
+    $posts_attribute = $rtwiki_settings['attribute'];
+    $args = array(
+        'post_type'     => 'revision',
+        'date_query'    => array(
+            'before'  => date ( 'Y-m-d', strtotime( '+1 day' ) ),
+            'after'  => date ( 'Y-m-d', strtotime( '-1 day' ) ),
+            'inclusive'   => true,
+            'column'    => 'post_date'
+        ),
+        'posts_per_page'    => 5,
+        'post_status'       => 'inherit'
+    );
+    $query = new WP_Query($args);
+    $post_parent = array();
+    if( $query->have_posts() ) {
+        foreach( $query->posts as $posts){
+            if( !in_array($posts->post_parent, $post_parent) ) {
+                $revisions = wp_get_post_revisions( $posts->post_parent, array( 'post_status' => 'inherit') );
+                foreach ($revisions as $revision) {
+                    ?>
+                        <div class='diff'>
+                            <?php echo get_avatar( $revision->post_author, '50' ); ?>
+                            <div class='diff-wrap' style='overflow: hidden;'>
+                                <h4 class='diff-meta'>
+                                    <cite class='diff-author'><a href='<?php get_author_link('true', $revision->post_author); ?>'><?php echo get_author_name( $revision->post_author ); ?></a></cite>
+                                    <?php echo __('has edited', 'rtCamp'); ?>
+                                    <a href='post.php?post=<?php echo $posts->post_parent; ?>&action=edit'><?php echo sanitize_title( $revision->post_title ); ?></a>
+                                    <?php echo __( "at (" . date( 'Y-m-d H:i:s', strtotime( $revision->post_date ) ) . ")", 'rtCamp' ); ?>
+                                    <a href='revision.php?revision=<?php echo $revision->ID; ?>'><?php echo __('View Diff', 'rtCamp'); ?></a>
+                                </h4>
+                            </div>
+                        </div>
+                    <?php
+                }
+                array_push( $post_parent, $posts->post_parent );
+            }
+        }
+        wp_reset_postdata();
+    }
+}
+
+/**
+ * Add a widget to the dashboard.
+ *
+ * This function is hooked into the 'wp_dashboard_setup' action below.
+ */
+function wiki_add_dashboard_widgets() {
+
+	wp_add_dashboard_widget(
+            'dashboard_wiki',         // Widget slug.
+            'Wiki Posts',         // Title.
+            'rt_list_wikis' // Display function.
+        );	
+}
+add_action( 'wp_dashboard_setup', 'wiki_add_dashboard_widgets' );
