@@ -38,11 +38,13 @@ if ( !class_exists( 'RtWikiAdmin' ) ) {
                         else {
                             $rtwiki_settings = get_option( 'rtwiki_settings', array() );
                         }
-                        $tax_attributes = $rtwiki_settings['attribute'];
-                        foreach ($tax_attributes as $value) {
-                            $attributes = $rtWikiAttributesModel->get_all_attributes( $value );
-                            foreach ($attributes as $attr) {
-                                $rtWikiAttributes->register_taxonomy( $value, $attr->id );
+                        if ( isset ( $rtwiki_settings['attribute'] ) ) { 
+                            $tax_attributes = $rtwiki_settings['attribute'];
+                            foreach ($tax_attributes as $value) {
+                                $attributes = $rtWikiAttributesModel->get_all_attributes( $value );
+                                foreach ($attributes as $attr) {
+                                    $rtWikiAttributes->register_taxonomy( $value, $attr->id );
+                                }
                             }
                         }
 		}
