@@ -392,7 +392,7 @@ function rt_list_wikis() {
         <div id="wiki-widget">
             <?php
             foreach( $query->posts as $posts){
-                if( ! in_array( $posts->post_parent, $post_parent ) ) {
+                if( ! in_array( $posts->post_parent, $post_parent ) && is_wiki_post_type( $posts->post_parent ) ) {
                     $revision_args = array( 
                                         'post_type'         => 'revision',
                                         'post_status'       => 'inherit', 
@@ -467,3 +467,29 @@ function wiki_add_dashboard_widgets() {
         );	
 }
 add_action( 'wp_dashboard_setup', 'wiki_add_dashboard_widgets' );
+
+/*
+ * Function to check whether the post type is registered in rtWiki plugin setting.
+ */
+
+function is_wiki_post_type($post_id = 0) {
+    global $post;
+    if( is_multisite() ) {
+        $rtwiki_settings = get_site_option( 'rtwiki_settings', true );
+        $rtwiki_custom = get_site_option( 'rtwiki_custom', true );
+    }
+    else {
+        $rtwiki_settings = get_option( 'rtwiki_settings', true );
+        $rtwiki_custom = get_option( 'rtwiki_custom', true );
+    }
+    $wiki_posts = array( $rtwiki_settings['default']['slug'] );
+    if( isset( $rtwiki_custom[0]['slug'] ) && !empty( $rtwiki_custom[0]['slug'] ) )
+        array_push ( $wiki_posts, $rtwiki_custom[0]['slug'] );
+    if( $post_id == 0 && $post->post_parent != 0)
+        $post_id = $post->post_parent;
+    $post_type = get_post_type( $post_id );
+    if( in_array( $post_type, $wiki_posts, true ) )
+        return true;
+    else
+        return false;
+}
