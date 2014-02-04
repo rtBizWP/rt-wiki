@@ -33,10 +33,10 @@ if ( !class_exists( 'RtWikiAdmin' ) ) {
 			global $rtWikiAttributesModel, $rtWikiAttributes;
                         $rtwiki_settings = '';
                         if ( is_multisite() ) {
-                            $rtwiki_settings = get_site_option( 'rtwiki_settings', true );
+                            $rtwiki_settings = get_site_option( 'rtwiki_settings', array() );
                         }
                         else {
-                            $rtwiki_settings = get_option( 'rtwiki_settings', true );
+                            $rtwiki_settings = get_option( 'rtwiki_settings', array() );
                         }
                         $tax_attributes = $rtwiki_settings['attribute'];
                         foreach ($tax_attributes as $value) {
