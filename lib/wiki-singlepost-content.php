@@ -140,7 +140,7 @@ function subpages_non_wiki($post_type){
     $subpageList=get_option('rtWiki_subpages_options');
     $list=$subpageList['subpages'];
     
-    if(in_array($post_type,$list))
+    if( is_array($list) && in_array($post_type,$list) )
     {
       if($list[$post_type] == 1 )
       return true;    
@@ -154,7 +154,7 @@ function subscribe_non_wiki($post_type){
     $subscribe=get_option('rtWiki_subscribe_options');
     $list=$subscribe['subscribe'];
    
-  if(in_array($post_type,$list))
+  if( is_array($list) && in_array($post_type,$list) )
   {
      if($list[$post_type] == 1)
      {return true;}

@@ -287,7 +287,7 @@ function post_changes_send_mail($postID, $email, $group, $url = '') {
     if (!empty($content)) {
         $url = 'Page Link:' . $url . '<br>';
         //$diff_table = wp_text_diff($content[1], $content[0], $args);
-        $body = rtcrm_text_diff($title[1], $title[0], $content[1], $content[0]);
+        $body = rtcrm_text_diff($title[count($title) - 1], $title[0], $content[count($title) - 1], $content[0]);
         $body.=$diff;
         $finalBody = $url . '<br>' . $body;
         add_filter('wp_mail_content_type', 'set_html_content_type');
@@ -414,17 +414,20 @@ function sendMailonPostUpdateWiki($post) {
         foreach ($attr_term as $attr) {
             $terms = get_the_terms($post, $attr);
 
-            foreach ($terms as $term) {
-                $termArray[] = $term->name;
-            }
+            if( is_array($terms) ) {
+                foreach ($terms as $term) {
+                    $termArray[] = $term->name;
+                }
 
-            $mainTermArray[$attr] = $termArray;
-            unset($termArray);
+                $mainTermArray[$attr] = $termArray;
+                unset($termArray);
+            }
         }
 
         $newTermId = array();
         $oldTermId = array();
         $iterator = new MultipleIterator;
+        if( is_array($taxo) )
         $iterator->attachIterator(new ArrayIterator($taxo));
         $iterator->attachIterator(new ArrayIterator($mainTermArray));
         $diff = '';

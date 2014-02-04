@@ -37,9 +37,7 @@ if ( !class_exists( 'RtWikiAttributeTaxonomyModel' ) ) {
                         if( !empty ( $post_type ) ){
                             $args['attribute_post_type'] = array(
                                 'compare' => '=',
-                                'value'   => array( 
-                                                $post_type 
-                                            )
+                                'value'   => explode(',', $post_type)
                             );
                         }
 			return parent::get( $args );

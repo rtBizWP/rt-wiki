@@ -382,35 +382,74 @@ function rt_list_wikis() {
             'inclusive'   => true,
             'column'    => 'post_date'
         ),
-        'posts_per_page'    => 5,
+        'posts_per_page'    => 10,
         'post_status'       => 'inherit'
     );
     $query = new WP_Query($args);
     $post_parent = array();
     if( $query->have_posts() ) {
-        foreach( $query->posts as $posts){
-            if( !in_array($posts->post_parent, $post_parent) ) {
-                $revisions = wp_get_post_revisions( $posts->post_parent, array( 'post_status' => 'inherit') );
-                foreach ($revisions as $revision) {
-                    ?>
-                        <div class='diff'>
-                            <?php echo get_avatar( $revision->post_author, '50' ); ?>
-                            <div class='diff-wrap' style='overflow: hidden;'>
-                                <h4 class='diff-meta'>
-                                    <cite class='diff-author'><a href='<?php get_author_link('true', $revision->post_author); ?>'><?php echo get_author_name( $revision->post_author ); ?></a></cite>
-                                    <?php echo __('has edited', 'rtCamp'); ?>
-                                    <a href='post.php?post=<?php echo $posts->post_parent; ?>&action=edit'><?php echo sanitize_title( $revision->post_title ); ?></a>
-                                    <?php echo __( "at (" . date( 'Y-m-d H:i:s', strtotime( $revision->post_date ) ) . ")", 'rtCamp' ); ?>
-                                    <a href='revision.php?revision=<?php echo $revision->ID; ?>'><?php echo __('View Diff', 'rtCamp'); ?></a>
-                                </h4>
+        ?>
+        <div id="wiki-widget">
+            <?php
+            foreach( $query->posts as $posts){
+                if( ! in_array( $posts->post_parent, $post_parent ) ) {
+                    $revision_args = array( 
+                                        'post_type'         => 'revision',
+                                        'post_status'       => 'inherit', 
+                                        'date_query'        => array(
+                                                'after'    => date ( 'Y-m-d', strtotime( '-1 day' ) ),
+                                            ),
+                                        'post_parent'       => $posts->post_parent,
+                                    );
+                    $revisions = new WP_Query($revision_args);
+    //                echo "<pre>";
+    //                print_r($revisions);
+    //                echo "</pre>";
+    //                continue;
+                    foreach ($revisions->posts as $revision) {
+                        if( 'Auto Draft' == $revision->post_title )
+                            continue;
+                        $date = date( 'Y-m-d H:i:s', strtotime( $revision->post_date ) );
+                        $hour_ago = date_diff( new DateTime(), new DateTime( $date ) );
+                        if( $hour_ago->d == 0 ) {
+                            if( $hour_ago->h > 0 ) {
+                                if( $hour_ago->h > 1 ) 
+                                    $hour_ago = $hour_ago->h." hours ago";
+                                else
+                                    $hour_ago = $hour_ago->h." hour ago";
+                            }
+                            else {
+                                if ( $hour_ago->i > 1 )
+                                    $hour_ago = $hour_ago->i." minutes ago";
+                                else
+                                    $hour_ago = $hour_ago->i." minute ago";
+                            }
+                        }
+                        else 
+                            $hour_ago = $date;
+                        ?>
+                            <div class='rtwiki-diff'>
+                                <?php echo get_avatar( $revision->post_author, '50' ); ?>
+                                <div class='rtwiki-diff-wrap'>
+                                    <h4 class='rtwiki-diff-meta'>
+                                        <cite class='rtwiki-diff-author'><a href='<?php get_author_link('true', $revision->post_author); ?>'><?php echo ucwords( get_author_name( $revision->post_author ) ); ?></a></cite>
+                                        <?php echo __('has edited', 'rtCamp'); ?>
+                                        <a href='post.php?post=<?php echo $posts->post_parent; ?>&action=edit'><?php echo esc_attr( $revision->post_title ); ?></a>
+                                        <?php echo __( "(" . $hour_ago . ")", 'rtCamp' ); ?>
+                                        <a href='revision.php?revision=<?php echo $revision->ID; ?>'><?php echo __('View Diff', 'rtCamp'); ?></a>
+                                    </h4>
+                                </div>
                             </div>
-                        </div>
-                    <?php
+                        <?php
+                    }
+                    array_push( $post_parent, $posts->post_parent );
+                    wp_reset_postdata();
                 }
-                array_push( $post_parent, $posts->post_parent );
             }
-        }
-        wp_reset_postdata();
+            wp_reset_postdata();
+            ?>
+        </div>
+        <?php
     }
 }
 

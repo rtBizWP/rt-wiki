@@ -142,7 +142,7 @@ function display_wiki_post_access_metabox($post) {
     $access_rights = get_post_meta($post->ID, 'access_rights', true);
     $disabled = '';
 
-    if( 1 == $access_rights['public'] )
+    if( isset( $access_rights['public'] ) && ( 1 == $access_rights['public'] ) )
         $disabled = 'disabled=""';
     ?>  
     <table>
@@ -156,9 +156,9 @@ function display_wiki_post_access_metabox($post) {
 
             <tr>
                 <td>All</td>
-                <td><input type="radio" <?php echo $disabled; ?> class="rtwiki_all_na rtwiki_na" name="access_rights[all]" <?php if (isset($access_rights['all']['na']) == 1) { ?>checked="checked"<?php } ?> value="na" /></td>
-                <td><input type="radio" class="rtwiki_all_r rtwiki_r" name="access_rights[all]" <?php if (isset($access_rights['all']['r']) == 1) { ?>checked="checked"<?php } ?> value="r" /></td>
-                <td><input type="radio" class="rtwiki_all_w rtwiki_w" name="access_rights[all]" <?php if (isset($access_rights['all']['w']) == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
+                <td><input type="radio" <?php echo $disabled; ?> class="rtwiki_all_na rtwiki_na" name="access_rights[all]" <?php if ( isset( $access_rights['all']['na'] ) && ( $access_rights['all']['na'] == 1 ) ) { ?>checked="checked"<?php } ?> value="na" /></td>
+                <td><input type="radio" class="rtwiki_all_r rtwiki_r" name="access_rights[all]" <?php if ( isset( $access_rights['all']['r'] ) == 1 ) { ?>checked="checked"<?php } ?> value="r" /></td>
+                <td><input type="radio" class="rtwiki_all_w rtwiki_w" name="access_rights[all]" <?php if ( isset( $access_rights['all']['w'] ) == 1 ) { ?>checked="checked"<?php } ?> value="w" /></td>
             </tr>
 
     <?php
@@ -169,9 +169,9 @@ function display_wiki_post_access_metabox($post) {
         ?>
                 <tr>
                     <td><?php echo $groupName ?></td>
-                    <td><input type="radio" class="case rtwiki_na" <?php echo $disabled; ?> id="na" name="access_rights[<?php echo $groupName ?>]"  <?php if ($access_rights[$groupName]['na'] == 1) { ?>checked="checked"<?php } ?> value="na" /></td>
-                    <td><input type="radio" class="case rtwiki_r" id="r" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['r'] == 1) { ?>checked="checked"<?php } ?> value="r" /></td>
-                    <td><input type="radio" class="case rtwiki_w" id="w" name="access_rights[<?php echo $groupName ?>]" <?php if ($access_rights[$groupName]['w'] == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
+                    <td><input type="radio" onclick="if(this.checked) { uncheckAll(); } " class="case rtwiki_na" <?php echo $disabled; ?> id="na" name="access_rights[<?php echo $groupName ?>]"  <?php if ( isset( $access_rights[$groupName]['na'] ) && ( $access_rights[$groupName]['na'] == 1 ) ) { ?>checked="checked"<?php } ?> value="na" /></td>
+                    <td><input type="radio" onclick="if(this.checked) { uncheckAll(); } " class="case rtwiki_r" id="r" name="access_rights[<?php echo $groupName ?>]" <?php if ( ( '' != $disabled ) || ( isset( $access_rights[$groupName]['r'] ) &&( $access_rights[$groupName]['r'] == 1 ) ) ) { ?>checked="checked"<?php } ?> value="r" /></td>
+                    <td><input type="radio" onclick="if(this.checked) { uncheckAll(); } " class="case rtwiki_w" id="w" name="access_rights[<?php echo $groupName ?>]" <?php if ( isset( $access_rights[$groupName]['w'] ) && ( $access_rights[$groupName]['w'] == 1 ) ) { ?>checked="checked"<?php } ?> value="w" /></td>
                 </tr>
             <?php } ?> 
 
@@ -184,7 +184,7 @@ function display_wiki_post_access_metabox($post) {
             <tr><th colspan='2'><h4>Permission for public level</h4></th></tr>
         <tr>
             <td>Public</td> 
-            <td colspan='2'><input type="checkbox" onclick='if(this.checked) { jQuery(".rtwiki_na").prop("checked", false); jQuery(".rtwiki_na").prop("disabled", true); } else jQuery(".rtwiki_na").prop("disabled", false);' id="rtwiki_public_na" name="access_rights[public]" <?php if ( 1 == $access_rights['public'] ) { ?> checked="checked" <?php } ?> value='1' /> </td>    
+            <td colspan='2'><input type="checkbox" onclick='if(this.checked) { jQuery(".rtwiki_na").prop("checked", false); jQuery(".rtwiki_na").prop("disabled", true); } else { jQuery(".rtwiki_na").prop("disabled", false); }' id="rtwiki_public_na" name="access_rights[public]" <?php if ( isset( $access_rights['public'] ) && ( 1 == $access_rights['public'] ) ) { ?> checked="checked" <?php } ?> value='1' /> </td>    
         </tr>
     </tbody>
 
@@ -213,28 +213,29 @@ function rtp_wiki_permission_save($post) {
             $perm = array('na', 'r', 'w');
             $args = array('orderby' => 'asc', 'hide_empty' => false);
             $terms = get_terms('user-group', $args);
-            $group = array();
+            $group = array( 'all' );
             foreach ($terms as $term) {
                 $group[] = $term->name;
             }
 
-            foreach ($group as $g) {
-                foreach ($perm as $p) {
-                    if (isset($_POST['access_rights'][$g])) {
-
-                        if ($_POST['access_rights'][$g] == $p)
-                            $access_rights[$g][$p] = 1;
-                        else
-                            $access_rights[$g][$p] = 0;
-                    }else {
-
-                        if ($p == 'na') {
-                            $access_rights[$g][$p] = 1;
-                        } else {
-                            $access_rights[$g][$p] = 0;
-                        }
-                    }
-                }
+            foreach ($_POST['access_rights'] as $key => $value) {
+                $access_rights[$key][$value] = 1;
+//                foreach ($perm as $p) {
+//                    if (isset($_POST['access_rights'][$g])) {
+//
+//                        if ($_POST['access_rights'][$g] == $p)
+//                            $access_rights[$g][$p] = 1;
+//                        else
+//                            $access_rights[$g][$p] = 0;
+//                    }else {
+//
+//                        if ($p == 'na') {
+//                            $access_rights[$g][$p] = 1;
+//                        } else {
+//                            $access_rights[$g][$p] = 0;
+//                        }
+//                    }
+//                }
             }
 
 //            if (isset($_POST['access_rights']['all'])) {

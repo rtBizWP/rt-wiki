@@ -6,48 +6,41 @@
  */
 
 get_header();
+
+$content_class = apply_filters('rtwiki_content_class', 'large-8 small-12 columns');
 ?>
 
-<div id="primary" class="content-area">
+<div id="primary" class="content-area <?php echo $content_class ?>">
     <div id="content" class="site-content" role="main">
 
         <?php
         /* The loop */
-        
-        global $post;
-        $postType = $post->post_type;
-        ?>
-            <h2> <?php //echo the_title();  ?></h2>
-            <div id="content-wrapper">
+        if (have_posts()) {
+            the_post();
+            ?>
+            <article id="post-<?php the_ID(); ?>" <?php post_class('clearfix'); ?> >
                 <?php
-            
-            if (getPermission($post->ID) == true) { ?>
-                <h2><?php echo the_title(); ?></h2>
-                <p><?php echo the_content(); ?></p>
-                             
-               <?php  } else { ?>
-              <p> <?php echo 'Not Enough Rights to View The Content'; ?>  </p>
-             
-           <?php } ?>
-            </div>  
+                if (getPermission( get_the_ID() ) == true) {
+                    ?>
+                    <header class="entry-header">
+                        <h1 class="entry-title post-title"><?php echo the_title(); ?></h1>
+                    </header>
+                    <div class="entry-content">
+                    <?php echo the_content(); ?>
+                    </div>
+                    <?php } else { ?>
+                    <div class="entry-content">
+                    <?php _e('Not Enough Rights to View The Content on this page.', 'rtCamp'); ?>
+                    </div>
+            <?php } ?>
+            </article>
+<?php } ?>
+
     </div><!-- #content -->
 </div><!-- #primary -->
 
 
-<?php if ($postType == 'wiki') { ?>
-    <div id="secondary" class="sidebar-container" role="complementary">
-
-        <div class="widget-area">
-
-    <?php dynamic_sidebar('rt-wiki-sidebar'); ?>
-
-        </div> 
-
-    </div> 
-    <?php
-} else {
-    get_sidebar();
-}
+<?php
+get_sidebar();
 
 get_footer();
-?>

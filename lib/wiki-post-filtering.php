@@ -203,9 +203,9 @@ function getPermission($pageID) {
     $access_rights = get_post_meta($pageID, 'access_rights', true);
 
     if (!is_user_logged_in()) {
-        if ($access_rights['public']['r'] == 1) {
+        if ($access_rights['public'] == 1) {
             return true;
-        } else if ($access_rights['public']['na'] == 1) {
+        } else if ($access_rights['public'] == 0) {
             return false;
         }
     } else {
