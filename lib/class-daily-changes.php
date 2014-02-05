@@ -27,7 +27,7 @@ if (defined('WP_CLI') && WP_CLI) {
 
                             $postID = get_the_ID();
                             //$postObject=get_post($postID);
-                            $access_rights = get_post_meta($postID, 'access_rights', true);
+                            $access_rights = get_post_meta($postID, 'access_rights', array());
 
                             if ($access_rights != null) {
 
@@ -65,7 +65,7 @@ if (defined('WP_CLI') && WP_CLI) {
 
                             $postID = get_the_ID();
 
-                            $subscribersList = get_post_meta($postID, 'subcribers_list', true);              
+                            $subscribersList = get_post_meta($postID, 'subcribers_list', array());              
 
                             foreach ($subscribersList as $subscribers) {
 
@@ -91,7 +91,7 @@ if (defined('WP_CLI') && WP_CLI) {
                             $wp_query->the_post();
 
                             $postID = get_the_ID();
-                            $subscribersList = get_post_meta($postID, 'subcribers_list', true);              
+                            $subscribersList = get_post_meta($postID, 'subcribers_list', array());              
 
                             foreach ($subscribersList as $subscribers) {
 

@@ -137,7 +137,7 @@ function wiki_permission_metabox() {
 function display_wiki_post_access_metabox($post) {
     wp_nonce_field(plugin_basename(__FILE__), $post->post_type . '_noncename');
 
-    $access_rights = get_post_meta($post->ID, 'access_rights', true);
+    $access_rights = get_post_meta($post->ID, 'access_rights', array());
     $disabled = '';
 
     if( isset( $access_rights['public'] ) && ( 1 == $access_rights['public'] ) )
@@ -253,11 +253,11 @@ function rtp_wiki_permission_save($post) {
 
             /* Checking and setting subscribers list for the post */
 
-            $subscriberList = get_post_meta($post, 'subcribers_list', true);
+            $subscriberList = get_post_meta($post, 'subcribers_list', array());
 
-            $subpageTrackingList = get_post_meta($post, 'subpages_tracking', true);
+            $subpageTrackingList = get_post_meta($post, 'subpages_tracking', array());
             $userId = get_current_user_id();
-            $access_rights = get_post_meta($post, 'access_rights', true);
+            $access_rights = get_post_meta($post, 'access_rights', array());
             $subPageStatus = false;
             $readWriteFlag = false;
             if (in_array($userId, $subpageTrackingList, true)) {
@@ -318,7 +318,7 @@ function rtp_wiki_permission_save($post) {
                         /* Check if parent has the userid for subscription of subpages */
                         $parent_ID = $post->post_parent;
                         if ($parent_ID != '0' || $parent_ID != 0) {
-                            $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true);
+                            $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', array());
                             if (in_array($userId, $parentSubpageTracking, true)) {
                                 if (!in_array($userId, $subscriberList, true)) {
                                     $parentSubpageTracking[] = $userId;

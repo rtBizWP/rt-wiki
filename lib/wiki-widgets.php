@@ -191,9 +191,9 @@ class rt_wiki_page_subscribe extends WP_Widget {
                 $parentIdFlag = false;
                  $parentStatus = true;
                 $userId = get_current_user_id(); //current user id
-                $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true); //Parent Post meta
-                $pageSubscription = get_post_meta($post->ID, 'subcribers_list', true); // Current post meta
-                $subPageSubscription = get_post_meta($post->ID, 'subpages_tracking', true);
+                $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', array()); //Parent Post meta
+                $pageSubscription = get_post_meta($post->ID, 'subcribers_list', array()); // Current post meta
+                $subPageSubscription = get_post_meta($post->ID, 'subpages_tracking', array());
                 /* Check if post has any parent or not */
                 if ($parent_ID == 0)
                     $parentIdFlag = false;
@@ -311,9 +311,9 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
                 $parentIdFlag = false;
 
                 $userId = get_current_user_id(); //current user id
-                $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true); //Parent Post meta
-                $pageSubscription = get_post_meta($post->ID, 'subcribers_list', true); // Current post meta
-                $subPageSubscription = get_post_meta($post->ID, 'subpages_tracking', true);
+                $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', array()); //Parent Post meta
+                $pageSubscription = get_post_meta($post->ID, 'subcribers_list', array()); // Current post meta
+                $subPageSubscription = get_post_meta($post->ID, 'subpages_tracking', array());
                 /* Check if post has any parent or not */
                 if ($parent_ID == 0)
                     $parentIdFlag = false;

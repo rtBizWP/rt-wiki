@@ -21,7 +21,7 @@ function single_post_filtering() {
 
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => true));
-    $access_rights = get_post_meta($post->ID, 'access_rights', true);
+    $access_rights = get_post_meta($post->ID, 'access_rights', array());
 
     if (!is_user_logged_in()) {
 
@@ -139,7 +139,7 @@ function getAdminPanelSidePermission($pageID) {
     $noPublic = 0;
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => true));
-    $access_rights = get_post_meta($pageID, 'access_rights', true);
+    $access_rights = get_post_meta($pageID, 'access_rights', array());
 
     if (!is_user_logged_in()) {
         if ($access_rights['public']['r'] == 1) {
@@ -201,7 +201,7 @@ function getPermission($pageID) {
     $noPublic = 0;
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => true));
-    $access_rights = get_post_meta($pageID, 'access_rights', true);
+    $access_rights = get_post_meta($pageID, 'access_rights', array());
 
     if ( isset( $access_rights['public'] ) && ( 1 == $access_rights['public'] ) ) {
         return true;
