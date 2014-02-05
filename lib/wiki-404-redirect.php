@@ -13,9 +13,9 @@
  * 
  **/
 
-function rtwiki_get_page_id($name) {
+function rtwiki_get_page_id($name, $post_type) {
     global $wpdb;
-    $page_id = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE ( post_name = '" . $name . "' or post_title = '" . $name . "' ) and post_status = 'publish' and post_type='wiki' ");
+    $page_id = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE ( post_name = '" . $name . "' or post_title = '" . $name . "' ) and post_status = 'publish' and post_type=" . $post_type );
     return $page_id;
 }
 
@@ -26,17 +26,19 @@ add_action('template_redirect', 'redirect_404');
  */
 
 function redirect_404() {
-      if (is_404() && get_query_var('post_type') == 'wiki') {
+    $supported_posts = rtwiki_get_supported_attribute();
+      if (is_404() && is_array( $supported_posts ) && in_array( get_query_var('post_type'), $supported_posts ) ) {
         $userId=get_current_user_id();
         if($userId == 0)
         { $userId = 1; }
         $page = $_SERVER['REQUEST_URI'];
         $segments = explode('/', trim($page, '/'));
-        if ($segments[0] == 'wiki') {
+        $post_type = $segments[0];
+        if ( in_array( $post_type, $supported_posts ) ) {
             $postid = '';
             for ($i = 1; $i < count($segments); $i++) {
      
-                $page = rtwiki_get_page_id($segments[$i]);
+                $page = rtwiki_get_page_id( $segments[$i], $post_type );
                 if ($i == 1) {
                     if ($page == null) {
                              $my_post1 = array(
@@ -44,7 +46,7 @@ function redirect_404() {
                             'post_content' => '',
                             'post_status' => 'publish',
                             'post_author' => $userId,
-                            'post_type' => 'wiki',
+                            'post_type' => $post_type,
                             'slug' => $segments[$i],
                         );
                         $postid = wp_insert_post($my_post1);
@@ -60,7 +62,7 @@ function redirect_404() {
                             'post_content' => '',
                             'post_status' => 'publish',
                             'post_author' => $userId,
-                            'post_type' => 'wiki',
+                            'post_type' => $post_type,
                             'slug' => $segments[$i],
                             'post_parent' => $parentId,
                         );

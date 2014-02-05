@@ -20,3 +20,22 @@ function rtwiki_sanitize_taxonomy_name( $taxonomy ) {
 function rtwiki_attribute_taxonomy_name( $name ) {
 	return  rtwiki_sanitize_taxonomy_name( $name );
 }
+
+function rtwiki_get_supported_attribute() {
+    $attributes = array( 'wiki' );
+    $rtwiki_settings = '';
+    $rtwiki_custom = '';
+    if( is_multisite() ){
+        $rtwiki_settings = get_site_option( 'rtwiki_settings', array() );
+        $rtwiki_custom = get_site_option( 'rtwiki_custom', array() );
+    }
+    else {
+        $rtwiki_settings = get_option( 'rtwiki_settings', array() );
+        $rtwiki_custom = get_option( 'rtwiki_custom', array() );
+    }
+    if( isset( $rtwiki_settings['attribute'] ) )
+        $attributes = array_merge ( $attributes, $rtwiki_settings['attribute'] );
+    if( isset( $rtwiki_custom[0]['slug'] ) )
+        $attributes[] = $rtwiki_custom[0]['slug'];
+    return $attributes;
+}

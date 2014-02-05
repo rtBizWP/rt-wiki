@@ -22,8 +22,8 @@ if ( !class_exists( 'RtWikiAttributeTaxonomyModel' ) ) {
 			parent::__construct( 'rtwiki_attribute_taxonomy' );
 		}
 
-		function attribute_exists( $attribute_name ) {
-			$attributes = $this->get_all_attributes();
+		function attribute_exists( $attribute_name, $post_type = '' ) {
+			$attributes = $this->get_all_attributes( $post_type );
 			foreach ( $attributes as $attribute ) {
 				if ( $attribute_name == $attribute->attribute_name ) {
 					return true;

@@ -27,36 +27,18 @@ $content_class = apply_filters('rtwiki_content_class', 'large-8 small-12 columns
             endif;
             ?></h1>
         </header>
-        <?php if (have_posts()) : 
-            $post_count = 0; ?>
+        <?php if (have_posts()) : ?>
             <?php while (have_posts()) : the_post(); ?>
-                <?php if ( getPermission( get_the_ID() ) == true ) { ?>
                     <article id="post-<?php the_ID(); ?>" <?php post_class( 'clearfix' ); ?> >
                         <header class="entry-header">
                             <h1 class="entry-title"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permanent Link to %s', 'rtCamp' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></h1>
                         </header>
                         <div class="entry-content">
-                            <?php echo the_excerpt(); ?>
+                            <?php the_excerpt(); ?>
                         </div>
                     </article>
-                <?php  
-                        $post_count++;
-                    }
-                ?>
             <?php 
                 endwhile; 
-                if( $post_count == 0 ) {
-                    ?>
-                        <article id="post-0" class="post not-found" >
-                            <header class="entry-header">
-                                <h1 class="entry-title"><?php _e( 'No Posts', 'rtCamp' ); ?></h1>
-                            </header>
-                            <div class="entry-content">
-                                <p><?php _e( 'Not Enough Rights to View The Content.', 'rtCamp' ); ?></p>
-                            </div>
-                        </article>
-                    <?php
-                }
             ?>
             <div class="navigation">
                 <div class="alignleft"><?php previous_posts_link('&laquo; Previous Page') ?></div>

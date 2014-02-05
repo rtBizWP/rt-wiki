@@ -367,13 +367,6 @@ add_action('widgets_init', 'rt_wiki_register_widgets');
  * Function to add wiki activity to the dashboard.
  */
 function rt_list_wikis() {
-    
-    if( is_multisite() )
-        $rtwiki_settings = get_site_option( 'rtwiki_settings', true );
-    else
-        $rtwiki_settings = get_option( 'rtwiki_settings', true );
-    
-    $posts_attribute = $rtwiki_settings['attribute'];
     $args = array(
         'post_type'     => 'revision',
         'date_query'    => array(
@@ -475,14 +468,14 @@ add_action( 'wp_dashboard_setup', 'wiki_add_dashboard_widgets' );
 function is_wiki_post_type($post_id = 0) {
     global $post;
     if( is_multisite() ) {
-        $rtwiki_settings = get_site_option( 'rtwiki_settings', true );
-        $rtwiki_custom = get_site_option( 'rtwiki_custom', true );
+        $rtwiki_settings = get_site_option( 'rtwiki_settings', array() );
+        $rtwiki_custom = get_site_option( 'rtwiki_custom', array() );
     }
     else {
-        $rtwiki_settings = get_option( 'rtwiki_settings', true );
-        $rtwiki_custom = get_option( 'rtwiki_custom', true );
+        $rtwiki_settings = get_option( 'rtwiki_settings', array() );
+        $rtwiki_custom = get_option( 'rtwiki_custom', array() );
     }
-    $wiki_posts = array( $rtwiki_settings['default']['slug'] );
+    $wiki_posts = array( 'wiki' );
     if( isset( $rtwiki_custom[0]['slug'] ) && !empty( $rtwiki_custom[0]['slug'] ) )
         array_push ( $wiki_posts, $rtwiki_custom[0]['slug'] );
     if( $post_id == 0 && $post->post_parent != 0)

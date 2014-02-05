@@ -1,24 +1,25 @@
 <?php
-add_filter( 'template_include', 'rc_tc_template_chooser');
 function rc_tc_template_chooser($template) {
 
     // Post ID
     $post_id = get_the_ID();
 
     // For all other CPT
-
-    if (get_post_type($post_id) != 'wiki') {
-        return $template;
+    $return = '';
+    $supported_posts = rtwiki_get_supported_attribute();
+    if ( !in_array( get_post_type(), $supported_posts ) ) {
+        $return = $template;
     }
 
     // Else use custom template
-    if (is_single()) {
-        return rc_tc_get_template_hierarchy('single-wiki');
-    }
-    if(is_archive())
-    {
-        return rc_tc_get_template_hierarchy('archive-wiki');
-    }
+    else if (is_singular() )
+        $return = rc_tc_get_template_hierarchy('single-wiki');
+    else if( is_archive() )
+        $return = rc_tc_get_template_hierarchy('archive-wiki');
+    else
+        $return = $template;
+    
+    return $return;
 }
 
 /**
@@ -52,6 +53,6 @@ function rc_tc_get_template_hierarchy( $template ) {
 |--------------------------------------------------------------------------
 */
  
-add_filter( 'template_include', 'rc_tc_template_chooser' );
+add_filter( 'template_include', 'rc_tc_template_chooser', 1 );
 
 

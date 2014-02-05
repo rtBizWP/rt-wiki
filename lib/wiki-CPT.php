@@ -9,91 +9,93 @@ require_once dirname(__FILE__) . '/wiki-post-filtering.php';
 /**
  * Creates wiki named CPT.
  */
-add_action('init', 'create_wiki');
+add_action('init', 'create_wiki' );
 
 function create_wiki() {
 
     $rtwiki_settings = '';
     $rtwiki_custom = '';
     if( is_multisite() ) {
-        $rtwiki_settings = get_site_option ( "rtwiki_settings", true );
-        $rtwiki_custom = get_site_option ( "rtwiki_custom", true );
+        $rtwiki_settings = get_site_option ( "rtwiki_settings", array() );
+        $rtwiki_custom = get_site_option ( "rtwiki_custom", array() );
     }
     else {
-        $rtwiki_settings = get_option ( "rtwiki_settings", true );
-        $rtwiki_custom = get_option ( "rtwiki_custom", true );
+        $rtwiki_settings = get_option ( "rtwiki_settings", array() );
+        $rtwiki_custom = get_option ( "rtwiki_custom", array() );
     }
     
-    $post_name = array( $rtwiki_settings['default'] );
-    if( ( 'y' == $rtwiki_settings['custom_post'] ) && ( count ( $rtwiki_custom ) > 0 ) ) {
-        $post_name[1] = $rtwiki_custom[0];
+    $post_name = array( array( 'label'=>'Wiki', 'slug'=>'wiki' ) );
+    if( ( 'y' == $rtwiki_settings['custom_wiki'] ) && ( count ( $rtwiki_custom ) > 0 ) ) {
+        $post_name = $rtwiki_custom;
     }
     
-    foreach ( $post_name as $name ){
-
-        register_post_type($name['slug'], array(
-            'labels' => array(
-                'name' => __(ucwords( $name['label'] ), 'post type general name', 'rtCamp'),
-                'singular_name' => __(ucwords( $name['label'] ), 'post type singular name', 'rtCamp'),
-                'add_new' => __('Add New', ucwords( $name['label'] ), 'rtCamp'),
-                'add_new_item' => __('Add New '. ucwords( $name['label'] ), 'rtCamp'),
-                'edit' => __('Edit', ucwords( $name['label'] ), 'rtCamp'),
-                'edit_item' => __('Edit '. ucwords( $name['label'] ), 'rtCamp'),
-                'new_item' => __('New '. ucwords( $name['label'] ), 'rtCamp'),
-                'view' => __('View', ucwords( $name['label'] ), 'rtCamp'),
-                'view_item' => __('View ' . ucwords( $name['label'] ), 'rtCamp'),
-                'search_items' => __('Search ' . ucwords( $name['label'] ), 'rtCamp'),
-                'not_found' => __('No ' . ucwords( $name['label'] ) . ' found', 'rtCamp'),
-                'not_found_in_trash' => __('No ' . ucwords( $name['label'] ) . ' found in Trash', 'rtCamp'),
-                'all_items' => __('All ' . ucwords( $name['label'] ), 'rtCamp'),
-                'parent' => 'Parent ' . ucwords( $name['label'] )
-            ),
-            'description' => __( ucwords( $name['label'] ), 'rtCamp'),
-            'publicly_queryable' => null,
-            'map_meta_cap' => true,
-            'capability_type' => 'wiki',
-            'capabilities' => array(
-                'read_post' => 'read_wiki',
-                'publish_posts' => 'publish_wiki',
-                'edit_posts' => 'edit_wiki',
-                'edit_others_posts' => 'edit_others_wiki',
-                'delete_posts' => 'delete_wiki',
-                'delete_others_posts' => 'delete_others_wiki',
-                'read_private_posts' => 'read_private_wiki',
-                'edit_post' => 'edit_wiki',
-                'delete_post' => 'delete_wiki',
-                'edit_published_posts' => 'edit_published_wiki',
-                'delete_published_posts' => 'delete_published_wiki' 
-            ),
-            '_builtin' => false,
-            '_edit_link' => 'post.php?post=%d',
-            'rewrite' => true,
-            'has_archive' => true,
-            'query_var' => true,
-            'register_meta_box_cb' => null,
-            //'taxonomies' => array('category', 'post_tag'),
-            'show_ui' => true,
-            'menu_icon' => true,
-            'permalink_epmask' => EP_PERMALINK,
-            'can_export' => true,
-            'show_in_nav_menus' => true,
-            'show_in_menu' => true,
-            'show_in_admin_bar' => true,
-            'hierarchical' => true,
-            'public' => true,
-            'menu_position' => 10,
-            'exclude_from_search' => true,
-            'supports' => array( 
-                        'title', 
-                        'editor', 
-                        'comments',
-                        'thumbnail', 
-                        'revisions', 
-                        'page-attributes',
-                        'excerpt'
-                    ),
-            )
-        );
+    if( is_array( $post_name ) ) {
+        foreach ( $post_name as $name ){
+            $slug = $name['slug'];
+            $label = ucwords( $name['label'] );
+            register_post_type($slug, array(
+                'labels' => array(
+                    'name' => __($label, 'post type general name', 'rtCamp'),
+                    'singular_name' => __($label, 'post type singular name', 'rtCamp'),
+                    'add_new' => __('Add New', $label, 'rtCamp'),
+                    'add_new_item' => __('Add New '. $label, 'rtCamp'),
+                    'edit' => __('Edit', $label, 'rtCamp'),
+                    'edit_item' => __('Edit '. $label, 'rtCamp'),
+                    'new_item' => __('New '. $label, 'rtCamp'),
+                    'view' => __('View', $label, 'rtCamp'),
+                    'view_item' => __('View ' . $label, 'rtCamp'),
+                    'search_items' => __('Search ' . $label, 'rtCamp'),
+                    'not_found' => __('No ' . $label . ' found', 'rtCamp'),
+                    'not_found_in_trash' => __('No ' . $label . ' found in Trash', 'rtCamp'),
+                    'all_items' => __('All ' . $label, 'rtCamp'),
+                    'parent' => 'Parent ' . $label
+                ),
+                'description' => __( $label, 'rtCamp'),
+                'publicly_queryable' => null,
+                'map_meta_cap' => true,
+                'capability_type' => 'wiki',
+                'capabilities' => array(
+                    'read_post' => 'read_wiki',
+                    'publish_posts' => 'publish_wiki',
+                    'edit_posts' => 'edit_wiki',
+                    'edit_others_posts' => 'edit_others_wiki',
+                    'delete_posts' => 'delete_wiki',
+                    'delete_others_posts' => 'delete_others_wiki',
+                    'read_private_posts' => 'read_private_wiki',
+                    'edit_post' => 'edit_wiki',
+                    'delete_post' => 'delete_wiki',
+                    'edit_published_posts' => 'edit_published_wiki',
+                    'delete_published_posts' => 'delete_published_wiki' 
+                ),
+                '_builtin' => false,
+                '_edit_link' => 'post.php?post=%d',
+                'rewrite' => true,
+                'has_archive' => true,
+                'query_var' => true,
+                'register_meta_box_cb' => null,
+                //'taxonomies' => array('category', 'post_tag'),
+                'show_ui' => true,
+                'menu_icon' => true,
+                'permalink_epmask' => EP_PERMALINK,
+                'can_export' => true,
+                'show_in_nav_menus' => true,
+                'show_in_menu' => true,
+                'show_in_admin_bar' => true,
+                'hierarchical' => true,
+                'public' => true,
+                'menu_position' => 10,
+                'exclude_from_search' => true,
+                'supports' => array( 
+                            'title', 
+                            'editor', 
+                            'thumbnail', 
+                            'revisions', 
+                            'page-attributes',
+                            'excerpt'
+                        ),
+                )
+            );
+        }
     }
 }
 
@@ -121,15 +123,11 @@ add_action('admin_init', 'add_wiki_caps');
 add_action('admin_init', 'wiki_permission_metabox');
 
 function wiki_permission_metabox() {
-    $rtwiki_settings = '';
-    if ( is_multisite() )
-        $rtwiki_settings = get_site_option( 'rtwiki_settings', true );
-    else
-        $rtwiki_settings = get_option( 'rtwiki_settings', true );
-    
-    $attributes = $rtwiki_settings['attribute'];
-    foreach ( $attributes as $attribute )
-        add_meta_box($attribute.'_post_access', 'Permissions', 'display_wiki_post_access_metabox', $attribute, 'normal', 'high');
+    $supported_posts = rtwiki_get_supported_attribute();
+    if( is_array( $supported_posts ) ) {
+        foreach ( $supported_posts as $posts )
+            add_meta_box($posts.'_post_access', 'Permissions', 'display_wiki_post_access_metabox', $posts, 'normal', 'high');
+    }
 }
 
 /*
@@ -206,7 +204,8 @@ function rtp_wiki_permission_save($post) {
     if (!wp_verify_nonce(@$_POST[$_POST['post_type'] . '_noncename'], plugin_basename(__FILE__)))
         return;
 
-    if ('wiki' == $_POST['post_type']) {
+    $supported_posts = rtwiki_get_supported_attribute();
+    if ( in_array( $_POST['post_type'], $supported_posts, true ) ) {
         if (!current_user_can('edit_page', $post)) {
             return;
         } else {

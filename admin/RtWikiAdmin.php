@@ -31,19 +31,14 @@ if ( !class_exists( 'RtWikiAdmin' ) ) {
 
 		function register_taxonomies() {
 			global $rtWikiAttributesModel, $rtWikiAttributes;
-                        $rtwiki_settings = '';
-                        if ( is_multisite() ) {
-                            $rtwiki_settings = get_site_option( 'rtwiki_settings', array() );
-                        }
-                        else {
-                            $rtwiki_settings = get_option( 'rtwiki_settings', array() );
-                        }
-                        if ( isset ( $rtwiki_settings['attribute'] ) ) { 
-                            $tax_attributes = $rtwiki_settings['attribute'];
+                        $tax_attributes = rtwiki_get_supported_attribute();
+                        if( is_array($tax_attributes) ) {
                             foreach ($tax_attributes as $value) {
                                 $attributes = $rtWikiAttributesModel->get_all_attributes( $value );
-                                foreach ($attributes as $attr) {
-                                    $rtWikiAttributes->register_taxonomy( $value, $attr->id );
+                                if( is_array($attributes) ) {
+                                    foreach ($attributes as $attr) {
+                                        $rtWikiAttributes->register_taxonomy( $value, $attr->id );
+                                    }
                                 }
                             }
                         }
@@ -51,16 +46,16 @@ if ( !class_exists( 'RtWikiAdmin' ) ) {
 
 		function register_pages() {
 			global $rtWikiAttributes;
-                        $rtwiki_settings = '';
-                        if ( is_multisite() ) {
-                            $rtwiki_settings = get_site_option( 'rtwiki_settings', true );
+                        $attributes = rtwiki_get_supported_attribute();
+                        if( is_array($attributes) ) {
+                            foreach( $attributes as $attribute ) {
+                                if ( $attribute !== 'post' ) {
+                                    add_submenu_page( 'edit.php?post_type='.$attribute, __( 'Attributes' ), __( 'Attributes' ), 'administrator', $attribute.'-attributes', array( $rtWikiAttributes, 'attributes_page' ) );
+                                } else {
+                                    add_submenu_page( 'edit.php', __( 'Attributes' ), __( 'Attributes' ), 'administrator', $attribute.'-attributes', array( $rtWikiAttributes, 'attributes_page' ) );
+                                }
+                            }
                         }
-                        else {
-                            $rtwiki_settings = get_option( 'rtwiki_settings', true );
-                        }
-                        $attributes = $rtwiki_settings['attribute'];
-                        foreach( $attributes as $attribute )
-                            add_submenu_page( 'edit.php?post_type='.$attribute, __( 'Attributes' ), __( 'Attributes' ), 'administrator', 'rtwiki-attributes', array( $rtWikiAttributes, 'attributes_page' ) );
 		}
 
 		function init_attributes() {

@@ -92,7 +92,8 @@ function get_term_if_exists($term, $userid) {
 
 function remove_quick_edit($actions) {
     global $post;
-    if ($post->post_type == 'wiki') {
+    $supported_posts = rtwiki_get_supported_attribute();
+    if ( in_array( $post->post_type, $supported_posts ) ) {
         if (getAdminPanelSidePermission($post->ID) == false) {
             unset($actions['inline hide-if-no-js']);
             unset($actions['trash']);
@@ -113,10 +114,10 @@ add_filter('page_row_actions', 'remove_quick_edit', 10);
 function postCheck() {
     if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         $page = $_GET['post'];
-
+        $supported_posts = rtwiki_get_supported_attribute();
         // $status = get_post_meta($page, '_edit_last');
         //if ($status[0] == '1') {
-        if (get_post_type($page) == 'wiki') {
+        if ( in_array( get_post_type($page), $supported_posts ) ) {
             if (getAdminPanelSidePermission($page) == false) {
                 WP_DIE(__('You Dont have enough access rights to Edit this post'));
             }
@@ -202,13 +203,12 @@ function getPermission($pageID) {
     $terms = get_terms('user-group', array('hide_empty' => true));
     $access_rights = get_post_meta($pageID, 'access_rights', true);
 
-    if (!is_user_logged_in()) {
-        if ($access_rights['public'] == 1) {
-            return true;
-        } else if ($access_rights['public'] == 0) {
-            return false;
-        }
-    } else {
+    if ( isset( $access_rights['public'] ) && ( 1 == $access_rights['public'] ) ) {
+        return true;
+    } else if ( isset( $access_rights['public'] ) && !is_user_logged_in() && ( 0 == $access_rights['public'] ) ) {
+        return false;
+    }
+    if( is_user_logged_in() ) {
         $post_details = get_post($pageID);
 
         if ($post_details->post_author == $user) {
@@ -350,3 +350,25 @@ function add_wiki_taxonomy($query) {
         }
     }
 }
+
+function rtwiki_content_filter ( $content ) {
+    if( getPermission ( get_the_ID() ) ) {
+        $post_thumbnail = get_the_post_thumbnail();
+        return $post_thumbnail.$content;
+    }
+    else { 
+        return '<p>'.__( 'Not Enough Rights to View The Content.', 'rtCamp' ).'</p>'; 
+    }
+}
+
+add_filter( 'the_content', 'rtwiki_content_filter' );
+
+function rtwiki_edit_post_link_filter( $output ) {
+    if( getPermission ( get_the_ID() ) ) {
+        return $output;
+    }
+    else { 
+        return '';
+    }
+}
+add_filter('edit_post_link', 'rtwiki_edit_post_link_filter');
