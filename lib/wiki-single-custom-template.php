@@ -1,9 +1,6 @@
 <?php
 function rc_tc_template_chooser($template) {
 
-    // Post ID
-    $post_id = get_the_ID();
-
     // For all other CPT
     $return = '';
     $supported_posts = rtwiki_get_supported_attribute();

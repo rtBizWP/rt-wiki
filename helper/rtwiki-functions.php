@@ -22,7 +22,7 @@ function rtwiki_attribute_taxonomy_name( $name ) {
 }
 
 function rtwiki_get_supported_attribute() {
-    $attributes = array( 'wiki' );
+    $attributes = array();
     $rtwiki_settings = '';
     $rtwiki_custom = '';
     if( is_multisite() ){

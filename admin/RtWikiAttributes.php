@@ -19,13 +19,22 @@ if ( ! defined( 'ABSPATH' ) )
 if ( !class_exists( 'RtWikiAttributes' ) ) {
 	class RtWikiAttributes {
 		public function __construct() {
-
+                    add_action ( 'admin_init', array( $this, 'save_attribute' ), 1 );
 		}
 
 		function attributes_page() {
 			$this->rtwiki_attributes();
 		}
 
+                function save_attribute(){
+                    $action_completed = $this->perform_action();
+
+                    // If an attribute was added, edited or deleted: clear cache and redirect
+                    if ( ! empty( $action_completed ) ) {
+                        wp_redirect( admin_url( 'admin.php?p_type='.$_GET['p_type'].'&page='. $_GET['page'] ) );
+                    }
+                }
+                
 		function register_taxonomy( $post_type, $attr_id ) {
 			global $rtWikiAttributesModel;
 			$tax = $rtWikiAttributesModel->get_attribute( $attr_id );
@@ -242,15 +251,6 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 		}
 
 		function rtwiki_attributes() {
-
-			$action_completed = $this->perform_action();
-
-			// If an attribute was added, edited or deleted: clear cache and redirect
-			if ( ! empty( $action_completed ) ) {
-                            if( wp_redirect( admin_url( 'admin.php?post_type='.$_GET['post_type'].'&page='. $_GET['page'] ) ) )
-                                die();
-			}
-
 			// Show admin interface
 			if ( ! empty( $_GET['edit'] ) )
 				$this->rtwiki_edit_attribute();
@@ -351,7 +351,7 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 											foreach ($attribute_taxonomies as $tax) :
 												?><tr>
 
-													<td><a href="edit-tags.php?taxonomy=<?php echo esc_html(rtwiki_attribute_taxonomy_name($tax->attribute_name)); ?>&amp;post_type=wiki"><?php echo esc_html( $tax->attribute_label ); ?></a>
+													<td><a href="edit-tags.php?taxonomy=<?php echo esc_html(rtwiki_attribute_taxonomy_name($tax->attribute_name)); ?>&amp;post_type=<?php echo $post_type; ?>"><?php echo esc_html( $tax->attribute_label ); ?></a>
 
 													<div class="row-actions"><span class="edit"><a href="<?php echo esc_url( add_query_arg('edit', $tax->id, 'admin.php?page=' . $_GET['page'] . '&amp;p_type='.$post_type ) ); ?>"><?php _e( 'Edit' ); ?></a> | </span><span class="delete"><a class="delete" href="<?php echo esc_url( add_query_arg('delete', $tax->id, 'admin.php?page=' . $_GET['page'] . '&amp;p_type='.$post_type ) ); ?>"><?php _e( 'Delete' ); ?></a></span></div>
 													</td>

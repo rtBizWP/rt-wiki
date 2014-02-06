@@ -15,7 +15,7 @@ if (defined('WP_CLI') && WP_CLI) {
 
             // query_posts('post_type=wiki');
             $supported_posts = rtwiki_get_supported_attribute();
-            if( is_array($supported_posts) ) {
+            if( is_array( $supported_posts ) && !empty( $supported_posts ) ) {
                 foreach ( $supported_posts as $post_types ) {
                     $wp_query = new WP_Query(array('post_type' => $post_types, 'posts_per_page' => -1));
 
@@ -55,7 +55,7 @@ if (defined('WP_CLI') && WP_CLI) {
         function wikiUser()
         {
             $supported_posts = rtwiki_get_supported_attribute();
-            if( is_array($supported_posts) ) {
+            if( is_array( $supported_posts ) && !empty( $supported_posts ) ) {
                 foreach ( $supported_posts as $post_types ) {
                     $wp_query = new WP_Query(array('post_type' => $post_types, 'posts_per_page' => -1));
                     if ($wp_query->have_posts()) {
@@ -83,7 +83,7 @@ if (defined('WP_CLI') && WP_CLI) {
         
         function nonWikiUsers() {
             $supported_posts = rtwiki_get_supported_attribute();
-            if( is_array($supported_posts) ) {
+            if( is_array( $supported_posts ) && !empty( $supported_posts ) ) {
                 foreach ( $supported_posts as $post_types ) {
                     $wp_query = new WP_Query(array('post_type' => $post_types, 'posts_per_page' => -1));
                     if ($wp_query->have_posts()) {

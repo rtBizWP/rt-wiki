@@ -101,22 +101,18 @@ function rtwiki_save_settings() {
         //Form data sent  
         $rtwiki_custom = array();
         $error = true;
-        if( is_multisite() )
-            $rtwiki_custom = get_site_option ( 'rtwiki_custom', array() );
-        else
-            $rtwiki_custom = get_option ( 'rtwiki_custom', array() );
         if( isset( $_POST['rtwiki_settings'] ) ){
             if( 'n' == $_POST['rtwiki_settings']['custom_wiki'] )
                 $error = false;
             else {
                 $rtwiki_custom_args = array( 'slug' => '', 'label' => '' );
                 if( isset( $_POST['rtwiki_custom'][0] ) && !empty( $_POST['rtwiki_custom'][0] ) ) {
-                    if( !isset( $rtwiki_custom[0]['slug'] ) ) {
-                        $taxonomy_name = rtwiki_sanitize_taxonomy_name ( $_POST['rtwiki_custom'][0] );
-                        $rtwiki_custom_args['slug'] = $taxonomy_name;
-                    }
-                    else 
-                        $rtwiki_custom_args['slug'] = $rtwiki_custom[0]['slug'];
+//                    if( !isset( $rtwiki_custom[0]['slug'] ) ) {
+//                        $taxonomy_name = rtwiki_sanitize_taxonomy_name ( $_POST['rtwiki_custom'][0] );
+//                        $rtwiki_custom_args['slug'] = $taxonomy_name;
+//                    }
+//                    else 
+                        $rtwiki_custom_args['slug'] = rtwiki_sanitize_taxonomy_name ( $_POST['rtwiki_custom'][0] );
                     $rtwiki_custom_args['label'] = $_POST['rtwiki_custom'][0];
                     $rtwiki_custom = array( $rtwiki_custom_args );
                     $error = false;

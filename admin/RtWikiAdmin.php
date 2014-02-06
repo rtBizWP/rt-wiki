@@ -32,8 +32,8 @@ if ( !class_exists( 'RtWikiAdmin' ) ) {
 		function register_taxonomies() {
 			global $rtWikiAttributesModel, $rtWikiAttributes;
                         $tax_attributes = rtwiki_get_supported_attribute();
-                        if( is_array($tax_attributes) ) {
-                            foreach ($tax_attributes as $value) {
+                        if( is_array( $tax_attributes ) && !empty( $tax_attributes ) ) {
+                            foreach ( $tax_attributes as $value ) {
                                 $attributes = $rtWikiAttributesModel->get_all_attributes( $value );
                                 if( is_array($attributes) ) {
                                     foreach ($attributes as $attr) {
@@ -47,7 +47,7 @@ if ( !class_exists( 'RtWikiAdmin' ) ) {
 		function register_pages() {
 			global $rtWikiAttributes;
                         $attributes = rtwiki_get_supported_attribute();
-                        if( is_array($attributes) ) {
+                        if( is_array( $attributes ) && !empty( $attributes ) ) {
                             foreach( $attributes as $attribute ) {
                                 if ( $attribute !== 'post' ) {
                                     add_submenu_page( 'edit.php?post_type='.$attribute, __( 'Attributes' ), __( 'Attributes' ), 'administrator', $attribute.'-attributes', array( $rtWikiAttributes, 'attributes_page' ) );

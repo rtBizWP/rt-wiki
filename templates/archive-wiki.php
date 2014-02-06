@@ -57,5 +57,5 @@ $content_class = apply_filters('rtwiki_content_class', 'large-8 small-12 columns
     </div><!-- #content -->
 </div><!-- #primary -->
 
-<?php get_sidebar(); ?>
-<?php get_footer(); ?>
+<?php get_sidebar(); 
+ get_footer();

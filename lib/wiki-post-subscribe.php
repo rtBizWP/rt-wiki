@@ -343,12 +343,12 @@ function nonWiki_page_changes_send_mail($postID, $email, $tax_diff = '', $url = 
     if (!empty($content)) {
         $url = 'Page Link:' . $url . '<br>';
         //$diff_table = wp_text_diff($content[1], $content[0], $args);
-        $body = rtcrm_text_diff($title[1], $title[0], $content[1], $content[0]);
+        $body = rtcrm_text_diff($title[count($title) - 1], $title[0], $content[count($title) - 1], $content[0]);
         $body.=$tax_diff;
         $finalBody = $url . '<br>' . $body;
         add_filter('wp_mail_content_type', 'set_html_content_type');
 
-        $subject .= 'Updates for "' . strtoupper(get_the_title($postID)) . '"';
+        $subject = 'Updates for "' . strtoupper(get_the_title($postID)) . '"';
         // $subject .=':Time: ' . date("F j, Y, g:i a");
         $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
 

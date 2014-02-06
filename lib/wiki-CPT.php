@@ -24,12 +24,12 @@ function create_wiki() {
         $rtwiki_custom = get_option ( "rtwiki_custom", array() );
     }
     
-    $post_name = array( array( 'label'=>'Wiki', 'slug'=>'wiki' ) );
+    $post_name = array();
     if( isset( $rtwiki_settings['custom_wiki'] ) && ( 'y' == $rtwiki_settings['custom_wiki'] ) && ( count ( $rtwiki_custom ) > 0 ) ) {
         $post_name = $rtwiki_custom;
     }
 
-    if( is_array( $post_name ) ) {
+    if( is_array( $post_name ) && ( count($post_name) > 0 ) ) {
         foreach ( $post_name as $name ){
             $slug = $name['slug'];
             $label = ucwords( $name['label'] );
@@ -138,7 +138,7 @@ add_action('admin_init', 'wiki_permission_metabox');
 
 function wiki_permission_metabox() {
     $supported_posts = rtwiki_get_supported_attribute();
-    if( is_array( $supported_posts ) ) {
+    if( is_array( $supported_posts ) && !empty($supported_posts) ) {
         foreach ( $supported_posts as $posts )
             add_meta_box($posts.'_post_access', 'Permissions', 'display_wiki_post_access_metabox', $posts, 'normal', 'high');
     }
@@ -231,32 +231,12 @@ function rtp_wiki_permission_save($post) {
                 $group[] = $term->name;
             }
 
-            foreach ($_POST['access_rights'] as $key => $value) {
-                $access_rights[$key][$value] = 1;
-//                foreach ($perm as $p) {
-//                    if (isset($_POST['access_rights'][$g])) {
-//
-//                        if ($_POST['access_rights'][$g] == $p)
-//                            $access_rights[$g][$p] = 1;
-//                        else
-//                            $access_rights[$g][$p] = 0;
-//                    }else {
-//
-//                        if ($p == 'na') {
-//                            $access_rights[$g][$p] = 1;
-//                        } else {
-//                            $access_rights[$g][$p] = 0;
-//                        }
-//                    }
-//                }
+            if( isset( $_POST['access_rights'] ) ) {
+                foreach ($_POST['access_rights'] as $key => $value) {
+                    $access_rights[$key][$value] = 1;
+                }
             }
 
-//            if (isset($_POST['access_rights']['all'])) {
-//                foreach ($perm as $p1) {
-//                    if ($_POST['access_rights']['all'] == $p1)
-//                        $access_rights['all'][$p1] = 1;
-//                }
-//            }
             if ( isset( $_POST['access_rights']['public'] ) )
                 $access_rights['public'] = 1;
             else
