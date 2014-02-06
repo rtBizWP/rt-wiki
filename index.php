@@ -8,6 +8,7 @@
   Contributors: Prannoy Tank, Sohil
  */
 
+require_once dirname(__FILE__) . '/helper/rtwiki-functions.php';
 require_once dirname(__FILE__) . '/lib/wiki-CPT.php';
 require_once dirname(__FILE__) . '/lib/user-groups.php';
 require_once dirname(__FILE__) . '/lib/wiki-single-custom-template.php';

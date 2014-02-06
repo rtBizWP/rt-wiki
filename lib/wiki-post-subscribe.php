@@ -7,7 +7,7 @@
  */
 function checkSubscribe() {
     global $post;
-    $subscriberList = get_post_meta($post->ID, 'subcribers_list', array());
+    $subscriberList = get_post_meta($post->ID, 'subcribers_list', true);
     $userId = get_current_user_id();
     if (!empty($subscriberList)) {
         if (in_array($userId, $subscriberList, true)) {
@@ -40,7 +40,7 @@ function nonWikiSubscribe() {
 
                 $id = $_POST['nonWikiPost'];
                 $userId = get_current_user_id();
-                $subscribeId = get_post_meta($id, 'subcribers_list', array());
+                $subscribeId = get_post_meta($id, 'subcribers_list', true);
                 pageSubscription($id, $userId, $subscribeId);
             }
         }
@@ -68,7 +68,7 @@ function unSubscribe() {
             if (isset($_POST['unSubscribe-postId'])) {
                 $id = $_POST['unSubscribe-postId'];
                 $userId = get_current_user_id();
-                $subscribeId = get_post_meta($id, 'subcribers_list', array());
+                $subscribeId = get_post_meta($id, 'subcribers_list', true);
                 unSubscription($id, $userId, $subscribeId);
             }
         }
@@ -100,7 +100,7 @@ function update() {
             $singleStatus = $_POST['single-subscribe'];
             $userId = get_current_user_id();
 
-            $subscribeId = get_post_meta($postID, 'subcribers_list', array());
+            $subscribeId = get_post_meta($postID, 'subcribers_list', true);
             if (isset($_POST['single-subscribe'])) {
 
                 if ($_POST['single-subscribe'] == 'current') {
@@ -114,8 +114,8 @@ function update() {
             if (isset($_POST['subPage-subscribe'])) {
                 //$subPageStatus = $_POST['subPage-subscribe'];
                 $userId = get_current_user_id();
-                $subpagesTrackingList = get_post_meta($postID, 'subpages_tracking', array());
-                $pageSubsciptionList = get_post_meta($postID, 'subcribers_list', array());
+                $subpagesTrackingList = get_post_meta($postID, 'subpages_tracking', true);
+                $pageSubsciptionList = get_post_meta($postID, 'subcribers_list', true);
                 if ($_POST['subPage-subscribe'] == 'subpage') {
                     pageSubscription($postID, $userId, $pageSubsciptionList);
                     subPageSubscription($postID, $userId, $subpagesTrackingList);
@@ -185,8 +185,8 @@ function subcribeSubPages($parentId, $lvl, $userId) {
             $permission = getPermission($page->ID);
 
             if ($permission == true) {
-                $subscribeId = get_post_meta($page->ID, 'subcribers_list', array());
-                $subpagesTrackingList = get_post_meta($page->ID, 'subpages_tracking', array());
+                $subscribeId = get_post_meta($page->ID, 'subcribers_list', true);
+                $subpagesTrackingList = get_post_meta($page->ID, 'subpages_tracking', true);
 
                 pageSubscription($page->ID, $userId, $subscribeId);
                 subPageSubscription($page->ID, $userId, $subpagesTrackingList);
@@ -212,8 +212,8 @@ function unSubcribeSubPages($parentId, $lvl, $userId) {
             $permission = getPermission($page->ID);
 
             if ($permission == true) {
-                $subscribeId = get_post_meta($page->ID, 'subcribers_list', array());
-                $subpagesTrackingList = get_post_meta($page->ID, 'subpages_tracking', array());
+                $subscribeId = get_post_meta($page->ID, 'subcribers_list', true);
+                $subpagesTrackingList = get_post_meta($page->ID, 'subpages_tracking', true);
 
                 unSubscription($page->ID, $userId, $subscribeId);
                 subpageUnSubscription($page->ID, $userId, $subpagesTrackingList);
@@ -461,7 +461,7 @@ function sendMailonPostUpdateWiki($post) {
             }
         }
 
-        $subscribersList = get_post_meta($postObject->ID, 'subcribers_list', array());
+        $subscribersList = get_post_meta($postObject->ID, 'subcribers_list', true);
         if (!empty($subscribersList) || $subscribersList != NULL) {
             foreach ($subscribersList as $subscribers) {
 
@@ -551,7 +551,7 @@ function sendMailNonWiki($post) {
 
 
         if (in_array($postObject->post_type, $post_types)) {
-            $subscribersList = get_post_meta($postObject->ID, 'subcribers_list', array());
+            $subscribersList = get_post_meta($postObject->ID, 'subcribers_list', true);
             if (!empty($subscribersList) || $subscribersList != NULL) {
                 foreach ($subscribersList as $subscribers) {
                     $user_info = get_userdata($subscribers);

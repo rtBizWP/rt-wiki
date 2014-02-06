@@ -9,7 +9,7 @@ require_once dirname(__FILE__) . '/wiki-post-filtering.php';
 /**
  * Creates wiki named CPT.
  */
-add_action('admin_init', 'create_wiki' );
+add_action('init', 'create_wiki' );
 
 function create_wiki() {
 
@@ -28,11 +28,37 @@ function create_wiki() {
     if( isset( $rtwiki_settings['custom_wiki'] ) && ( 'y' == $rtwiki_settings['custom_wiki'] ) && ( count ( $rtwiki_custom ) > 0 ) ) {
         $post_name = $rtwiki_custom;
     }
-    
+
     if( is_array( $post_name ) ) {
         foreach ( $post_name as $name ){
             $slug = $name['slug'];
             $label = ucwords( $name['label'] );
+//            $capabilities = array(
+//                    'read_post' => 'read_wiki',
+//                    'publish_posts' => 'publish_wiki',
+//                    'edit_posts' => 'edit_wiki',
+//                    'edit_others_posts' => 'edit_others_wiki',
+//                    'delete_posts' => 'delete_wiki',
+//                    'delete_others_posts' => 'delete_others_wiki',
+//                    'read_private_posts' => 'read_private_wiki',
+//                    'edit_posts' => 'edit_wiki',
+//                    'delete_posts' => 'delete_wiki',
+//                    'edit_published_posts' => 'edit_published_wiki',
+//                    'delete_published_posts' => 'delete_published_wiki' 
+//                );
+            $capabilities = array(
+                    'read_post' => 'read_post',
+                    'publish_posts' => 'publish_posts',
+                    'edit_posts' => 'edit_posts',
+                    'edit_others_posts' => 'edit_others_posts',
+                    'delete_posts' => 'delete_posts',
+                    'delete_others_posts' => 'delete_others_posts',
+                    'read_private_posts' => 'read_private_posts',
+                    'edit_post' => 'edit_post',
+                    'delete_post' => 'delete_post',
+                    'edit_published_posts' => 'edit_published_posts',
+                    'delete_published_posts' => 'delete_published_posts' 
+                );
             register_post_type($slug, array(
                 'labels' => array(
                     'name' => __($label, 'post type general name', 'rtCamp'),
@@ -48,26 +74,13 @@ function create_wiki() {
                     'not_found' => __('No ' . $label . ' found', 'rtCamp'),
                     'not_found_in_trash' => __('No ' . $label . ' found in Trash', 'rtCamp'),
                     'all_items' => __('All ' . $label, 'rtCamp'),
-                    'parent' => 'Parent ' . $label
+                    'parent' => __( 'Parent ' . $label, 'rtCamp' )
                 ),
                 'description' => __( $label, 'rtCamp'),
                 'publicly_queryable' => null,
                 'map_meta_cap' => true,
                 'capability_type' => 'wiki',
-                'capabilities' => array(
-                    'read_post' => 'read_wiki',
-                    'publish_posts' => 'publish_wiki',
-                    'edit_posts' => 'edit_wiki',
-                    'edit_others_posts' => 'edit_others_wiki',
-                    'delete_posts' => 'delete_wiki',
-                    'delete_others_posts' => 'delete_others_wiki',
-                    'read_private_posts' => 'read_private_wiki',
-                    'read_private_pages' => 'read_private_wiki',
-                    'edit_post' => 'edit_wiki',
-                    'delete_post' => 'delete_wiki',
-                    'edit_published_posts' => 'edit_published_wiki',
-                    'delete_published_posts' => 'delete_published_wiki' 
-                ),
+                'capabilities' => $capabilities,
                 '_builtin' => false,
                 '_edit_link' => 'post.php?post=%d',
                 'rewrite' => true,
@@ -81,7 +94,7 @@ function create_wiki() {
                 'can_export' => true,
                 'show_in_nav_menus' => true,
                 'show_in_menu' => true,
-                'show_in_admin_bar' => false,
+                'show_in_admin_bar' => true,
                 'hierarchical' => true,
                 'public' => true,
                 'menu_position' => 10,
@@ -115,7 +128,7 @@ function add_wiki_caps() {
     }
 }
 
-add_action('admin_init', 'add_wiki_caps');
+add_action('init', 'add_wiki_caps');
 
 /*
  * Add User group and permission type metabox  
@@ -138,9 +151,9 @@ function wiki_permission_metabox() {
 function display_wiki_post_access_metabox($post) {
     wp_nonce_field(plugin_basename(__FILE__), $post->post_type . '_noncename');
 
-    $access_rights = get_post_meta($post->ID, 'access_rights', array());
+    $access_rights = get_post_meta($post->ID, 'access_rights', true);
     $disabled = '';
-    $access_rights = $access_rights[0];
+
     if( isset( $access_rights['public'] ) && ( 1 == $access_rights['public'] ) )
         $disabled = 'disabled=""';
     ?>  
@@ -254,14 +267,14 @@ function rtp_wiki_permission_save($post) {
 
             /* Checking and setting subscribers list for the post */
 
-            $subscriberList = get_post_meta($post, 'subcribers_list', array());
+            $subscriberList = get_post_meta($post, 'subcribers_list', true);
 
-            $subpageTrackingList = get_post_meta($post, 'subpages_tracking', array());
+            $subpageTrackingList = get_post_meta($post, 'subpages_tracking', true);
             $userId = get_current_user_id();
-            $access_rights = get_post_meta($post, 'access_rights', array());
+            $access_rights = get_post_meta($post, 'access_rights', true);
             $subPageStatus = false;
             $readWriteFlag = false;
-            if (in_array($userId, $subpageTrackingList, true)) {
+            if (is_array($subpageTrackingList ) && in_array($userId, $subpageTrackingList, true)) {
                 $subPageStatus = true;
             }
 
@@ -319,8 +332,8 @@ function rtp_wiki_permission_save($post) {
                         /* Check if parent has the userid for subscription of subpages */
                         $parent_ID = $post->post_parent;
                         if ($parent_ID != '0' || $parent_ID != 0) {
-                            $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', array());
-                            if (in_array($userId, $parentSubpageTracking, true)) {
+                            $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true);
+                            if (is_array( $parentSubpageTracking) && in_array($userId, $parentSubpageTracking, true)) {
                                 if (!in_array($userId, $subscriberList, true)) {
                                     $parentSubpageTracking[] = $userId;
                                     update_post_meta($post, 'subpages_tracking', $parentSubpageTracking);

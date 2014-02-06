@@ -27,9 +27,8 @@ if (defined('WP_CLI') && WP_CLI) {
 
                             $postID = get_the_ID();
                             //$postObject=get_post($postID);
-                            $access_rights = get_post_meta($postID, 'access_rights', array());
-
-                            if ($access_rights != null) {
+                            $access_rights = get_post_meta($postID, 'access_rights', true);
+                            if ( is_array( $access_rights ) ) {
 
                                 $term_meta = get_option("user-group-meta");
 
@@ -65,12 +64,13 @@ if (defined('WP_CLI') && WP_CLI) {
 
                             $postID = get_the_ID();
 
-                            $subscribersList = get_post_meta($postID, 'subcribers_list', array());              
+                            $subscribersList = get_post_meta($postID, 'subcribers_list', true);              
+                            if(is_array($subscribersList) ) {
+                                foreach ($subscribersList as $subscribers) {
 
-                            foreach ($subscribersList as $subscribers) {
-
-                                $user_info = get_userdata($subscribers);
-                                nonWiki_page_changes_send_mail($postID, $user_info->user_email,'',get_permalink($postID));
+                                    $user_info = get_userdata($subscribers);
+                                    nonWiki_page_changes_send_mail($postID, $user_info->user_email,'',get_permalink($postID));
+                                }
                             }
                         }
                     }
@@ -91,12 +91,13 @@ if (defined('WP_CLI') && WP_CLI) {
                             $wp_query->the_post();
 
                             $postID = get_the_ID();
-                            $subscribersList = get_post_meta($postID, 'subcribers_list', array());              
+                            $subscribersList = get_post_meta($postID, 'subcribers_list', true);              
+                            if(is_array($subscribersList)) {
+                                foreach ($subscribersList as $subscribers) {
 
-                            foreach ($subscribersList as $subscribers) {
-
-                                $user_info = get_userdata($subscribers);
-                                nonWiki_page_changes_send_mail($postID, $user_info->user_email,'',get_permalink($postID));
+                                    $user_info = get_userdata($subscribers);
+                                    nonWiki_page_changes_send_mail($postID, $user_info->user_email,'',get_permalink($postID));
+                                }
                             }
                         }
                     }
