@@ -9,7 +9,7 @@ require_once dirname(__FILE__) . '/wiki-post-filtering.php';
 /**
  * Creates wiki named CPT.
  */
-add_action('init', 'create_wiki' );
+add_action('admin_init', 'create_wiki' );
 
 function create_wiki() {
 
@@ -25,7 +25,7 @@ function create_wiki() {
     }
     
     $post_name = array( array( 'label'=>'Wiki', 'slug'=>'wiki' ) );
-    if( ( 'y' == $rtwiki_settings['custom_wiki'] ) && ( count ( $rtwiki_custom ) > 0 ) ) {
+    if( isset( $rtwiki_settings['custom_wiki'] ) && ( 'y' == $rtwiki_settings['custom_wiki'] ) && ( count ( $rtwiki_custom ) > 0 ) ) {
         $post_name = $rtwiki_custom;
     }
     
@@ -62,6 +62,7 @@ function create_wiki() {
                     'delete_posts' => 'delete_wiki',
                     'delete_others_posts' => 'delete_others_wiki',
                     'read_private_posts' => 'read_private_wiki',
+                    'read_private_pages' => 'read_private_wiki',
                     'edit_post' => 'edit_wiki',
                     'delete_post' => 'delete_wiki',
                     'edit_published_posts' => 'edit_published_wiki',
@@ -80,7 +81,7 @@ function create_wiki() {
                 'can_export' => true,
                 'show_in_nav_menus' => true,
                 'show_in_menu' => true,
-                'show_in_admin_bar' => true,
+                'show_in_admin_bar' => false,
                 'hierarchical' => true,
                 'public' => true,
                 'menu_position' => 10,
@@ -139,7 +140,7 @@ function display_wiki_post_access_metabox($post) {
 
     $access_rights = get_post_meta($post->ID, 'access_rights', array());
     $disabled = '';
-
+    $access_rights = $access_rights[0];
     if( isset( $access_rights['public'] ) && ( 1 == $access_rights['public'] ) )
         $disabled = 'disabled=""';
     ?>  

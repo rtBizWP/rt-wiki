@@ -395,10 +395,6 @@ function rt_list_wikis() {
                                         'post_parent'       => $posts->post_parent,
                                     );
                     $revisions = new WP_Query($revision_args);
-    //                echo "<pre>";
-    //                print_r($revisions);
-    //                echo "</pre>";
-    //                continue;
                     foreach ($revisions->posts as $revision) {
                         if( 'Auto Draft' == $revision->post_title )
                             continue;

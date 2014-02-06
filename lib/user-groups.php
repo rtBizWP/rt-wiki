@@ -6,7 +6,7 @@ add_action('plugins_loaded', array('KWS_User_Groups', 'load'), 200);
 if(!class_exists('KWS_User_Groups')) {
 class KWS_User_Groups {
 
-	function load() {
+	static function load() {
 		$KWS_User_Groups = new KWS_User_Groups();
 	}
 
