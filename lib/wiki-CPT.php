@@ -33,19 +33,6 @@ function create_wiki() {
         foreach ( $post_name as $name ){
             $slug = $name['slug'];
             $label = ucwords( $name['label'] );
-//            $capabilities = array(
-//                    'read_post' => 'read_wiki',
-//                    'publish_posts' => 'publish_wiki',
-//                    'edit_posts' => 'edit_wiki',
-//                    'edit_others_posts' => 'edit_others_wiki',
-//                    'delete_posts' => 'delete_wiki',
-//                    'delete_others_posts' => 'delete_others_wiki',
-//                    'read_private_posts' => 'read_private_wiki',
-//                    'edit_posts' => 'edit_wiki',
-//                    'delete_posts' => 'delete_wiki',
-//                    'edit_published_posts' => 'edit_published_wiki',
-//                    'delete_published_posts' => 'delete_published_wiki' 
-//                );
             $capabilities = array(
                     'read_post' => 'read_post',
                     'publish_posts' => 'publish_posts',
@@ -59,8 +46,7 @@ function create_wiki() {
                     'edit_published_posts' => 'edit_published_posts',
                     'delete_published_posts' => 'delete_published_posts' 
                 );
-            register_post_type($slug, array(
-                'labels' => array(
+            $labels = array(
                     'name' => __($label, 'post type general name', 'rtCamp'),
                     'singular_name' => __($label, 'post type singular name', 'rtCamp'),
                     'add_new' => __('Add New', $label, 'rtCamp'),
@@ -75,15 +61,16 @@ function create_wiki() {
                     'not_found_in_trash' => __('No ' . $label . ' found in Trash', 'rtCamp'),
                     'all_items' => __('All ' . $label, 'rtCamp'),
                     'parent' => __( 'Parent ' . $label, 'rtCamp' )
-                ),
+                );
+            register_post_type($slug, array(
+                'labels' => $labels,
                 'description' => __( $label, 'rtCamp'),
-                'publicly_queryable' => null,
-                'map_meta_cap' => true,
-                'capability_type' => 'wiki',
-                'capabilities' => $capabilities,
+                'publicly_queryable' => true,
+                'public' => true,
+                'capability_type' => 'post',
                 '_builtin' => false,
                 '_edit_link' => 'post.php?post=%d',
-                'rewrite' => true,
+                'rewrite' => array( 'slug' => $slug ),
                 'has_archive' => true,
                 'query_var' => true,
                 'register_meta_box_cb' => null,
@@ -95,7 +82,7 @@ function create_wiki() {
                 'show_in_nav_menus' => true,
                 'show_in_menu' => true,
                 'show_in_admin_bar' => true,
-                'hierarchical' => true,
+                'hierarchical' => false,
                 'public' => true,
                 'menu_position' => 10,
                 'exclude_from_search' => true,
@@ -108,6 +95,18 @@ function create_wiki() {
                             'excerpt'
                         ),
                 )
+//                    'labels'             => $labels,
+//    'public'             => true,
+//    'publicly_queryable' => true,
+//    'show_ui'            => true,
+//    'show_in_menu'       => true,
+//    'query_var'          => true,
+//    'rewrite'            => array( 'slug' => 'book' ),
+//    'capability_type'    => 'post',
+//    'has_archive'        => true,
+//    'hierarchical'       => false,
+//    'menu_position'      => null,
+//    'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' )
             );
         }
     }
@@ -324,6 +323,7 @@ function rtp_wiki_permission_save($post) {
                 }
             }
         }
+        flush_rewrite_rules();
     }
 }
 

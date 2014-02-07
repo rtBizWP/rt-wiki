@@ -12,9 +12,9 @@
  * 
  **/
 
-function rtwiki_get_page_id($name, $post_type) {
+function rtwiki_get_page_id($name, $post_type = 'post') {
     global $wpdb;
-    $page_id = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE ( post_name = '" . $name . "' or post_title = '" . $name . "' ) and post_status = 'publish' and post_type=" . $post_type );
+    $page_id = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE ( post_name = '" . $name . "' or post_title = '" . $name . "' ) and post_status = 'publish' and post_type='" . $post_type ."'" );
     return $page_id;
 }
 
@@ -26,6 +26,7 @@ add_action('template_redirect', 'redirect_404');
 
 function redirect_404() {
     $supported_posts = rtwiki_get_supported_attribute();
+    
       if (is_404() && is_array( $supported_posts ) && in_array( get_query_var('post_type'), $supported_posts ) ) {
         $userId=get_current_user_id();
         if($userId == 0)

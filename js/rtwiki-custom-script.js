@@ -26,10 +26,10 @@ jQuery(document).ready(function() {
         jQuery('input[type="radio"], #public').attr('disabled', false);
     });
     
+    if ( jQuery('.wikidropdown').length > 0 ) {
+        jQuery('.wikidropdown h3 a').click(function(event) {
+            jQuery(this).parent('h3').next('ul').slideToggle();
+            event.preventDefault();
+        });
+    }
 });
-
-function uncheckAll() {
-    jQuery('.rtwiki_all_na').prop('checked', false); 
-    jQuery('.rtwiki_all_r').prop('checked', false); 
-    jQuery('.rtwiki_all_w').prop('checked', false);
-}

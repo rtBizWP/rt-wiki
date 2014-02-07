@@ -20,15 +20,21 @@ require_once dirname(__FILE__) . '/lib/class-daily-changes.php';
 require_once dirname(__FILE__) . '/lib/wiki-sidebar.php';
 require_once dirname(__FILE__) . '/lib/wiki-widgets.php';
 
-function rtwiki_enqueue_styles_and_scripts() {
-    wp_register_script('rtwiki-custom-script', plugins_url('/js/rtwiki-custom-script.js', __FILE__), array('jquery'));
-    wp_enqueue_script('rtwiki-custom-script');
+function rtwiki_admin_enqueue_styles_and_scripts() {
+    wp_register_script('rtwiki-admin-script', plugins_url('/js/rtwiki-admin-script.js', __FILE__), array('jquery'));
+    wp_enqueue_script('rtwiki-admin-script');
 
     wp_register_style( 'rtwiki-admin-styles', plugins_url('/css/rtwiki-admin-styles.css', __FILE__) );
     if( is_admin() )
         wp_enqueue_style( 'rtwiki-admin-styles' );
 }
-add_action('admin_enqueue_scripts', 'rtwiki_enqueue_styles_and_scripts');
+add_action('admin_enqueue_scripts', 'rtwiki_admin_enqueue_styles_and_scripts');
+
+function rtwiki_enqueue_styles_and_scripts() {
+    wp_register_script('rtwiki-custom-script', plugins_url('/js/rtwiki-custom-script.js', __FILE__), array('jquery'));
+    wp_enqueue_script('rtwiki-custom-script');
+}
+add_action( 'wp_enqueue_scripts', 'rtwiki_enqueue_styles_and_scripts' );
 
 if (!defined('RC_TC_BASE_FILE'))
     define('RC_TC_BASE_FILE', __FILE__);

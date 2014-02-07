@@ -485,7 +485,7 @@ class KWS_User_Groups {
 				<div>
 					<input name="users" value="" type="hidden" id="bulkeditusergroupusers" />
 
-					<label for="user-groups-select" class="screen-reader-text"><?php _('User Group', 'user-group'); ?></label>
+					<label for="user-groups-select" class="screen-reader-text"><?php _e('User Groups', 'rtCamp'); ?></label>
 						<select name="user-group" id="user-groups-select" style="max-width: 300px;">
 							<?php
 							$select = '<option value="">'.__( 'Select User Group&hellip;', 'user-group').'</option>';

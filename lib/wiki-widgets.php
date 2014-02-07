@@ -54,55 +54,15 @@ class rt_wiki_subPages extends WP_Widget {
         extract($args, EXTR_SKIP);
         global $post;
 
-        $isParent = ifSubPages($post->ID);
+        $isParent = ifSubPages($post->ID, $post->post_type);
 
         if ($isParent) {
             echo $args['before_widget'];
-            if (rt_wiki_subpages_check($post->ID, true) == true) {
+            if (rt_wiki_subpages_check($post->ID, true, $post->post_type) == true) {
                 echo $args['before_title'] . 'Sub Pages' . $args['after_title'];
-                getSubPages($post->ID, 0);
+                getSubPages($post->ID, 0, $post->post_type);
             }
             echo $args['after_widget'];
-        }
-    }
-
-    function update($new_instance, $old_instance) {
-        $instance = $old_instance;
-        return $instance;
-    }
-
-    function form($instance) {
-        
-    }
-
-}
-
-class rt_non_wiki_subPages extends WP_Widget {
-
-    function __construct() {
-        $widget_ops = array('classname' => 'rtWiki-nonwiki-subPages', 'description' => __('Subpages List For Non Wiki Pages', 'rtCamp'));
-        parent::__construct('rtWiki-nonwiki-subPages-widgets', __('rtWiki: Non wiki Subpages ', 'rtCamp'), $widget_ops);
-    }
-
-    function widget($args, $instance) {
-        extract($args, EXTR_SKIP);
-        global $post;
-
-        if ($post->post_type != 'wiki' && !is_single()) {
-
-            if (subpages_non_wiki($post->post_type) == true && is_page()) {
-
-                $isParent = ifSubPages($post->ID, $post->post_type);
-
-                echo $args['before_widget'];
-                if ($isParent) {
-
-
-                    echo $args['before_title'] . 'Sub Pages' . $args['after_title'];
-                    getSubPages($post->ID, 0, $post->post_type);
-                }
-                echo $args['after_widget'];
-            }
         }
     }
 
@@ -182,24 +142,26 @@ class rt_wiki_page_subscribe extends WP_Widget {
             //$currentPageMessage= ''
         }
 
-        $isParent = ifSubPages($post->ID);
+        $isParent = ifSubPages($post->ID, $post->post_type);
 
         if ($isParent == true) {
            
-            if (rt_wiki_subpages_check($post->ID, true) == true) {
+            if (rt_wiki_subpages_check($post->ID, true, $post->post_type) == true) {
                 $parent_ID = $post->post_parent;
                 $parentIdFlag = false;
                  $parentStatus = true;
                 $userId = get_current_user_id(); //current user id
-                $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', array()); //Parent Post meta
-                $pageSubscription = get_post_meta($post->ID, 'subcribers_list', array()); // Current post meta
-                $subPageSubscription = get_post_meta($post->ID, 'subpages_tracking', array());
+                $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true); //Parent Post meta
+                $pageSubscription = get_post_meta($post->ID, 'subcribers_list', true); // Current post meta
+                $subPageSubscription = get_post_meta($post->ID, 'subpages_tracking', true);
                 /* Check if post has any parent or not */
                 if ($parent_ID == 0)
                     $parentIdFlag = false;
-                else
-                    $parentIdFlag = in_array($userId, $parentSubpageTracking, true);
-                if (!in_array($userId, $subPageSubscription, true)) {
+                else {
+                    if( is_array($parentSubpageTracking) )
+                        $parentIdFlag = in_array($userId, $parentSubpageTracking, true);
+                }
+                if ( !empty( $subPageSubscription ) && !in_array($userId, $subPageSubscription, true)) {
 
                     $subpageStatus = 0;
                 } else {
@@ -219,12 +181,12 @@ class rt_wiki_page_subscribe extends WP_Widget {
         } else {
             $subPageCheck = '';
         }
-        echo '<form id="user-subscribe" method="post" action="?wikiPageSubscribe=1">
-                <input type="checkbox" name="single-subscribe" value="current"  '. $singleCheck .' >Subscribe to this page <br/>';
+        echo '<form id="user-subscribe" method="post" action="?PageSubscribe=1">
+                <input type="checkbox" name="single_subscribe" value="current"  '. $singleCheck .' >Subscribe to this page <br/>';
         if ($parentStatus == true) {
-            echo '<input type="checkbox" name="subPage-subscribe" value="subpage"  '. $subPageCheck .' >Subscribe to this page and  Sub Pages <br />';
+            echo '<input type="checkbox" name="subPage_subscribe" value="subpage"  '. $subPageCheck .' >Subscribe to this page and  Sub Pages <br />';
         }
-        echo '<input type="submit" name=post-update-subscribe" value="Submit" >
+        echo '<input type="hidden" name=post-type value='.$post->post_type.' /><input type="submit" class="button" name=post-update-subscribe" value="Submit" >
                 <input type="hidden" name="update-postId"  value=' . $post->ID . '>
             </form>';
 
@@ -252,28 +214,21 @@ class rt_non_wiki_single_page_subscribe extends WP_Widget {
     function widget($args, $instance) {
         extract($args, EXTR_SKIP);
         global $post;
-        if ($post->post_type != 'wiki' && !is_single()) {
-            echo $args['before_widget'];
-            echo $args['before_title'] . 'Subscribe For Updates' . $args['after_title'];
+        echo $args['before_widget'];
+        echo $args['before_title'] . 'Subscribe For Updates' . $args['after_title'];
+            if (checkSubscribe() == true) {
 
-            if (subscribe_non_wiki($post->post_type) == true && is_page()) {
-                if (checkSubscribe() == true) {
-
-                    echo '<form id="user-unsubscribe" method="post" action="?unSubscribe=1">
-                <input type="submit" name=post-unsubscribe" value="Unsubscribe" >
-                <input type="hidden" name="unSubscribe-postId"  value=' . $post->ID . '>
-            </form>';
-                } else {
-                    echo '<form id="user-subscribe-non-wiki" method="post" action="?subscribe=1">
-                <input type="submit" name=post-update-subscribe" value="Subscribe For Updates" >
-                <input type="hidden" name="nonWikiPost"  value='. $post->ID .'>
-            </form>';
-                }
+                echo '<form id="user-unsubscribe" method="post" action="?unSubscribe=1">
+            <input type="submit" name=post-unsubscribe" value="Unsubscribe" >
+            <input type="hidden" name="unSubscribe-postId"  value=' . $post->ID . '>
+        </form>';
             } else {
-                echo '<p>Please Enable the option to subscribe for this Page from Settings Page.</p>';
+                echo '<form id="user-subscribe-non-wiki" method="post" action="?subscribe=1">
+            <input type="submit" name=post-update-subscribe" value="Subscribe For Updates" >
+            <input type="hidden" name="nonWikiPost"  value='. $post->ID .'>
+        </form>';
             }
-            echo $args['after_widget'];
-        }
+        echo $args['after_widget'];
     }
 
     function update($new_instance, $old_instance) {
@@ -354,7 +309,6 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
 function rt_wiki_register_widgets() {
     register_widget('rt_wiki_contributers');
     register_widget('rt_wiki_subPages');
-    register_widget('rt_non_wiki_subPages');
     register_widget('rt_wiki_page_subscribe');
     // register_widget('rt_wiki_subpage_subscribe');
     register_widget('rt_wiki_taxonomies');

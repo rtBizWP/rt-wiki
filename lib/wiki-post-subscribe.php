@@ -47,7 +47,7 @@ function nonWikiSubscribe() {
     }
 }
 
-add_action('wp', 'nonWikiSubscribe');
+//add_action('wp', 'nonWikiSubscribe');
 
 function unSubscribe() {
     global $pagenow;
@@ -84,7 +84,7 @@ add_action('wp', 'unSubscribe');
 function update() {
     global $pagenow;
 
-    if (isset($_REQUEST['wikiPageSubscribe']) == '1') {
+    if (isset($_REQUEST['PageSubscribe']) == '1') {
 
 
         $params = array_keys($_REQUEST);  //get the keys from request parameter
@@ -97,31 +97,35 @@ function update() {
         if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
             wp_redirect(wp_login_url($redirectURl), 302); //after login and if permission is set , user would be subscribed to the page
         } else {
-            $singleStatus = $_POST['single-subscribe'];
+            $singleStatus = '';
+            if(isset($_POST['single_subscribe']))
+            $singleStatus = $_POST['single_subscribe'];
             $userId = get_current_user_id();
-
+            $post_type = 'post';
+            if( isset( $_POST['post-type'] ) )
+                $post_type = $_POST['post-type'];
             $subscribeId = get_post_meta($postID, 'subcribers_list', true);
-            if (isset($_POST['single-subscribe'])) {
+            if (isset($_POST['single_subscribe'])) {
 
-                if ($_POST['single-subscribe'] == 'current') {
+                if ($_POST['single_subscribe'] == 'current') {
                     pageSubscription($postID, $userId, $subscribeId);
                 }
-            } else if ($_POST['single-subscribe'] == NULL) {
+            } else if ($_POST['single_subscribe'] == NULL) {
 
                 unSubscription($postID, $userId, $subscribeId);
             }
 
-            if (isset($_POST['subPage-subscribe'])) {
+            if (isset($_POST['subPage_subscribe'])) {
                 //$subPageStatus = $_POST['subPage-subscribe'];
                 $userId = get_current_user_id();
                 $subpagesTrackingList = get_post_meta($postID, 'subpages_tracking', true);
                 $pageSubsciptionList = get_post_meta($postID, 'subcribers_list', true);
-                if ($_POST['subPage-subscribe'] == 'subpage') {
+                if ($_POST['subPage_subscribe'] == 'subpage') {
                     pageSubscription($postID, $userId, $pageSubsciptionList);
                     subPageSubscription($postID, $userId, $subpagesTrackingList);
-                    subcribeSubPages($postID, 0, $userId);
+                    subcribeSubPages($postID, 0, $userId, $post_type);
                 }
-            } else if ($_POST['subPage-subscribe'] == NULL) {
+            } else if ($_POST['subPage_subscribe'] == NULL) {
                 //var_dump($pageSubsciptionList);
 
                 unSubscription($postID, $userId, $pageSubsciptionList);
@@ -174,8 +178,8 @@ add_action('wp', 'update');
  */
 
 
-function subcribeSubPages($parentId, $lvl, $userId) {
-    $args = array('parent' => $parentId, 'post_type' => 'wiki');
+function subcribeSubPages($parentId, $lvl, $userId, $post_type) {
+    $args = array('parent' => $parentId, 'post_type' => $post_type);
     $pages = get_pages($args);
 
     if ($pages) {
@@ -191,7 +195,7 @@ function subcribeSubPages($parentId, $lvl, $userId) {
                 pageSubscription($page->ID, $userId, $subscribeId);
                 subPageSubscription($page->ID, $userId, $subpagesTrackingList);
             }
-            subcribeSubPages($page->ID, $lvl, $userId);
+            subcribeSubPages($page->ID, $lvl, $userId, $post_type);
         }
     }
 }
@@ -201,8 +205,8 @@ function subcribeSubPages($parentId, $lvl, $userId) {
  * 
  */
 
-function unSubcribeSubPages($parentId, $lvl, $userId) {
-    $args = array('parent' => $parentId, 'post_type' => 'wiki');
+function unSubcribeSubPages($parentId, $lvl, $userId, $post_type = 'post') {
+    $args = array('parent' => $parentId, 'post_type' => $post_type);
     $pages = get_pages($args);
 
     if ($pages) {
@@ -218,7 +222,7 @@ function unSubcribeSubPages($parentId, $lvl, $userId) {
                 unSubscription($page->ID, $userId, $subscribeId);
                 subpageUnSubscription($page->ID, $userId, $subpagesTrackingList);
             }
-            unSubcribeSubPages($page->ID, $lvl, $userId);
+            unSubcribeSubPages($page->ID, $lvl, $userId, $post_type);
         }
     }
 }
@@ -229,7 +233,7 @@ function unSubcribeSubPages($parentId, $lvl, $userId) {
  * @param type $parentId
  * @return boolean
  */
-function ifSubPages($parentId, $post_type = 'wiki') {
+function ifSubPages($parentId, $post_type = 'post') {
 
     $args = array('parent' => $parentId, 'post_type' => $post_type);
     $pages = get_pages($args);
@@ -240,8 +244,8 @@ function ifSubPages($parentId, $post_type = 'wiki') {
         return false;
 }
 
-function rt_wiki_subpages_check($parentId, $subPage) {
-    $args = array('parent' => $parentId, 'post_type' => 'wiki');
+function rt_wiki_subpages_check($parentId, $subPage, $post_type = 'post' ) {
+    $args = array('parent' => $parentId, 'post_type' => $post_type);
     $subPageFlag = $subPage;
     $pages = get_pages($args);
     if ($pages) {
@@ -302,7 +306,7 @@ function post_changes_send_mail($postID, $email, $group, $url = '') {
     }
 }
 
-function nonWiki_page_changes_send_mail($postID, $email, $tax_diff = '', $url = '') {
+function wiki_page_changes_send_mail($postID, $email, $tax_diff = '', $url = '') {
 
     $revision = wp_get_post_revisions($postID);
     $content = array();
@@ -379,7 +383,7 @@ function set_html_content_type() {
 //            foreach ($subscribersList as $subscribers) {
 //
 //                $user_info = get_userdata($subscribers);
-//                nonWiki_page_changes_send_mail($postObject->ID, $user_info->user_email);
+//                wiki_page_changes_send_mail($postObject->ID, $user_info->user_email);
 //            }
 //        }
 //    }
@@ -395,7 +399,9 @@ function set_html_content_type() {
 function sendMailonPostUpdateWiki($post) {
 
     $postObject = get_post($post);
-    if ($postObject->post_type == 'wiki') {
+    $supported_posts = rtwiki_get_supported_attribute();
+    
+    if (in_array(get_post_type($post), $supported_posts, true)) {
 
         if (wp_is_post_revision($postObject->ID)) {
             return;
@@ -466,7 +472,7 @@ function sendMailonPostUpdateWiki($post) {
             foreach ($subscribersList as $subscribers) {
 
                 $user_info = get_userdata($subscribers);
-                nonWiki_page_changes_send_mail($postObject->ID, $user_info->user_email, $diff, get_permalink($postObject->ID));
+                wiki_page_changes_send_mail($postObject->ID, $user_info->user_email, $diff, get_permalink($postObject->ID));
             }
         }
 
@@ -475,92 +481,4 @@ function sendMailonPostUpdateWiki($post) {
 }
 
 add_action('pre_post_update', 'sendMailonPostUpdateWiki', 99, 1);
-
-/*
- * Function Called when a Non Wiki post type is Updated 
- * Sends Email to Subscribers of Non Wiki Posts
- */
-
-function sendMailNonWiki($post) {
-    $postObject = get_post($post);
-    $args = array('hierarchical' => true);
-    $post_types = get_post_types($args);
-
-    if ($postObject->post_type != 'wiki') {
-
-        if (wp_is_post_revision($postObject->ID)) {
-            return;
-        }
-
-//        global $rtWikiAttributesModel;
-//        $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
-//        $attributes = $rtWikiAttributesModel->get_all_attributes();
-//        $mainTermArray = array();
-//        $termArray = array();
-//        $attr_term = array();
-//        foreach ($attributes as $attr) {
-//            $attr_term[] = $attr->attribute_name;
-//        }
-//        $taxo = $_REQUEST['tax_input'];
-//        foreach ($attr_term as $attr) {
-//            $terms = get_the_terms($post, $attr);
-//
-//            foreach ($terms as $term) {
-//                $termArray[] = $term->name;
-//            }
-//
-//            $mainTermArray[$attr] = $termArray;
-//            unset($termArray);
-//        }
-//
-//        $newTermId = array();
-//        $oldTermId = array();
-//        $iterator = new MultipleIterator;
-//        $iterator->attachIterator(new ArrayIterator($taxo));
-//        $iterator->attachIterator(new ArrayIterator($mainTermArray));
-//        $diff = '';
-//        foreach ($iterator as $key => $values) {
-//
-//            if ($key[0] == $key[1]) {
-//
-//                foreach ($values[0] as $val) {
-//                    $newTermId[] = $val;
-//                }
-//
-//                foreach ($values[1] as $val1) {
-//
-//                    if ($key[1] == NULL) {
-//
-//                        //unset($oldTermId);
-//                        $oldTermId[] = '-';
-//                    } else {
-//                        if (!empty($val1)) {
-//                            $oldTermId[] = $val1;
-//                        } else {
-//                            $oldTermId[] = ' ';
-//                        }
-//                    }
-//                }
-//
-//                $diff.=contacts_diff_on_lead($post, $newTermId, $oldTermId, $key[0]);
-//
-//                unset($oldTermId);
-//                unset($newTermId);
-//            }
-//        }
-
-
-        if (in_array($postObject->post_type, $post_types)) {
-            $subscribersList = get_post_meta($postObject->ID, 'subcribers_list', true);
-            if (!empty($subscribersList) || $subscribersList != NULL) {
-                foreach ($subscribersList as $subscribers) {
-                    $user_info = get_userdata($subscribers);
-                    nonWiki_page_changes_send_mail($postObject->ID, $user_info->user_email, '', get_permalink($postObject->ID));
-                }
-            }
-        }
-    }
-}
-
-add_action('save_post', 'sendMailNonWiki', 99, 1);
 

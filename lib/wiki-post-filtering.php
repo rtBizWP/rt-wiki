@@ -113,7 +113,7 @@ add_filter('page_row_actions', 'remove_quick_edit', 10);
 
 function postCheck() {
     if (isset($_GET['action']) && $_GET['action'] == 'edit') {
-        $page = $_GET['post'];
+        $page = isset( $_GET['post'] )?$_GET['post']:0;
         $supported_posts = rtwiki_get_supported_attribute();
         // $status = get_post_meta($page, '_edit_last');
         //if ($status[0] == '1') {

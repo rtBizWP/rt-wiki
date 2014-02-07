@@ -48,7 +48,7 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 				$show_in_nav_menus = apply_filters( 'rtwiki_attribute_show_in_nav_menus', false, $name );
 
 				register_taxonomy( $name,
-					apply_filters( 'rtwiki_taxonomy_objects_' . $name, $post_type ),
+					apply_filters( 'rtwiki_taxonomy_objects_' . $name, array( $post_type ) ),
 					apply_filters( 'rtwiki_taxonomy_args_' . $name, array(
 						'hierarchical' 				=> $hierarchical,
 						'update_count_callback' 	=> '_update_post_term_count',
@@ -65,17 +65,12 @@ if ( !class_exists( 'RtWikiAttributes' ) ) {
 								'new_item_name' 			=> __( 'New' ) . ' ' . $label
 							),
 						'show_ui' 					=> true,
-						'query_var' 				=> true,
-//						'capabilities'			=> array(
-//							'manage_terms' 		=> 'manage_rtwiki_terms',
-//							'edit_terms' 		=> 'edit_rtwiki_terms',
-//							'delete_terms' 		=> 'delete_rtwiki_terms',
-//							'assign_terms' 		=> 'assign_rtwiki_terms',
-//						),
+                                                'query_var'                     => true,
 						'show_in_nav_menus' 		=> $show_in_nav_menus,
-//						'rewrite' 					=> array( 'slug' => $product_attribute_base . sanitize_title( $tax->attribute_name ), 'with_front' => false, 'hierarchical' => $hierarchical ),
-						'rewrite' => true,
-                                                //'rewrite' => array( 'slug' => $pname )                                                                        
+                                                'rewrite' => array(
+                                                    'slug' => $post_type.'/'.$name,
+                                                    'with_front' => true 
+                                                )
 					) )
 				);
 			}

@@ -60,6 +60,23 @@ if ( !class_exists( 'RtWikiAttributeTaxonomyModel' ) ) {
 			return $attribute->attribute_name;
 		}
 
+                function get_attribute_by_name( $attribute_name, $post_type ) {
+                        $args = array();
+                        $return = array();
+                        if( !empty( $attribute_name ) && !empty ( $post_type ) ){
+                            $args['attribute_post_type'] = array(
+                                'compare' => '=',
+                                'value'   => explode( ',', $post_type )
+                            );
+                            $args['attribute_name'] = array(
+                                'compare' => '=',
+                                'value'   => explode( ',', $attribute_name )
+                            );
+                            $return = parent::get( $args );
+                        }
+			return $return;
+                }
+                
 		function add_attribute( $data ) {
 			return parent::insert( $data );
 		}
