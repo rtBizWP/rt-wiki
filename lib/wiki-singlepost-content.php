@@ -13,7 +13,7 @@
 
 function ifWikiContributers($postid) {
     $supported_posts = rtwiki_get_supported_attribute();
-    if ( !empty( $supported_posts ) && in_array( get_query_var('post_type'), $supported_posts ) ) {
+    if (!empty($supported_posts) && in_array(get_query_var('post_type'), $supported_posts)) {
         $revision = wp_get_post_revisions($postid);
         if (!empty($revision))
             return true;
@@ -28,7 +28,7 @@ function ifWikiContributers($postid) {
 
 function getContributers($postid) {
     $supported_posts = rtwiki_get_supported_attribute();
-    if ( !empty( $supported_posts ) && in_array( get_query_var('post_type'), $supported_posts ) ) {
+    if (!empty($supported_posts) && in_array(get_query_var('post_type'), $supported_posts)) {
 
         $revision = wp_get_post_revisions($postid);
         $authorId = array();
@@ -48,23 +48,23 @@ function getContributers($postid) {
  * Get Wiki post SubPages
  */
 
-function getSubPages($parentId, $lvl, $post_type='post') {
+function getSubPages($parentId, $lvl, $post_type = 'post') {
     $args = array('parent' => $parentId, 'post_type' => $post_type);
     $pages = get_pages($args);
     $supported_posts = rtwiki_get_supported_attribute();
-    
+
     if ($pages) {
         $lvl++;
         echo '<ul>';
         foreach ($pages as $page) {
-            if ( !empty( $supported_posts ) && in_array( $post_type, $supported_posts ) ) {
+            if (!empty($supported_posts) && in_array($post_type, $supported_posts)) {
                 $permission = getPermission($page->ID);
-            }else {
+            } else {
                 $permission = true;
             }
-                
+
             if ($permission == true) {
-                echo '<li><a href=' . get_permalink( $page->ID ) . '>' . $page->post_title . "</a></li>";
+                echo '<li><a href=' . get_permalink($page->ID) . '>' . $page->post_title . "</a></li>";
             }
 
             getSubPages($page->ID, $lvl, $post_type);
@@ -84,45 +84,84 @@ function wiki_custom_taxonomies($postid, $display = true) {
     //$taxonomies = get_object_taxonomies($post_type);
     global $rtWikiAttributesModel;
     $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
-    $attributes = $rtWikiAttributesModel->get_all_attributes( get_post_type() );
-    
-    if( $display ) {
+    $attributes = $rtWikiAttributesModel->get_all_attributes(get_post_type());
+    if ($display) {
         $out = "";
         foreach ($attributes as $attr) {
 
             $taxonomy = $attr->attribute_name;
-            $out .= "<div class='wikidropdown'><h3><a href='#' >".$attr->attribute_name."</a></h3>";
-            //echo $taxonomy;
-            $terms = get_terms( $taxonomy );
+            $out .= "<div class='wikidropdown'><h3><a href='#' >" . $attr->attribute_name . "</a></h3>";
+
+            if (is_single()) {
+                $terms = wp_get_post_terms($postid, $taxonomy);
+            } else {
+                $terms = get_terms($taxonomy);
+            }
             if (!empty($terms)) {
                 $out.= "<ul style='display: none;'>";
                 foreach ($terms as $term)
-                   // var_dump($term);
-                    $out .= '<li><a href="' . get_term_link($term,$taxonomy) . '" title="' . $term->name . '" >' . $term->name . '</a></li>';
+                // var_dump($term);
+                    $out .= '<li><a href="' . get_term_link($term, $taxonomy) . '" title="' . $term->name . '" >' . $term->name . '</a></li>';
                 $out .="</ul>";
+            } else {
+                $out .= 'No ' . $taxonomy . ' assign.';
             }
             $out .= "</div>";
         }
         //$out .= "</ul>";
         echo $out;
+    } 
+}
+
+/*
+ * Get wiki post taxonomies and its terms list 
+ */
+
+function wiki_default_taxonomies($postid, $display = true) {
+    if (is_single()) {
+        $categories = get_the_category($postid);
     } else {
-        $out = array();
-        foreach ($attributes as $attr) {
-            $out[$attr->attribute_name] = array();
-            $taxonomy = $attr->attribute_name;
-            //echo $taxonomy;
-            $terms = get_terms( $taxonomy );
-            if (!empty($terms)) {
-                foreach ($terms as $term) {
-                    if( !array_key_exists( $attr->attribute_name, $out) )
-                        array_push( $out, array( $attr->attribute_name => array() ) );
-                    $term_link = get_term_link($term,$taxonomy);
-                    $term = array( 'link' => $term_link, 'name' => $term->name );
-                    $out[$attr->attribute_name][] = $term;
-                }
-            }
+        $categories = get_categories();
+    }
+    if ($display) {
+        $out = "";
+        $taxonomy = 'category';
+        $out .= "<div class='wikidropdown'><h3><a href='#' >" . $taxonomy . "</a></h3>";
+        //echo $taxonomy;
+        if (!empty($categories)) {
+            $out.= "<ul style='display: none;'>";
+            foreach ($categories as $category)
+            // var_dump($term);
+                $out .= '<li><a href="' . get_term_link($category, $taxonomy) . '" title="' . $category->name . '" >' . $category->name . '</a></li>';
+            $out .="</ul>";
+        } else {
+            $out .= 'No Category assign.';
         }
-        return $out;
+        $out .= "</div>";
+        echo $out;
+    }
+    if (is_single()) {
+        $tags = wp_get_post_tags($postid);
+    } else {
+        $tags = get_tags();
+    }
+    $terms = get_tags();
+    if ($display) {
+        $out = "";
+        $taxonomy = 'tags';
+        $out .= "<div class='wikidropdown'><h3><a href='#' >" . $taxonomy . "</a></h3>";
+        //echo $taxonomy;
+        if (!empty($tags)) {
+            $out.= "<ul style='display: none;'>";
+            foreach ($tags as $tag)
+            // var_dump($term);
+                $out .= '<li><a href="' . get_term_link($tag, $taxonomy) . '" title="' . $tag->name . '" >' . $tag->name . '</a></li>';
+            $out .="</ul>";
+        } else {
+            $out .= 'No Tag assign.';
+        }
+        $out .= "</div>";
+        echo $out;
     }
 }
 
@@ -149,25 +188,23 @@ function getTopParent() {
 function rtwiki_single_shortcode() {
     global $post;
     $supported_posts = rtwiki_get_supported_attribute();
-    if ( !empty( $supported_posts ) && in_array( get_query_var('post_type'), $supported_posts ) ) {
+    if (!empty($supported_posts) && in_array(get_query_var('post_type'), $supported_posts)) {
         echo single_post_filtering();
     }
 }
 
 add_shortcode("rtWikiSinglePost", "rtwiki_single_shortcode");
 
+function subpages_non_wiki($post_type) {
 
-function subpages_non_wiki($post_type){
-    
-    
-    $subpageList=get_option('rtWiki_subpages_options');
-    $list=$subpageList['subpages'];
-    
-    if( is_array($list) && in_array($post_type,$list) )
-    {
-      if($list[$post_type] == 1 )
-      return true;    
-       
+
+    $subpageList = get_option('rtWiki_subpages_options');
+    $list = $subpageList['subpages'];
+
+    if (is_array($list) && in_array($post_type, $list)) {
+        if ($list[$post_type] == 1)
+            return true;
     }
- }
-add_shortcode("rtwikiSubPages","subpages_non_wiki");
+}
+
+add_shortcode("rtwikiSubPages", "subpages_non_wiki");

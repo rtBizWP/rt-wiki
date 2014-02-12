@@ -53,7 +53,6 @@ class rt_wiki_subPages extends WP_Widget {
     function widget($args, $instance) {
         extract($args, EXTR_SKIP);
         global $post;
-
         $isParent = ifSubPages($post->ID, $post->post_type);
 
         if ($isParent) {
@@ -93,6 +92,7 @@ class rt_wiki_taxonomies extends WP_Widget {
         global $post;
         echo $args['before_widget'];
         echo $args['before_title'] . 'Taxonomies' . $args['after_title'];
+        wiki_default_taxonomies($post->ID);
         wiki_custom_taxonomies($post->ID);
         echo $args['after_widget'];
     }
@@ -145,11 +145,11 @@ class rt_wiki_page_subscribe extends WP_Widget {
         $isParent = ifSubPages($post->ID, $post->post_type);
 
         if ($isParent == true) {
-           
+
             if (rt_wiki_subpages_check($post->ID, true, $post->post_type) == true) {
                 $parent_ID = $post->post_parent;
                 $parentIdFlag = false;
-                 $parentStatus = true;
+                $parentStatus = true;
                 $userId = get_current_user_id(); //current user id
                 $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true); //Parent Post meta
                 $pageSubscription = get_post_meta($post->ID, 'subcribers_list', true); // Current post meta
@@ -158,10 +158,10 @@ class rt_wiki_page_subscribe extends WP_Widget {
                 if ($parent_ID == 0)
                     $parentIdFlag = false;
                 else {
-                    if( is_array($parentSubpageTracking) )
+                    if (is_array($parentSubpageTracking))
                         $parentIdFlag = in_array($userId, $parentSubpageTracking, true);
                 }
-                if ( !empty( $subPageSubscription ) && !in_array($userId, $subPageSubscription, true)) {
+                if (!empty($subPageSubscription) && !in_array($userId, $subPageSubscription, true)) {
 
                     $subpageStatus = 0;
                 } else {
@@ -182,11 +182,11 @@ class rt_wiki_page_subscribe extends WP_Widget {
             $subPageCheck = '';
         }
         echo '<form id="user-subscribe" method="post" action="?PageSubscribe=1">
-                <input type="checkbox" name="single_subscribe" value="current"  '. $singleCheck .' >Subscribe to this page <br/>';
+                <input type="checkbox" name="single_subscribe" value="current"  ' . $singleCheck . ' >Subscribe to this page <br/>';
         if ($parentStatus == true) {
-            echo '<input type="checkbox" name="subPage_subscribe" value="subpage"  '. $subPageCheck .' >Subscribe to this page and  Sub Pages <br />';
+            echo '<input type="checkbox" name="subPage_subscribe" value="subpage"  ' . $subPageCheck . ' >Subscribe to this page and  Sub Pages <br />';
         }
-        echo '<input type="hidden" name=post-type value='.$post->post_type.' /><input type="submit" class="button" name=post-update-subscribe" value="Submit" >
+        echo '<input type="hidden" name=post-type value=' . $post->post_type . ' /><input type="submit" class="button" name=post-update-subscribe" value="Submit" >
                 <input type="hidden" name="update-postId"  value=' . $post->ID . '>
             </form>';
 
@@ -204,7 +204,7 @@ class rt_wiki_page_subscribe extends WP_Widget {
 
 }
 
-class rt_non_wiki_single_page_subscribe extends WP_Widget {
+/*class rt_non_wiki_single_page_subscribe extends WP_Widget {
 
     function __construct() {
         $widget_ops = array('classname' => 'rtWiki-otherPostTypes-singlePageSubscription', 'description' => __('Single Page Subscription For Non Wiki Pages', 'rtCamp'));
@@ -216,18 +216,18 @@ class rt_non_wiki_single_page_subscribe extends WP_Widget {
         global $post;
         echo $args['before_widget'];
         echo $args['before_title'] . 'Subscribe For Updates' . $args['after_title'];
-            if (checkSubscribe() == true) {
+        if (checkSubscribe() == true) {
 
-                echo '<form id="user-unsubscribe" method="post" action="?unSubscribe=1">
+            echo '<form id="user-unsubscribe" method="post" action="?unSubscribe=1">
             <input type="submit" name=post-unsubscribe" value="Unsubscribe" >
             <input type="hidden" name="unSubscribe-postId"  value=' . $post->ID . '>
         </form>';
-            } else {
-                echo '<form id="user-subscribe-non-wiki" method="post" action="?subscribe=1">
+        } else {
+            echo '<form id="user-subscribe-non-wiki" method="post" action="?subscribe=1">
             <input type="submit" name=post-update-subscribe" value="Subscribe For Updates" >
-            <input type="hidden" name="nonWikiPost"  value='. $post->ID .'>
+            <input type="hidden" name="nonWikiPost"  value=' . $post->ID . '>
         </form>';
-            }
+        }
         echo $args['after_widget'];
     }
 
@@ -240,13 +240,13 @@ class rt_non_wiki_single_page_subscribe extends WP_Widget {
         
     }
 
-}
+}*/
 
 /*
  * rtWiki SubPage Subscription Widget
  */
 
-class rt_wiki_subpage_subscribe extends WP_Widget {
+/*class rt_wiki_subpage_subscribe extends WP_Widget {
 
     function __construct() {
         $widget_ops = array('classname' => 'rtWiki-subPageSubscription', 'description' => __('SubPage Subscription', 'rtCamp'));
@@ -270,14 +270,14 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
                 $pageSubscription = get_post_meta($post->ID, 'subcribers_list', array()); // Current post meta
                 $subPageSubscription = get_post_meta($post->ID, 'subpages_tracking', array());
                 /* Check if post has any parent or not */
-                if ($parent_ID == 0)
+               /* if ($parent_ID == 0)
                     $parentIdFlag = false;
                 else
                     $parentIdFlag = in_array($userId, $parentSubpageTracking, true);
 
 
                 /* Check whether current post  has userid in page and parent page meta value */
-                echo $args['before_widget'];
+               /* echo $args['before_widget'];
                 echo $args['before_title'] . 'Subscribe For All Pages' . $args['after_title'];
                 if (!in_array($userId, $subPageSubscription, true)) {
                     ?>
@@ -304,15 +304,13 @@ class rt_wiki_subpage_subscribe extends WP_Widget {
         
     }
 
-}
+}*/
 
 function rt_wiki_register_widgets() {
     register_widget('rt_wiki_contributers');
     register_widget('rt_wiki_subPages');
     register_widget('rt_wiki_page_subscribe');
-    // register_widget('rt_wiki_subpage_subscribe');
     register_widget('rt_wiki_taxonomies');
-    register_widget('rt_non_wiki_single_page_subscribe');
 }
 
 add_action('widgets_init', 'rt_wiki_register_widgets');
@@ -320,72 +318,72 @@ add_action('widgets_init', 'rt_wiki_register_widgets');
 /*
  * Function to add wiki activity to the dashboard.
  */
+
 function rt_list_wikis() {
     $args = array(
-        'post_type'     => 'revision',
-        'date_query'    => array(
-            'before'  => date ( 'Y-m-d', strtotime( '+1 day' ) ),
-            'after'  => date ( 'Y-m-d', strtotime( '-1 day' ) ),
-            'inclusive'   => true,
-            'column'    => 'post_date'
+        'post_type' => 'revision',
+        'date_query' => array(
+            'before' => date('Y-m-d', strtotime('+1 day')),
+            'after' => date('Y-m-d', strtotime('-1 day')),
+            'inclusive' => true,
+            'column' => 'post_date'
         ),
-        'posts_per_page'    => 10,
-        'post_status'       => 'inherit'
+        'posts_per_page' => 10,
+        'post_status' => 'inherit'
     );
     $query = new WP_Query($args);
     $post_parent = array();
-    if( $query->have_posts() ) {
+    if ($query->have_posts()) {
         ?>
         <div id="wiki-widget">
             <?php
-            foreach( $query->posts as $posts){
-                if( ! in_array( $posts->post_parent, $post_parent ) && is_wiki_post_type( $posts->post_parent ) ) {
-                    $revision_args = array( 
-                                        'post_type'         => 'revision',
-                                        'post_status'       => 'inherit', 
-                                        'date_query'        => array(
-                                                'after'    => date ( 'Y-m-d', strtotime( '-1 day' ) ),
-                                            ),
-                                        'post_parent'       => $posts->post_parent,
-                                    );
+            foreach ($query->posts as $posts) {
+                if (!in_array($posts->post_parent, $post_parent) && is_wiki_post_type($posts->post_parent)) {
+                    $revision_args = array(
+                        'post_type' => 'revision',
+                        'post_status' => 'inherit',
+                        'date_query' => array(
+                            'after' => date('Y-m-d', strtotime('-1 day')),
+                        ),
+                        'post_parent' => $posts->post_parent,
+                    );
                     $revisions = new WP_Query($revision_args);
                     foreach ($revisions->posts as $revision) {
-                        if( 'Auto Draft' == $revision->post_title )
+                        if ('Auto Draft' == $revision->post_title)
                             continue;
-                        $date = date( 'Y-m-d H:i:s', strtotime( $revision->post_date ) );
-                        $hour_ago = date_diff( new DateTime(), new DateTime( $date ) );
-                        if( $hour_ago->d == 0 ) {
-                            if( $hour_ago->h > 0 ) {
-                                if( $hour_ago->h > 1 ) 
-                                    $hour_ago = $hour_ago->h." hours ago";
+                        $date = date('Y-m-d H:i:s', strtotime($revision->post_date));
+                        $hour_ago = date_diff(new DateTime(), new DateTime($date));
+                        if ($hour_ago->d == 0) {
+                            if ($hour_ago->h > 0) {
+                                if ($hour_ago->h > 1)
+                                    $hour_ago = $hour_ago->h . " hours ago";
                                 else
-                                    $hour_ago = $hour_ago->h." hour ago";
+                                    $hour_ago = $hour_ago->h . " hour ago";
                             }
                             else {
-                                if ( $hour_ago->i > 1 )
-                                    $hour_ago = $hour_ago->i." minutes ago";
+                                if ($hour_ago->i > 1)
+                                    $hour_ago = $hour_ago->i . " minutes ago";
                                 else
-                                    $hour_ago = $hour_ago->i." minute ago";
+                                    $hour_ago = $hour_ago->i . " minute ago";
                             }
-                        }
-                        else 
+                        } else
                             $hour_ago = $date;
                         ?>
-                            <div class='rtwiki-diff'>
-                                <?php echo get_avatar( $revision->post_author, '50' ); ?>
-                                <div class='rtwiki-diff-wrap'>
-                                    <h4 class='rtwiki-diff-meta'>
-                                        <cite class='rtwiki-diff-author'><a href='<?php get_author_link('true', $revision->post_author); ?>'><?php echo ucwords( get_author_name( $revision->post_author ) ); ?></a></cite>
+                        <div class='rtwiki-diff'>
+                            <?php echo get_avatar($revision->post_author, '50'); ?>
+                            <div class='rtwiki-diff-wrap'>
+                                <h4 class='rtwiki-diff-meta'>
+                                    <cite class='rtwiki-diff-author'><a href='<?php echo get_author_posts_url($revision->post_author); ?>'><?php echo ucwords(get_the_author_meta('display_name',$revision->post_author)); ?></a></cite>
                                         <?php echo __('has edited', 'rtCamp'); ?>
-                                        <a href='post.php?post=<?php echo $posts->post_parent; ?>&action=edit'><?php echo esc_attr( $revision->post_title ); ?></a>
-                                        <?php echo __( "(" . $hour_ago . ")", 'rtCamp' ); ?>
-                                        <a href='revision.php?revision=<?php echo $revision->ID; ?>'><?php echo __('View Diff', 'rtCamp'); ?></a>
-                                    </h4>
-                                </div>
+                                    <a href='post.php?post=<?php echo $posts->post_parent; ?>&action=edit'><?php echo esc_attr($revision->post_title); ?></a>
+                                    <?php echo __("(" . $hour_ago . ")", 'rtCamp'); ?>
+                                    <a href='revision.php?revision=<?php echo $revision->ID; ?>'><?php echo __('View Diff', 'rtCamp'); ?></a>
+                                </h4>
                             </div>
+                        </div>
                         <?php
                     }
-                    array_push( $post_parent, $posts->post_parent );
+                    array_push($post_parent, $posts->post_parent);
                     wp_reset_postdata();
                 }
             }
@@ -403,13 +401,14 @@ function rt_list_wikis() {
  */
 function wiki_add_dashboard_widgets() {
 
-	wp_add_dashboard_widget(
-            'dashboard_wiki',         // Widget slug.
-            'Wiki Posts',         // Title.
+    wp_add_dashboard_widget(
+            'dashboard_wiki', // Widget slug.
+            'Wiki Posts', // Title.
             'rt_list_wikis' // Display function.
-        );	
+    );
 }
-add_action( 'wp_dashboard_setup', 'wiki_add_dashboard_widgets' );
+
+add_action('wp_dashboard_setup', 'wiki_add_dashboard_widgets');
 
 /*
  * Function to check whether the post type is registered in rtWiki plugin setting.
@@ -417,21 +416,20 @@ add_action( 'wp_dashboard_setup', 'wiki_add_dashboard_widgets' );
 
 function is_wiki_post_type($post_id = 0) {
     global $post;
-    if( is_multisite() ) {
-        $rtwiki_settings = get_site_option( 'rtwiki_settings', array() );
-        $rtwiki_custom = get_site_option( 'rtwiki_custom', array() );
+    if (is_multisite()) {
+        $rtwiki_settings = get_site_option('rtwiki_settings', array());
+        $rtwiki_custom = get_site_option('rtwiki_custom', array());
+    } else {
+        $rtwiki_settings = get_option('rtwiki_settings', array());
+        $rtwiki_custom = get_option('rtwiki_custom', array());
     }
-    else {
-        $rtwiki_settings = get_option( 'rtwiki_settings', array() );
-        $rtwiki_custom = get_option( 'rtwiki_custom', array() );
-    }
-    $wiki_posts = array( 'wiki' );
-    if( isset( $rtwiki_custom[0]['slug'] ) && !empty( $rtwiki_custom[0]['slug'] ) )
-        array_push ( $wiki_posts, $rtwiki_custom[0]['slug'] );
-    if( $post_id == 0 && $post->post_parent != 0)
+    $wiki_posts = array('wiki');
+    if (isset($rtwiki_custom[0]['slug']) && !empty($rtwiki_custom[0]['slug']))
+        array_push($wiki_posts, $rtwiki_custom[0]['slug']);
+    if ($post_id == 0 && $post->post_parent != 0)
         $post_id = $post->post_parent;
-    $post_type = get_post_type( $post_id );
-    if( in_array( $post_type, $wiki_posts, true ) )
+    $post_type = get_post_type($post_id);
+    if (in_array($post_type, $wiki_posts, true))
         return true;
     else
         return false;

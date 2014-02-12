@@ -18,7 +18,7 @@ function checkSubscribe() {
     }
 }
 
-function nonWikiSubscribe() {
+/*function nonWikiSubscribe() {
     global $pagenow;
 
     if (isset($_REQUEST['subscribe']) == '1') {
@@ -45,7 +45,7 @@ function nonWikiSubscribe() {
             }
         }
     }
-}
+}*/
 
 //add_action('wp', 'nonWikiSubscribe');
 
