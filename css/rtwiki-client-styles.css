@@ -1,0 +1,20 @@
+/* 
+    Document   : rtwiki-styles
+    Created on : 4 Feb, 2014, 3:48:50 PM
+    Author     : sohil
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.widget-area .widget .wikidropdown{
+    margin-bottom: 20px;
+}
+
+.widget-area .widget h3 {
+    margin-bottom: 0.5rem;
+}
+
+.widget-area .widget ul{
+    margin-left: 20px;
+}
+
