@@ -22,9 +22,17 @@ require_once dirname(__FILE__) . '/lib/wiki-sidebar.php';
 require_once dirname(__FILE__) . '/lib/wiki-widgets.php';
 
 function rtwiki_admin_enqueue_styles_and_scripts() {
+    global $hook_suffix;
     wp_register_script('rtwiki-admin-script', plugins_url('/js/rtwiki-admin-script.js', __FILE__), array('jquery'));
     wp_enqueue_script('rtwiki-admin-script');
-   
+    
+    wp_register_script('rtwiki-new-post-script', plugins_url('/js/rtwiki-new-post-script.js', __FILE__), array('jquery'));
+    
+    
+    if(is_admin() && $hook_suffix== 'post-new.php'){
+        wp_enqueue_script('rtwiki-new-post-script');
+        echo $hook_suffix;
+    }
     
     wp_register_style('rtwiki-admin-styles', plugins_url('/css/rtwiki-admin-styles.css', __FILE__));
     
