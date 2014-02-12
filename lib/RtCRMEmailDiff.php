@@ -76,16 +76,16 @@ if (!function_exists('rtcrm_text_diff')) {
             return '';
 
         $r = "<table class='diff' style='width: 100%;background: white;margin-bottom: 1.25em;border: solid 1px #dddddd;border-radius: 3px;margin: 0 0 18px;'>\n";
-        $r .= "<col class='ltype' /><col class='content' /><col class='ltype' /><col class='content' />";
+        $r .= "<col class='ltype' /><col class='content' /><col/><col class='ltype' /><col class='content' />";
 
         if ($args['title'] || $args['title_left'] || $args['title_right'])
             $r .= "<thead>";
         if ($args['title'])
-            $r .= "<tr class='diff-title'><th colspan='4'>$args[title]</th></tr>\n";
+            $r .= "<tr class='diff-title'><th colspan='5'>$args[title]</th></tr>\n";
         if ($args['title_left'] || $args['title_right']) {
             $r .= "<tr class='diff-sub-title'>\n";
             $r .= "\t<td></td><th>$args[title_left]</th>\n";
-            $r .= "\t<td></td><th>$args[title_right]</th>\n";
+            $r .= "\t<td></td><td></td><th>$args[title_right]</th>\n";
             $r .= "</tr>\n";
         }
         if ($args['title'] || $args['title_left'] || $args['title_right'])
@@ -94,46 +94,46 @@ if (!function_exists('rtcrm_text_diff')) {
         $r .= "</table>";
         return $r;
     }
-    
+
     
     function rtcrm_text_diff_taxonomy($left_string, $right_string, $args = null) {
-               
+
         
-		$defaults = array('title' => '', 'title_left' => '', 'title_right' => '');
-		$args = wp_parse_args($args, $defaults);
+        $defaults = array('title' => '', 'title_left' => '', 'title_right' => '');
+        $args = wp_parse_args($args, $defaults);
 
-		$left_string = normalize_whitespace($left_string);
-		$right_string = normalize_whitespace($right_string);
-		$left_lines = explode("\n", $left_string);
-		$right_lines = explode("\n", $right_string);
+        $left_string = normalize_whitespace($left_string);
+        $right_string = normalize_whitespace($right_string);
+        $left_lines = explode("\n", $left_string);
+        $right_lines = explode("\n", $right_string);
 
-		$text_diff = new Text_Diff($left_lines, $right_lines);
-		$renderer = new RtCRMEmailDiff();
-		$diff = $renderer->render($text_diff);
-                
-		if (!$diff)
-	        return '';
+        $text_diff = new Text_Diff($left_lines, $right_lines);
+        $renderer = new RtCRMEmailDiff();
+        $diff = $renderer->render($text_diff);
 
-		$r = "<table class='diff' style='width: 100%;background: white;margin-bottom: 1.25em;border: solid 1px #dddddd;border-radius: 3px;margin: 0 0 18px;'>\n";
-		$r .= "<col class='ltype' /><col class='content' /><col class='ltype' /><col class='content' />";
+        if (!$diff)
+            return '';
 
-		if ($args['title'] || $args['title_left'] || $args['title_right'])
-			$r .= "<thead>";
-		if ($args['title'])
-			$r .= "<tr class='diff-title'><th colspan='4'>$args[title]</th></tr>\n";
-		if ($args['title_left'] || $args['title_right']) {
-			$r .= "<tr class='diff-sub-title'>\n";
-			$r .= "\t<td></td><th>$args[title_left]</th>\n";
-			$r .= "\t<td></td><th>$args[title_right]</th>\n";
-			$r .= "</tr>\n";
-		}
-		if ($args['title'] || $args['title_left'] || $args['title_right'])
-	        $r .= "</thead>\n";
-		$r .= "<tbody>\n$diff\n</tbody>\n";
-		$r .= "</table>";
-		return $r;
-	}
-    
+        $r = "<table class='diff' style='width: 100%;background: white;margin-bottom: 1.25em;border: solid 1px #dddddd;border-radius: 3px;margin: 0 0 18px;'>\n";
+        $r .= "<col class='ltype' /><col class='content' /><col/><col class='ltype' /><col class='content' />";
+
+        if ($args['title'] || $args['title_left'] || $args['title_right'])
+            $r .= "<thead>";
+        if ($args['title'])
+            $r .= "<tr class='diff-title'><th colspan='5'>$args[title]</th></tr>\n";
+        if ($args['title_left'] || $args['title_right']) {
+            $r .= "<tr class='diff-sub-title'>\n";
+            $r .= "\t<td></td><th>$args[title_left]</th>\n";
+            $r .= "\t<td></td><td></td><th>$args[title_right]</th>\n";
+            $r .= "</tr>\n";
+        }
+        if ($args['title'] || $args['title_left'] || $args['title_right'])
+            $r .= "</thead>\n";
+        $r .= "<tbody>\n$diff\n</tbody>\n";
+        $r .= "</table>";
+        return $r;
+    }
+
     
 
 }

@@ -255,11 +255,16 @@ function getPermission($pageID) {
         } else {
             foreach ($terms as $term) {
                 $ans = get_term_if_exists($term->slug, $user);
-
-                if ($ans == $term->slug && isset( $access_rights[$ans] )) {
-                    if ( ( isset( $access_rights[$ans]['r'] ) && ( $access_rights[$ans]['r'] == 1 ) ) || ( isset( $access_rights[$ans]['w'] ) && ( $access_rights[$ans]['w'] == 1 ) ) ) {
+                if(isset( $access_rights['all'])){
+                    if ( ( isset( $access_rights['all']['r'] ) && ( $access_rights['all']['r'] == 1 ) ) || ( isset( $access_rights['all']['w'] ) && ( $access_rights['all']['w'] == 1 ) ) ) {
                         return true;
-                    } else if ( isset( $access_rights[$ans]['na'] ) && ( $access_rights[$ans]['na'] == 1 ) ) {
+                    } else if ( isset( $access_rights['all']['na'] ) && ( $access_rights['all']['na'] == 1 ) ) {
+                        $noflag = 1;
+                    }
+                }else if ($ans == $term->slug && isset( $access_rights[$term->name] )) {
+                    if ( ( isset( $access_rights[$term->name]['r'] ) && ( $access_rights[$term->name]['r'] == 1 ) ) || ( isset( $access_rights[$term->name]['w'] ) && ( $access_rights[$term->name]['w'] == 1 ) ) ) {
+                        return true;
+                    } else if ( isset( $access_rights[$term->name]['na'] ) && ( $access_rights[$term->name]['na'] == 1 ) ) {
                         $noflag = 1;
                     }
                 } else if ($ans == '' || $ans == null) {

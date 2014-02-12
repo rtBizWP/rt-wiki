@@ -1,6 +1,6 @@
 <?php
 function rc_tc_template_chooser($template) {
-
+    
     // For all other CPT
     $return = '';
     $supported_posts = rtwiki_get_supported_attribute();

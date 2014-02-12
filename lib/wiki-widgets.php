@@ -143,9 +143,8 @@ class rt_wiki_page_subscribe extends WP_Widget {
         }
 
         $isParent = ifSubPages($post->ID, $post->post_type);
-
+        
         if ($isParent == true) {
-
             if (rt_wiki_subpages_check($post->ID, true, $post->post_type) == true) {
                 $parent_ID = $post->post_parent;
                 $parentIdFlag = false;
@@ -170,7 +169,6 @@ class rt_wiki_page_subscribe extends WP_Widget {
             }
         }
         if ($currentPageStatus == 1) {
-
             $singleCheck = "checked";
         } else {
 

@@ -74,14 +74,14 @@ function create_wiki() {
                 'has_archive' => true,
                 'hierarchical' => true,
                 'menu_position' => 10,
-                'supports' => array('title','editor','thumbnail','revisions','page-attributes','excerpt'),
-                 '_builtin' => false,
+                'supports' => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes', 'excerpt', 'custom-fields'),
+                '_builtin' => false,
                 '_edit_link' => 'post.php?post=%d',
                 'menu_icon' => true,
                 'can_export' => true,
                 'show_in_nav_menus' => true,
                 'show_in_admin_bar' => true,
-                //'exclude_from_search' => true,
+                    //'exclude_from_search' => true,
             );
             register_post_type($slug, $args);
         }
@@ -242,10 +242,9 @@ function rtp_wiki_permission_save($post) {
 
             update_post_meta($post, 'access_rights', $access_rights);
 
-
             /* Checking and setting subscribers list for the post */
 
-            $subscriberList = get_post_meta($post, 'subcribers_list', true);
+           /* $subscriberList = get_post_meta($post, 'subcribers_list', true);
 
             $subpageTrackingList = get_post_meta($post, 'subpages_tracking', true);
             $userId = get_current_user_id();
@@ -261,15 +260,17 @@ function rtp_wiki_permission_save($post) {
              */
 
             // checks if user is author itself 
-            $postObject = get_post($post);
+         /*   $postObject = get_post($post);
             if ($postObject->post_author == $userId) {
 
                 pageSubscription($post, $userId, $subscriberList);
                 subPageSubscription($post, $userId, $subpageTrackingList);
-//                if ($subPageStatus == true) {
-//                 subPageSubscription($post,$userId, $subpageTrackingList);
-//                  }
-            } else {
+
+                /* if ($subPageStatus == true) {
+                  subPageSubscription($post,$userId, $subpageTrackingList);
+                  } */
+           /* } else {
+                var_dump("other");
                 if (in_array($userId, $subscriberList, true)) {
                     //var_dump($terms);
                     foreach ($terms as $term) {
@@ -308,7 +309,7 @@ function rtp_wiki_permission_save($post) {
                             subPageSubscription($post, $userId, $subpageTrackingList);
                         }
                         /* Check if parent has the userid for subscription of subpages */
-                        $parent_ID = $post->post_parent;
+                     /*   $parent_ID = $post->post_parent;
                         if ($parent_ID != '0' || $parent_ID != 0) {
                             $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true);
                             if (is_array($parentSubpageTracking) && in_array($userId, $parentSubpageTracking, true)) {
@@ -320,9 +321,9 @@ function rtp_wiki_permission_save($post) {
                         }
                     }
                 }
-            }
+            }*/
         }
-        flush_rewrite_rules();
+        //flush_rewrite_rules();
     }
 }
 
