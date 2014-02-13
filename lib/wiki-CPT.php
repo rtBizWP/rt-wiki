@@ -74,7 +74,7 @@ function create_wiki() {
                 'has_archive' => true,
                 'hierarchical' => true,
                 'menu_position' => 10,
-                'supports' => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes', 'excerpt', 'custom-fields'),
+                'supports' => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes', 'excerpt'),
                 '_builtin' => false,
                 '_edit_link' => 'post.php?post=%d',
                 'menu_icon' => true,
