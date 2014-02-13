@@ -1,0 +1,8 @@
+CREATE TABLE %s (
+	id BIGINT(20) NOT NULL AUTO_INCREMENT,
+	attribute_postid  bigint(20) NOT NULL,
+	attribute_userid VARCHAR(100) NOT NULL,
+        attribute_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        attribute_sub_subscribe BOOLEAN NOT NULL,
+	PRIMARY KEY  (id)
+);
