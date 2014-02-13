@@ -56,9 +56,20 @@ if (!class_exists('RtCRMEmailDiff')) {
 
 }
 
-// wp1_text_diff
+
 if (!function_exists('rtcrm_text_diff')) {
 
+    /**
+     * Wp text diffrent
+     *
+     * @param 
+     *      string $left_title : title of old post
+     *      string $right_title : title of updated post
+     *      string $left_content : content of old post
+     *      string $right_content : content of updated post
+     *             $args : others arguments 
+     * @return string
+     */
     function rtcrm_text_diff($left_title, $right_title, $left_content, $right_content, $args = null) {
         $defaults = array('title' => 'Updates', 'title_left' => $left_title, 'title_right' => $right_title);
         $args = wp_parse_args($args, $defaults);
@@ -95,10 +106,18 @@ if (!function_exists('rtcrm_text_diff')) {
         return $r;
     }
 
-    
+    /**
+     * Wp text diffrent
+     *
+     * @param 
+     *      string $left_string : content of old post
+     *      string $right_string : content of updated post
+     *             $args : others arguments 
+     * @return string
+     */
     function rtcrm_text_diff_taxonomy($left_string, $right_string, $args = null) {
 
-        
+
         $defaults = array('title' => '', 'title_left' => '', 'title_right' => '');
         $args = wp_parse_args($args, $defaults);
 
@@ -133,7 +152,5 @@ if (!function_exists('rtcrm_text_diff')) {
         $r .= "</table>";
         return $r;
     }
-
-    
 
 }

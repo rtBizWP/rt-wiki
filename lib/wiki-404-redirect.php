@@ -1,15 +1,14 @@
 <?php
 
 /**
- * 
  * Check for the page in wiki CPT. If not found(404), it would redirect to edit post page 
  * with title and parent properly set.
  * 
  * @global type $wpdb
- * @param type $name
+ * @param 
+ *      String $name
+ *      String 
  * @return type
- * 
- * 
  * */
 function rtwiki_get_page_id($name, $post_type = 'post') {
     global $wpdb;
@@ -19,10 +18,9 @@ function rtwiki_get_page_id($name, $post_type = 'post') {
 
 add_action('template_redirect', 'redirect_404');
 
-/*
+/**
  * Redirect to edit page when page not found in wiki with parent set 
- */
-
+ * */
 function redirect_404() {
     $supported_posts = rtwiki_get_supported_attribute();
 
@@ -44,46 +42,14 @@ function redirect_404() {
                         $url = admin_url('post-new.php?post_type=' . $post_type . '&rtpost_title=' . $segments[$i]);
                     } else {
                         $pid = $i - 1;
-                        $parentId = rtwiki_get_page_id($segments[$pid],$post_type);
+                        $parentId = rtwiki_get_page_id($segments[$pid], $post_type);
                         $url = admin_url('post-new.php?post_type=' . $post_type . '&rtpost_title=' . $segments[$i] . '&rtpost_parent=' . $parentId);
                     }
                     break;
                 }
             }
-            $url=filter_var($url, FILTER_SANITIZE_URL); 
+            $url = filter_var($url, FILTER_SANITIZE_URL);
             wp_redirect($url);
-            /* if ($i == 1) {
-              if ($page == null) {
-              $my_post1 = array( 
-              'post_title' => $segments[$i],
-              'post_content' => '',
-              'post_status' => 'draft',
-              'post_author' => $userId,
-              'post_type' => $post_type,
-              'slug' => $segments[$i],
-              );
-              $postid = wp_insert_post($my_post1);
-              }
-              } else {
-
-              $pid = $i - 1;
-
-              $parentId = rtwiki_get_page_id($segments[$pid]);
-              if ($page == null)  {
-              $my_post = array(
-              'post_title' => $segments[$i],
-              'post_content' => '',
-              'post_status' => 'draft',
-              'post_author' => $userId,
-              'post_type' => $post_type,
-              'slug' => $segments[$i],
-              'post_parent' => $parentId,
-              );
-              $postid = wp_insert_post($my_post);
-              }
-              }
-              } */
-            //$url = admin_url('post.php?post=' . $postid . '&action=edit');
         }
     }
 }

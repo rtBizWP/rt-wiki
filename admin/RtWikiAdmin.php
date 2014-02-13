@@ -36,8 +36,9 @@ if (!class_exists('RtWikiAdmin')) {
          */
 
         function init_attributes() {
-            global $rtWikiAttributesModel, $rtWikiAttributes;
+            global $rtWikiAttributesModel, $rtWikiAttributes,$rtWikiSubscribe;
             $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
+            $rtWikiSubscribe=new RtWikiSubscribeModel();
             $rtWikiAttributes = new RtWikiAttributes();
         }
 

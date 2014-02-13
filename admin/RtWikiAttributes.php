@@ -178,7 +178,7 @@ if (!class_exists('RtWikiAttributes')) {
                         );
 
                         $rtWikiAttributesModel->add_attribute($attribute);
-
+                        
                         do_action('rtwiki_attribute_added', $wpdb->insert_id, $attribute);
 
                         $action_completed = true;
