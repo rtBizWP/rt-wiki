@@ -33,9 +33,9 @@ function rtwiki_get_supported_attribute() {
         $rtwiki_settings = get_option( 'rtwiki_settings', array() );
         $rtwiki_custom = get_option( 'rtwiki_custom', array() );
     }
-    if( isset( $rtwiki_settings['attribute'] ) )
-        $attributes = array_merge ( $attributes, $rtwiki_settings['attribute'] );
     if( isset( $rtwiki_custom[0]['slug'] ) )
         $attributes[] = $rtwiki_custom[0]['slug'];
+    if( isset( $rtwiki_settings['attribute'] ) )
+        $attributes = array_merge ( $attributes, $rtwiki_settings['attribute'] );
     return $attributes;
 }
