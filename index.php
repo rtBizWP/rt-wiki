@@ -3,7 +3,7 @@
 /*
   Plugin Name: rtWiki
   Description: Creates a Wiki CPT. Check for pages inside it. If not found will create it. Post filtering for different user groups
-  Version: 1.1
+  Version: 1.1.1
   Author: rtCamp
   Author Uri: http://rtcamp.com
   Contributors: Prannoy Tank, Sohil
@@ -31,7 +31,6 @@ function rtwiki_admin_enqueue_styles_and_scripts() {
     
     if(is_admin() && $hook_suffix== 'post-new.php'){
         wp_enqueue_script('rtwiki-new-post-script');
-        echo $hook_suffix;
     }
     
     wp_register_style('rtwiki-admin-styles', plugins_url('/css/rtwiki-admin-styles.css', __FILE__));

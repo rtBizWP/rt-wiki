@@ -88,7 +88,11 @@ function wiki_custom_taxonomies($postid, $display = true) {
     if ($display) {
         $out = "";
         foreach ($attributes as $attr) {
-
+            if($out!=""){
+                $ulstyle="style='display: none;'";
+            }else{
+                $ulstyle="";
+            }
             $taxonomy = $attr->attribute_name;
             $out .= "<div class='wikidropdown'><h3><a href='#' >" . $attr->attribute_name . "</a></h3>";
 
@@ -98,7 +102,7 @@ function wiki_custom_taxonomies($postid, $display = true) {
                 $terms = get_terms($taxonomy);
             }
             if (!empty($terms)) {
-                $out.= "<ul style='display: none;'>";
+                $out.= "<ul " . $ulstyle . " >";
                 foreach ($terms as $term)
                 // var_dump($term);
                     $out .= '<li><a href="' . get_term_link($term, $taxonomy) . '" title="' . $term->name . '" >' . $term->name . '</a></li>';

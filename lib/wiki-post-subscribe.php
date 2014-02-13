@@ -1,66 +1,54 @@
 <?php
 
 /**
- * Checks if subscribe ID is in the list or not 
+ * Checks if subscriber ID is in the subscribers list or not 
+ * 
  * @global type $post
  * @return boolean
  */
 function checkSubscribe() {
-    global $post;
-    $subscriberList = get_post_meta($post->ID, 'subcribers_list', true);
+    global $post, $rtWikiSubscribe;
     $userId = get_current_user_id();
-    if (!empty($subscriberList)) {
-        if (in_array($userId, $subscriberList, true)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    return $rtWikiSubscribe->is_subscribe($post->ID, $userId);
 }
 
-/* function nonWikiSubscribe() {
-  global $pagenow;
+/**
+ * Checks if parent post subscribe for subpage for perticular user 
+ * 
+ * @global type $post
+ * @return boolean
+ */
+function checkParentSubSubscribe($userId) {
+    global $post, $rtWikiSubscribe;
+    return $rtWikiSubscribe->is_subpage_subscribe($post->post_parent, $userId);
+}
 
-  if (isset($_REQUEST['subscribe']) == '1') {
+/**
+ * Checks if subscriber ID is in the sub page subscribers list or not 
+ * 
+ * @global type $post
+ * @return boolean
+ */
+function checkSubPageSubscribe() {
+    global $post, $rtWikiSubscribe;
+    $userId = get_current_user_id();
+    return $rtWikiSubscribe->is_subpage_subscribe($post->ID, $userId);
+}
 
-
-  $params = array_keys($_REQUEST);  //get the keys from request parameter
-  $actionParam = $params[0];
-  $postID = $_REQUEST['nonWikiPost'];  //get post id from the request parameter
-  $url = get_permalink($postID);      //get permalink from post id
-  $redirectURl = $url . '?' . $actionParam . '=1'; //form the url
-
-
-  if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
-  wp_redirect(wp_login_url($redirectURl), 302); //after login and if permission is set , user would be subscribed to the page
-  } else {
-  //var_dump($_POST['nonWikiPost']);
-
-  if (isset($_POST['nonWikiPost'])) {
-
-  $id = $_POST['nonWikiPost'];
-  $userId = get_current_user_id();
-  $subscribeId = get_post_meta($id, 'subcribers_list', true);
-  pageSubscription($id, $userId, $subscribeId);
-  }
-  }
-  }
-  } */
-
-//add_action('wp', 'nonWikiSubscribe');
-
+/**
+ * UnSubscribe for the particular post ID. 
+ * 
+ * @global type $pagenow
+ */
 function unSubscribe() {
     global $pagenow;
 
     if (isset($_REQUEST['unSubscribe']) == '1') {
-
-
         $params = array_keys($_REQUEST);  //get the keys from request parameter
         $actionParam = $params[0];
         $postID = $_REQUEST['unSubscribe-postId'];  //get post id from the request parameter
         $url = get_permalink($postID);      //get permalink from post id
         $redirectURl = $url . '?' . $actionParam . '=1'; //form the url
-
 
         if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
             wp_redirect(wp_login_url($redirectURl), 302); //after login and if permission is set , user would be subscribed to the page
@@ -79,59 +67,58 @@ add_action('wp', 'unSubscribe');
 
 /**
  * Update subscriber list meta value for the particular post ID. 
+ * 
  * @global type $pagenow
  */
 function update() {
     global $pagenow;
 
     if (isset($_REQUEST['PageSubscribe']) == '1') {
-
-
         $params = array_keys($_REQUEST);  //get the keys from request parameter
         $actionParam = $params[0];
         $postID = $_REQUEST['update-postId'];  //get post id from the request parameter
         $url = get_permalink($postID);      //get permalink from post id
         $redirectURl = $url . '?' . $actionParam . '=1'; //form the url
 
-
         if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
             wp_redirect(wp_login_url($redirectURl), 302); //after login and if permission is set , user would be subscribed to the page
         } else {
+
+            //Single post subscribe
             $singleStatus = '';
             if (isset($_POST['single_subscribe']))
                 $singleStatus = $_POST['single_subscribe'];
+
+            //Current user id 
             $userId = get_current_user_id();
+
+            //Post type 
             $post_type = 'post';
             if (isset($_POST['post-type']))
                 $post_type = $_POST['post-type'];
-            $subscribeId = get_post_meta($postID, 'subcribers_list', true);
-            if (isset($_POST['single_subscribe'])) {
 
+            //subscribe single post
+            if (isset($_POST['single_subscribe'])) {
                 if ($_POST['single_subscribe'] == 'current') {
-                    pageSubscription($postID, $userId, $subscribeId);
+                    if (isset($_POST['subPage_subscribe']) && $_POST['subPage_subscribe'] == 'subpage'):
+                        pageSubscription($postID, $userId, TRUE);
+                    else:
+                        pageSubscription($postID, $userId, FALSE);
+                    endif;
                 }
             } else if ($_POST['single_subscribe'] == NULL) {
-
-                unSubscription($postID, $userId, $subscribeId);
+                unSubscription($postID, $userId);
             }
 
-            $userId = get_current_user_id();
-            $subpagesTrackingList = get_post_meta($postID, 'subpages_tracking', true);
-            $pageSubsciptionList = get_post_meta($postID, 'subcribers_list', true);
-           
+            //subscribe post with subpage 
             if (isset($_POST['subPage_subscribe'])) {
-                //$subPageStatus = $_POST['subPage-subscribe'];
                 if ($_POST['subPage_subscribe'] == 'subpage') {
-                    pageSubscription($postID, $userId, $pageSubsciptionList);
-                    subPageSubscription($postID, $userId, $subpagesTrackingList);
+                    pageSubscription($postID, $userId, TRUE);
                     subcribeSubPages($postID, 0, $userId, $post_type);
                 }
             } else if ($_POST['subPage_subscribe'] == NULL) {
-                
-                //var_dump($pageSubsciptionList);
-                unSubscription($postID, $userId, $pageSubsciptionList);
-                subpageUnSubscription($postID, $userId, $subpagesTrackingList);
-                unSubcribeSubPages($postID, 0, $userId,$post_type);
+                unSubscription($postID, $userId);
+                unSubcribeSubPages($postID, 0, $userId, $post_type);
             }
         }
     }
@@ -140,45 +127,16 @@ function update() {
 add_action('wp', 'update');
 
 /**
- * Update subscriber list meta value for the Sub Pages. 
- * @global type $pagenow
- */
-//function updateForAllSubPages() {
-//    global $pagenow;
-//
-//    if (isset($_REQUEST['allSubscribe']) == '1') {
-//
-//        $params = array_keys($_REQUEST);  //get the keys from request parameter
-//        $actionParam = $params[0];
-//        $postID = $_REQUEST['update-postId'];  //get post id from the request parameter
-//        $url = get_permalink($postID);      //get permalink from post id
-//        $redirectURl = $url . '?' . $actionParam . '=1'; //form the url
-//
-//
-//        if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
-//            wp_redirect(wp_login_url($redirectURl), 302); //after login and if permission is set , user would be subscribed to the page and its subpages
-//        } else {
-//            $id = $_POST['update-all-postId'];
-//            $userId = get_current_user_id();
-//            $subpagesTrackingList = get_post_meta($id, 'subpages_tracking', true);
-//            $pageSubsciptionList = get_post_meta($id, 'subcribers_list', true);
-//
-//            pageSubscription($id, $userId, $pageSubsciptionList);
-//            subPageSubscription($id, $userId, $subpagesTrackingList);
-//
-//            subcribeSubPages($id, 0, $userId);
-//        }
-//    }
-//}
-//add_action('wp', 'updateForAllSubPages');
-
-/*
- * Subscription funciton for Pages and subpages
+ * Subscription funciton for subpages
  * 
+ * @param
+ *      int $parentId
+ *      int $lvl : heirarchi level
+ *      int $userId
+ *      String $post_type : post type of parenrt 
  */
+function subcribeSubPages($parentId, $lvl, $userId, $post_type = 'post') {
 
-
-function subcribeSubPages($parentId, $lvl, $userId, $post_type) {
     $args = array('parent' => $parentId, 'post_type' => $post_type);
     $pages = get_pages($args);
     if ($pages) {
@@ -188,24 +146,24 @@ function subcribeSubPages($parentId, $lvl, $userId, $post_type) {
             $permission = getPermission($page->ID);
 
             if ($permission == true) {
-                $subscribeId = get_post_meta($page->ID, 'subcribers_list', true);
-                $subpagesTrackingList = get_post_meta($page->ID, 'subpages_tracking', true);
-
-                pageSubscription($page->ID, $userId, $subscribeId);
-                subPageSubscription($page->ID, $userId, $subpagesTrackingList);
+                pageSubscription($page->ID, $userId, TRUE);
             }
             subcribeSubPages($page->ID, $lvl, $userId, $post_type);
         }
     }
 }
 
-/*
- * Unsubscription function for Pages and subpages
+/**
+ * Unsubscription function for subpages
  * 
+ * @param
+ *      int $parentId
+ *      int $lvl : heirarchi level
+ *      int $userId
+ *      String $post_type : post type of parenrt 
  */
-
 function unSubcribeSubPages($parentId, $lvl, $userId, $post_type = 'post') {
-     
+
     $args = array('parent' => $parentId, 'post_type' => $post_type);
     $pages = get_pages($args);
     if ($pages) {
@@ -215,11 +173,7 @@ function unSubcribeSubPages($parentId, $lvl, $userId, $post_type = 'post') {
             $permission = getPermission($page->ID);
 
             if ($permission == true) {
-                $subscribeId = get_post_meta($page->ID, 'subcribers_list', true);
-                $subpagesTrackingList = get_post_meta($page->ID, 'subpages_tracking', true);
-
-                unSubscription($page->ID, $userId, $subscribeId);
-                subpageUnSubscription($page->ID, $userId, $subpagesTrackingList);
+                unSubscription($page->ID, $userId);
             }
             unSubcribeSubPages($page->ID, $lvl, $userId, $post_type);
         }
@@ -229,7 +183,10 @@ function unSubcribeSubPages($parentId, $lvl, $userId, $post_type = 'post') {
 /**
  * Check if pages have any sub pages/child page
  * 
- * @param type $parentId
+ * @param 
+ *      int $parentId
+ *      String $post_type : post type of parent 
+ * 
  * @return boolean
  */
 function ifSubPages($parentId, $post_type = 'post') {
@@ -243,6 +200,16 @@ function ifSubPages($parentId, $post_type = 'post') {
         return false;
 }
 
+/**
+ * Check permission of sub pages/child page
+ * 
+ * @param 
+ *      int $parentId
+ *      bool $subPage : flag for subpage 
+ *      String $post_type : post type of parent 
+ * 
+ * @return boolean
+ */
 function rt_wiki_subpages_check($parentId, $subPage, $post_type = 'post') {
     $args = array('parent' => $parentId, 'post_type' => $post_type);
     $subPageFlag = $subPage;
@@ -264,7 +231,7 @@ function rt_wiki_subpages_check($parentId, $subPage, $post_type = 'post') {
 }
 
 /**
- * Send mail On post Update having body as diff of content 
+ * Send mail On post Update having body as diff of content for daily update 
  * 
  * @global type $post
  * @param type $post
@@ -305,32 +272,20 @@ function post_changes_send_mail($postID, $email, $group, $url = '') {
     }
 }
 
+/**
+ * Send mail On post Update having body as diff of content for daily update 
+ * 
+ * @param 
+ *      int  $postID
+ *      String $email : Email id of user 
+ *      String $tax_diff : body of mail 
+ *      String $url : url of post 
+ */
 function wiki_page_changes_send_mail($postID, $email, $tax_diff = '', $url = '') {
 
     $revision = wp_get_post_revisions($postID);
     $content = array();
     $title = array();
-
-//    $termid = array();
-//    $taxo = $_REQUEST['tax_input'];
-//
-//    $diff = '';
-//    if (isset($taxo)) {
-//        foreach ($taxo as $key => $value) {
-//
-//            foreach ($value as $val) {
-//                if ($val != 0) {
-//                    $termid[] = $val;
-//                }
-//            }
-//            if (!empty($termid)) {
-//
-//                $diff.=contacts_diff_on_lead($postID, $termid, $key);
-//            }
-//            unset($termid);
-//        }
-//    }
-
 
     foreach ($revision as $revisions) {
         $content[] = $revisions->post_content;
@@ -345,7 +300,6 @@ function wiki_page_changes_send_mail($postID, $email, $tax_diff = '', $url = '')
 
     if (!empty($content)) {
         $url = 'Page Link:' . $url . '<br>';
-        //$diff_table = wp_text_diff($content[1], $content[0], $args);
         $body = rtcrm_text_diff($title[count($title) - 1], $title[0], $content[count($title) - 1], $content[0]);
         $body.=$tax_diff;
         $finalBody = $url . '<br>' . $body;
@@ -361,42 +315,23 @@ function wiki_page_changes_send_mail($postID, $email, $tax_diff = '', $url = '')
     }
 }
 
-//add_action('wp', 'post_changes_send_mail');
-
+/**
+ * get html content type
+ * 
+ * @return String 
+ */
 function set_html_content_type() {
-
     return 'text/html';
 }
 
-//function sendMailonPostUpdateWiki($post) {
-//    $postObject = get_post($post);
-//    if ($postObject->post_type == 'wiki') {
-//        // If this is just a revision, don't send the email.
-//
-//        if (wp_is_post_revision($postObject->ID)) {
-//            return;
-//        }
-//
-//        $subscribersList = get_post_meta($postObject->ID, 'subcribers_list', true);
-//        if (!empty($subscribersList) || $subscribersList != NULL) {
-//            foreach ($subscribersList as $subscribers) {
-//
-//                $user_info = get_userdata($subscribers);
-//                wiki_page_changes_send_mail($postObject->ID, $user_info->user_email);
-//            }
-//        }
-//    }
-//}
-//add_action('save_post', 'sendMailonPostUpdateWiki');
-
-
-/*
- * Function Called when a Wiki post is Upated 
- * Sends Email to Subscribers of Wiki Posts
+/**
+ * Function Called after a Wiki post is Upated 
+ * Sends Email to Subscribers of Wiki Posts 
+ * 
+ * @param type  $post
  */
-
 function sendMailonPostUpdateWiki($post) {
-
+    global $rtWikiSubscribe;
     $postObject = get_post($post);
     $supported_posts = rtwiki_get_supported_attribute();
 
@@ -465,19 +400,14 @@ function sendMailonPostUpdateWiki($post) {
                 unset($newTermId);
             }
         }
+        $subscribersList = $rtWikiSubscribe->get_all_subscribers($postObject->ID);
 
-        $subscribersList = get_post_meta($postObject->ID, 'subcribers_list', true);
-        //var_dump($subscribersList);
-        //exit();
         if (!empty($subscribersList) || $subscribersList != NULL) {
             foreach ($subscribersList as $subscribers) {
-
-                $user_info = get_userdata($subscribers);
+                $user_info = get_userdata($subscribers->attribute_userid);
                 wiki_page_changes_send_mail($postObject->ID, $user_info->user_email, $diff, get_permalink($postObject->ID));
             }
         }
-
-        //echo $diff;
     }
 }
 

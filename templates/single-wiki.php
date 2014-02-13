@@ -18,7 +18,7 @@ $content_class = apply_filters('rtwiki_content_class', 'large-8 small-12 columns
         if (have_posts()) {
             the_post();
             ?>
-            <article id="<?php get_post_type()."-".get_the_ID(); ?>" <?php post_class('clearfix'); ?> >
+            <article id="<?php get_post_type() . "-" . get_the_ID(); ?>" <?php post_class('clearfix'); ?> >
                 <header class="entry-header">
                     <h1 class="entry-title post-title"><?php echo the_title(); ?></h1>
                 </header>
@@ -26,28 +26,24 @@ $content_class = apply_filters('rtwiki_content_class', 'large-8 small-12 columns
                     <?php the_content(); ?>
                 </div>
             </article>
-<?php } ?>
+        <?php } ?>
 
     </div><!-- #content -->
 </div><!-- #primary -->
 
 
-<?php 
-    $supported_posts = rtwiki_get_supported_attribute();
-    $post_type = get_post_type();
-    if ( in_array( $post_type, $supported_posts ) ) { ?>
-    <div id="secondary" class="sidebar-container" role="complementary">
-
-        <div class="widget-area">
-
-    <?php dynamic_sidebar('rt-wiki-sidebar'); ?>
-
-        </div> 
-
-    </div> 
 <?php
+$supported_posts = rtwiki_get_supported_attribute();
+$post_type = get_post_type();
+if (in_array($post_type, $supported_posts)) {
+    ?>
+    <div id="secondary" class="sidebar-container" role="complementary">
+        <div class="widget-area">
+            <?php dynamic_sidebar('rt-wiki-sidebar'); ?>
+        </div> 
+    </div> 
+    <?php
 } else {
-get_sidebar();
+    get_sidebar();
 }
-
 get_footer();

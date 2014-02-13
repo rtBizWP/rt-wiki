@@ -209,7 +209,7 @@ function display_wiki_post_access_metabox($post) {
  */
 
 function rtp_wiki_permission_save($post) {
-
+    global $wpdb;
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
         return;
 
@@ -242,88 +242,36 @@ function rtp_wiki_permission_save($post) {
 
             update_post_meta($post, 'access_rights', $access_rights);
 
-            /* Checking and setting subscribers list for the post */
-
-           /* $subscriberList = get_post_meta($post, 'subcribers_list', true);
-
-            $subpageTrackingList = get_post_meta($post, 'subpages_tracking', true);
             $userId = get_current_user_id();
             $access_rights = get_post_meta($post, 'access_rights', true);
-            $subPageStatus = false;
-            $readWriteFlag = false;
-            if (is_array($subpageTrackingList) && in_array($userId, $subpageTrackingList, true)) {
-                $subPageStatus = true;
-            }
 
-            /*
-             * If user is already subscribed to this page,check for any changes according to the permissions set
-             */
-
-            // checks if user is author itself 
-         /*   $postObject = get_post($post);
-            if ($postObject->post_author == $userId) {
-
-                pageSubscription($post, $userId, $subscriberList);
-                subPageSubscription($post, $userId, $subpageTrackingList);
-
-                /* if ($subPageStatus == true) {
-                  subPageSubscription($post,$userId, $subpageTrackingList);
-                  } */
-           /* } else {
-                var_dump("other");
-                if (in_array($userId, $subscriberList, true)) {
-                    //var_dump($terms);
-                    foreach ($terms as $term) {
-
-                        $ans = get_term_if_exists($term->slug, $userId);
-                        if ($ans == $term->slug) {
-
-
-                            if ($access_rights[$ans]['na'] == 1) {
-
-                                if (($userIndex = array_search($userId, $subscriberList)) !== false) {
-
-                                    unset($subscriberList[$userIndex]);
-                                    $newSubscriberList = $subscriberList;
-                                }
-                                update_post_meta($post, 'subcribers_list', $newSubscriberList);
-                                if (in_array($userId, $subpageTrackingList, true)) {
-
-                                    if (($key = array_search($userId, $subpageTrackingList)) !== false) {
-                                        unset($subpageTrackingList[$key]);
-                                        $newSubpageTrackingList = $subpageTrackingList;
-                                    }
-                                    update_post_meta($post, 'subpages_tracking', $newSubpageTrackingList);
-                                }
-                            } else if ($access_rights[$ans]['w'] == 1 || $access_rights[$ans]['r'] == 1) {
-                                $readWriteFlag = true;
+            if (isset($access_rights['all']['na']) && ( $access_rights['all']['na'] == 1 )) {
+                unSubscriptionAll($post);
+            } else {
+                $terms = get_terms('user-group', array('hide_empty' => true));
+                foreach ($terms as $term) {
+                    if (isset($access_rights[$term->name]) && ( $access_rights[$term->name]['na'] == 1 )) {
+                        $groupusers = $wpdb->get_col($wpdb->prepare("SELECT term_rel.object_id FROM $wpdb->term_relationships term_rel,$wpdb->term_taxonomy term_taxo,$wpdb->terms term WHERE term_rel.term_taxonomy_id = term_taxo.term_taxonomy_id and term_taxo.term_id=term.term_id and term.slug='%s'", $term->slug));
+                        var_dump($groupusers);
+                        if ($groupusers) {
+                            foreach ($groupusers as $id) {
+                                unSubscription($post, $id);
                             }
                         }
-                    }
-
-                    if ($readWriteFlag == true) {
-
-                        pageSubscription($post, $userId, $subscriberList);
-
-                        if ($subPageStatus == true) {
-                            subPageSubscription($post, $userId, $subpageTrackingList);
-                        }
-                        /* Check if parent has the userid for subscription of subpages */
-                     /*   $parent_ID = $post->post_parent;
-                        if ($parent_ID != '0' || $parent_ID != 0) {
-                            $parentSubpageTracking = get_post_meta($parent_ID, 'subpages_tracking', true);
-                            if (is_array($parentSubpageTracking) && in_array($userId, $parentSubpageTracking, true)) {
-                                if (!in_array($userId, $subscriberList, true)) {
-                                    $parentSubpageTracking[] = $userId;
-                                    update_post_meta($post, 'subpages_tracking', $parentSubpageTracking);
+                    } else if (isset($access_rights[$term->name]) && (( $access_rights[$term->name]['r'] == 1 ) || ($access_rights[$term->name]['w'] == 1))) {
+                        $groupusers = $wpdb->get_col($wpdb->prepare("SELECT term_rel.object_id FROM $wpdb->term_relationships term_rel,$wpdb->term_taxonomy term_taxo,$wpdb->terms term WHERE term_rel.term_taxonomy_id = term_taxo.term_taxonomy_id and term_taxo.term_id=term.term_id and term.slug='%s'", $term->slug));
+                        var_dump($groupusers);
+                        if ($groupusers) {
+                            foreach ($groupusers as $id) {
+                                if (checkParentSubSubscribe($id)) {
+                                    pageSubscription($post, $id,TRUE);
                                 }
                             }
                         }
                     }
                 }
-            }*/
+            }
         }
-        //flush_rewrite_rules();
     }
 }
 

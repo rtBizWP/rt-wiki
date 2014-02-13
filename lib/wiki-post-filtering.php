@@ -22,7 +22,7 @@ function single_post_filtering() {
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => true));
     $access_rights = get_post_meta($post->ID, 'access_rights', true);
-    
+
     if (!is_user_logged_in()) {
 
         if ($access_rights['public']['r'] == 1) {
@@ -93,7 +93,7 @@ function get_term_if_exists($term, $userid) {
 function remove_quick_edit($actions) {
     global $post;
     $supported_posts = rtwiki_get_supported_attribute();
-    if ( in_array( $post->post_type, $supported_posts ) ) {
+    if (in_array($post->post_type, $supported_posts)) {
         if (getAdminPanelSidePermission($post->ID) == false) {
             unset($actions['inline hide-if-no-js']);
             unset($actions['trash']);
@@ -113,11 +113,11 @@ add_filter('page_row_actions', 'remove_quick_edit', 10);
 
 function postCheck() {
     if (isset($_GET['action']) && $_GET['action'] == 'edit') {
-        $page = isset( $_GET['post'] )?$_GET['post']:0;
+        $page = isset($_GET['post']) ? $_GET['post'] : 0;
         $supported_posts = rtwiki_get_supported_attribute();
         // $status = get_post_meta($page, '_edit_last');
         //if ($status[0] == '1') {
-        if ( in_array( get_post_type($page), $supported_posts ) ) {
+        if (in_array(get_post_type($page), $supported_posts)) {
             if (getAdminPanelSidePermission($page) == false) {
                 WP_DIE(__('You Dont have enough access rights to Edit this post'));
             }
@@ -126,54 +126,53 @@ function postCheck() {
     }
 }
 
-add_action('admin_init', 'postCheck' );
+add_action('admin_init', 'postCheck');
 
 function addCapabilities($capabilities, $cap, $args, $user) {
     global $post;
     $access = 'na';
     $supported_posts = rtwiki_get_supported_attribute();
-    if ( is_object($post) && in_array( $post->post_type, $supported_posts ) ) {
+    if (is_object($post) && in_array($post->post_type, $supported_posts)) {
         $access = getAdminPanelSidePermission($post->ID);
-        if ( $access == false) {
+        if ($access == false) {
             return array();
         }
     }
-    
-    if( is_object($user) && !empty($user->roles) && ( 'administrator' == $user->roles[0] ) ){ 
+
+    if (is_object($user) && !empty($user->roles) && ( 'administrator' == $user->roles[0] )) {
         return $user->allcaps;
     }
-    
-    if( is_object($post) && $post->post_author == get_current_user_id() ) {
-        $capabilities = array_merge( $capabilities, array(
-                'delete_posts' => 'delete_posts',
-                'delete_others_posts' => 'delete_others_posts',
-                'delete_post' => 'delete_post',
-                'delete_published_posts' => 'delete_published_posts'
-            )
+
+    if (is_object($post) && $post->post_author == get_current_user_id()) {
+        $capabilities = array_merge($capabilities, array(
+            'delete_posts' => 'delete_posts',
+            'delete_others_posts' => 'delete_others_posts',
+            'delete_post' => 'delete_post',
+            'delete_published_posts' => 'delete_published_posts'
+                )
         );
     }
-    
-    if( 'w' == $access ) {
-        $capabilities = array_merge( $capabilities, array('read_post' => 'read_post',
-                    'publish_posts' => 'publish_posts',
-                    'edit_posts' => 'edit_posts',
-                    'edit_others_posts' => 'edit_others_posts',
-                    'read_private_posts' => 'read_private_posts',
-                    'edit_post' => 'edit_post',
-                    'edit_published_posts' => 'edit_published_posts',
-            ) 
+
+    if ('w' == $access) {
+        $capabilities = array_merge($capabilities, array('read_post' => 'read_post',
+            'publish_posts' => 'publish_posts',
+            'edit_posts' => 'edit_posts',
+            'edit_others_posts' => 'edit_others_posts',
+            'read_private_posts' => 'read_private_posts',
+            'edit_post' => 'edit_post',
+            'edit_published_posts' => 'edit_published_posts',
+                )
         );
-    }
-    else if( 'r' == $access ) {
-        $capabilities = array_merge( $capabilities, array('read_post' => 'read_post',
-                    'read_private_posts' => 'read_private_posts'
-            ) 
+    } else if ('r' == $access) {
+        $capabilities = array_merge($capabilities, array('read_post' => 'read_post',
+            'read_private_posts' => 'read_private_posts'
+                )
         );
     }
     return $capabilities;
 }
 
-add_filter( 'user_has_cap', 'addCapabilities', 10, 4 );
+add_filter('user_has_cap', 'addCapabilities', 10, 4);
 
 /*
  * Checks the permission of the Logged in User for editing post
@@ -187,18 +186,18 @@ function getAdminPanelSidePermission($pageID) {
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => true));
     $access_rights = get_post_meta($pageID, 'access_rights', true);
-    
-    if( !is_user_logged_in() ) {
-        if ( isset( $access_rights['public'] ) && ( 1 == $access_rights['public'] ) ) {
+
+    if (!is_user_logged_in()) {
+        if (isset($access_rights['public']) && ( 1 == $access_rights['public'] )) {
             return true;
-        } else if ( isset( $access_rights['public'] ) && ( 0 == $access_rights['public'] ) ) {
+        } else if (isset($access_rights['public']) && ( 0 == $access_rights['public'] )) {
             return false;
         }
     } else {
-        
+
         $post_meta = get_post($pageID);
 
-        if ( ( 'administrator' == $current_user->roles[0] ) || ( is_object($post_meta) && ( $post_meta->post_author == $user ) ) ) {
+        if (( 'administrator' == $current_user->roles[0] ) || ( is_object($post_meta) && ( $post_meta->post_author == $user ) )) {
             return true;
         } else {
             if (empty($access_rights)) {
@@ -208,13 +207,13 @@ function getAdminPanelSidePermission($pageID) {
 
                 $ans = get_term_if_exists($term->slug, $user);
 
-                if ($ans == $term->slug && isset( $access_rights[$ans] ) ) {
+                if ($ans == $term->slug && isset($access_rights[$ans])) {
 
-                    if ( isset( $access_rights[$ans]['w'] ) && ( $access_rights[$ans]['w'] == 1 ) ) {
+                    if (isset($access_rights[$ans]['w']) && ( $access_rights[$ans]['w'] == 1 )) {
                         return 'w';
-                    } else if ( isset( $access_rights[$ans]['r'] ) && ( $access_rights[$ans]['r'] == 1 ) ) {
+                    } else if (isset($access_rights[$ans]['r']) && ( $access_rights[$ans]['r'] == 1 )) {
                         return 'r';
-                    } else if ( isset( $access_rights[$ans]['na'] ) && ( $access_rights[$ans]['na'] == 1 ) ) {
+                    } else if (isset($access_rights[$ans]['na']) && ( $access_rights[$ans]['na'] == 1 )) {
                         $noflag = 1;
                     }
                 } else if ($ans == '' || $ans == null) {
@@ -223,7 +222,7 @@ function getAdminPanelSidePermission($pageID) {
             }
 
 
-            if( $noflag == 1 || $noPublic == 1 ) {
+            if ($noflag == 1 || $noPublic == 1) {
                 return false;
             }
         }
@@ -237,115 +236,102 @@ function getAdminPanelSidePermission($pageID) {
 function getPermission($pageID) {
 
     $noflag = 0;
-    //$noGroup = 0;
     $noPublic = 0;
     $user = get_current_user_id();
     $terms = get_terms('user-group', array('hide_empty' => true));
     $access_rights = get_post_meta($pageID, 'access_rights', true);
-    
-    if ( isset( $access_rights['public'] ) && ( 1 == $access_rights['public'] ) ) {
+
+    if (isset($access_rights['public']) && ( 1 == $access_rights['public'] )) {
         return true;
-    } else if ( isset( $access_rights['public'] ) && !is_user_logged_in() && ( 0 == $access_rights['public'] ) ) {
+    } else if (isset($access_rights['public']) && !is_user_logged_in() && ( 0 == $access_rights['public'] )) {
         return false;
-    }else if( is_user_logged_in() ) {
+    } else if (is_user_logged_in()) {
         $post_details = get_post($pageID);
 
         if ($post_details->post_author == $user) {
             return true;
+        } elseif (isset($access_rights['all'])) {
+            if (( isset($access_rights['all']['r']) && ( $access_rights['all']['r'] == 1 ) ) || ( isset($access_rights['all']['w']) && ( $access_rights['all']['w'] == 1 ) )) {
+                return true;
+            } else if (isset($access_rights['all']['na']) && ( $access_rights['all']['na'] == 1 )) {
+                $noflag = 1;
+            }
         } else {
             foreach ($terms as $term) {
                 $ans = get_term_if_exists($term->slug, $user);
-                if(isset( $access_rights['all'])){
-                    if ( ( isset( $access_rights['all']['r'] ) && ( $access_rights['all']['r'] == 1 ) ) || ( isset( $access_rights['all']['w'] ) && ( $access_rights['all']['w'] == 1 ) ) ) {
+                if ($ans == $term->slug && isset($access_rights[$term->name])) {
+                    if (( isset($access_rights[$term->name]['r']) && ( $access_rights[$term->name]['r'] == 1 ) ) || ( isset($access_rights[$term->name]['w']) && ( $access_rights[$term->name]['w'] == 1 ) )) {
                         return true;
-                    } else if ( isset( $access_rights['all']['na'] ) && ( $access_rights['all']['na'] == 1 ) ) {
-                        $noflag = 1;
-                    }
-                }else if ($ans == $term->slug && isset( $access_rights[$term->name] )) {
-                    if ( ( isset( $access_rights[$term->name]['r'] ) && ( $access_rights[$term->name]['r'] == 1 ) ) || ( isset( $access_rights[$term->name]['w'] ) && ( $access_rights[$term->name]['w'] == 1 ) ) ) {
-                        return true;
-                    } else if ( isset( $access_rights[$term->name]['na'] ) && ( $access_rights[$term->name]['na'] == 1 ) ) {
+                    } else if (isset($access_rights[$term->name]['na']) && ( $access_rights[$term->name]['na'] == 1 )) {
                         $noflag = 1;
                     }
                 } else if ($ans == '' || $ans == null) {
                     $noPublic = 1;
                 }
             }
-            if ($noflag == 1) {
-                return false;
-            }
-            if ($noPublic == 1) {
-                return false;
-            }
-
-//        if ($access_rights['all']['w'] == 1 || $access_rights['all']['r'] == 1) {
-//            return true;
-//        } else if ($access_rights['all']['na'] == 1) {
-//            return false;
-//        }
+        }
+        if ($noflag == 1) {
+            return false;
+        }
+        if ($noPublic == 1) {
+            return false;
         }
     }
 }
-
-
 
 add_filter('bulk_actions-' . 'edit-wiki', '__return_empty_array');
 
-
-/*
- * Function to unsubscribe/remove userid from post meta
+/**
+ * Function to unsubscribe/remove userid from post meta 
+ * 
+ * @param 
+ *      int $postid
+ *      int $userid
  */
-
-function unSubscription($postid, $userid, $list) {
-    if (in_array($userid, $list, true)) {
-
-        if (($key = array_search($userid, $list)) !== false) {
-
-            unset($list[$key]);
-            $newSubpageTrackingList = $list;
-            update_post_meta($postid, 'subcribers_list', $newSubpageTrackingList);
-        }
+function unSubscription($postid, $userid) {
+    global $rtWikiSubscribe;
+    if ($rtWikiSubscribe->is_subscribe($postid, $userid)) {
+        $subscriber = array(
+            'attribute_postid' => $postid,
+            'attribute_userid' => $userid
+        );
+        $rtWikiSubscribe->delete_subscriber($subscriber);
     }
 }
 
-function subpageUnSubscription($postid, $userid, $list) {
-    if (in_array($userid, $list, true)) {
-
-        if (($key = array_search($userid, $list)) !== false) {
-            unset($list[$key]);
-            $newSubpageTrackingList = $list;
-            update_post_meta($postid, 'subpages_tracking', $newSubpageTrackingList);
-        }
-    }
-}
-
-
-
-/*
- * Function to subscribe page and subpages 
+/**
+ * Function to unsubscribe/remove userid from post meta 
+ * 
+ * @param 
+ *      int $postid
+ *      int $userid
  */
-
-function pageSubscription($postid, $userid, $list) {
-    if( empty( $list ) )
-        $list = array();
-    if (!in_array($userid, $list, true)) {
-        $list[] = $userid;
-        update_post_meta($postid, 'subcribers_list', $list);
-    }
+function unSubscriptionAll($postid) {
+    global $rtWikiSubscribe;
+    $subscriber = array(
+        'attribute_postid' => $postid,
+    );
+    $rtWikiSubscribe->delete_subscriber($subscriber);
 }
 
-function subPageSubscription($postid, $userid, $list) {
-    if( empty( $list ) )
-        $list = array();
-    if (!in_array($userid, $list, true)) {
-        $list[] = $userid;
-        update_post_meta($postid, 'subpages_tracking', $list);
+/**
+ * Function to unsubscribe/remove userid from post meta 
+ * 
+ * @param 
+ *      int $postid
+ *      int $userid
+ */
+function pageSubscription($postid, $userid, $is_sub_subscribe) {
+    global $rtWikiSubscribe;
+    if (!$rtWikiSubscribe->is_subscribe($postid, $userid)) {
+        $subscriber = array(
+            'attribute_postid' => $postid,
+            'attribute_userid' => $userid,
+            'attribute_sub_subscribe' => $is_sub_subscribe
+        );
+        $rtWikiSubscribe->add_subscriber($subscriber);
     }
 }
-
-
-
-
 
 /* Function to disable feeds for wiki CPT */
 remove_action('do_feed_rdf', 'do_feed_rdf', 10, 1);
@@ -369,8 +355,6 @@ function my_do_feed() {
         do_feed_rss2($wp_query->is_comment_feed);
     }
 }
-
-
 
 /* Changing taxnonmy query for wiki CPT */
 add_action('pre_get_posts', 'add_wiki_taxonomy');
@@ -399,24 +383,23 @@ function add_wiki_taxonomy($query) {
     }
 }
 
-function rtwiki_content_filter ( $content ) {
-    if( getPermission ( get_the_ID() ) ) {
+function rtwiki_content_filter($content) {
+    if (getPermission(get_the_ID())) {
         $post_thumbnail = get_the_post_thumbnail();
-        return $post_thumbnail.$content;
-    }
-    else { 
-        return '<p>'.__( 'Not Enough Rights to View The Content.', 'rtCamp' ).'</p>'; 
+        return $post_thumbnail . $content;
+    } else {
+        return '<p>' . __('Not Enough Rights to View The Content.', 'rtCamp') . '</p>';
     }
 }
 
-add_filter( 'the_content', 'rtwiki_content_filter' );
+add_filter('the_content', 'rtwiki_content_filter');
 
-function rtwiki_edit_post_link_filter( $output ) {
-    if( getPermission ( get_the_ID() ) ) {
+function rtwiki_edit_post_link_filter($output) {
+    if (getPermission(get_the_ID())) {
         return $output;
-    }
-    else { 
+    } else {
         return '';
     }
 }
+
 add_filter('edit_post_link', 'rtwiki_edit_post_link_filter');
