@@ -59,7 +59,8 @@ function create_wiki() {
                 'not_found' => __('No ' . $label . ' found', 'rtCamp'),
                 'not_found_in_trash' => __('No ' . $label . ' found in Trash', 'rtCamp'),
                 'all_items' => __('All ' . $label, 'rtCamp'),
-                'parent' => __('Parent ' . $label, 'rtCamp')
+                'parent' => __('Parent ' . $label, 'rtCamp'),
+                'menu_name' => __( $label, 'rtCamp')
             );
             $args = array(
                 'labels' => $labels,
