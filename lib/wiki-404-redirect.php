@@ -16,14 +16,14 @@ function rtwiki_get_page_id($name, $post_type = 'post') {
     return $page_id;
 }
 
-add_action('template_redirect', 'redirect_404');
+//add_action('template_redirect', 'redirect_404');
 
 /**
  * Redirect to edit page when page not found in wiki with parent set 
  * */
 function redirect_404() {
     $supported_posts = rtwiki_get_supported_attribute();
-
+    $url = NULL;
     if (is_404() && is_array($supported_posts) && in_array(get_query_var('post_type'), $supported_posts)) {
         $userId = get_current_user_id();
         if ($userId == 0) {
@@ -49,7 +49,7 @@ function redirect_404() {
                 }
             }
             $url = filter_var($url, FILTER_SANITIZE_URL);
-            wp_redirect($url);
         }
     }
+    return $url;
 }
