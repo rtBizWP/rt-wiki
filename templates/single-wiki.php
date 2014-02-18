@@ -33,12 +33,6 @@ $content_class = apply_filters('rtwiki_content_class', 'large-8 small-12 columns
     </div><!-- #content -->
 </div><!-- #primary -->
 <?php
-//if (comments_open() || get_comments_number()) {
-    
-//}
-?>
-
-<?php
 $supported_posts = rtwiki_get_supported_attribute();
 $post_type = get_post_type();
 if (in_array($post_type, $supported_posts)) {
