@@ -26,11 +26,17 @@ $content_class = apply_filters('rtwiki_content_class', 'large-8 small-12 columns
                     <?php the_content(); ?>
                 </div>
             </article>
-        <?php } ?>
+        <?php } 
+        comments_template();
+        ?>
 
     </div><!-- #content -->
 </div><!-- #primary -->
-
+<?php
+//if (comments_open() || get_comments_number()) {
+    
+//}
+?>
 
 <?php
 $supported_posts = rtwiki_get_supported_attribute();
@@ -39,7 +45,7 @@ if (in_array($post_type, $supported_posts)) {
     ?>
     <div id="secondary" class="sidebar-container" role="complementary">
         <div class="widget-area">
-            <?php dynamic_sidebar('rt-wiki-sidebar'); ?>
+    <?php dynamic_sidebar('rt-wiki-sidebar'); ?>
         </div> 
     </div> 
     <?php
