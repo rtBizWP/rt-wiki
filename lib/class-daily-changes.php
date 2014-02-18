@@ -7,7 +7,7 @@
  */
 //if (defined('WP_CLI') && WP_CLI) {
 
-class daily_changes extends WP_CLI_COMMAND {
+class daily_changes{
 
     /**
      * Send mail On post Update having body as diff of content for daily update 
