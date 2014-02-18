@@ -1,13 +1,12 @@
 <?php
 
-/**
+/** 
  * find diffrent of perticuler post 
- *
- * @param 
- *      int $post_id 
- *      Array $newLead : new term id of post 
- *      Array $oldLead : new term id post
- *      string $tax : keyvalue of both term[$newLead & $oldLead]
+ * 
+ * @param type $post_id
+ * @param array $newLead : new term id of post 
+ * @param type $oldLead : old term id post
+ * @param type $tax : keyvalue of both term[$newLead & $oldLead]
  * @return string
  */
 function contacts_diff_on_lead($post_id, $newLead, $oldLead, $tax) {

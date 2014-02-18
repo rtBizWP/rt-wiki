@@ -20,32 +20,35 @@ if (!defined('ABSPATH'))
 if (!class_exists('RtWikiAdmin')) {
 
     class RtWikiAdmin {
-        
-        /*
-         * constructor 
-         */
 
+        /**
+         * construct
+         */
         public function __construct() {
             $this->init_attributes();
             add_action('admin_menu', array($this, 'register_pages'));
             $this->register_taxonomies();
         }
 
-        /*
+        /**
          * init a globle variable 
+         * 
+         * @global RtWikiAttributeTaxonomyModel $rtWikiAttributesModel
+         * @global RtWikiAttributes $rtWikiAttributes
+         * @global RtWikiSubscribeModel $rtWikiSubscribe
          */
-
         function init_attributes() {
-            global $rtWikiAttributesModel, $rtWikiAttributes,$rtWikiSubscribe;
+            global $rtWikiAttributesModel, $rtWikiAttributes, $rtWikiSubscribe;
             $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
-            $rtWikiSubscribe=new RtWikiSubscribeModel();
+            $rtWikiSubscribe = new RtWikiSubscribeModel();
             $rtWikiAttributes = new RtWikiAttributes();
         }
 
-        /*
+        /**
          * add attributes page link in menu bar
+         * 
+         * @global RtWikiAttributes $rtWikiAttributes
          */
-
         function register_pages() {
             global $rtWikiAttributes;
             $attributes = rtwiki_get_supported_attribute();
@@ -60,10 +63,12 @@ if (!class_exists('RtWikiAdmin')) {
             }
         }
 
-        /*
+        /**
          * create a texonomies
+         * 
+         * @global RtWikiAttributeTaxonomyModel $rtWikiAttributesModel
+         * @global RtWikiAttributes $rtWikiAttributes
          */
-
         function register_taxonomies() {
             global $rtWikiAttributesModel, $rtWikiAttributes;
             $tax_attributes = rtwiki_get_supported_attribute();

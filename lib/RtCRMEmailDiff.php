@@ -61,13 +61,12 @@ if (!function_exists('rtcrm_text_diff')) {
 
     /**
      * Wp text diffrent
-     *
-     * @param 
-     *      string $left_title : title of old post
-     *      string $right_title : title of updated post
-     *      string $left_content : content of old post
-     *      string $right_content : content of updated post
-     *             $args : others arguments 
+     * 
+     * @param type $left_title : title of old post
+     * @param type $right_title : title of updated post
+     * @param type $left_content : content of old post
+     * @param type $right_content : content of updated post
+     * @param type $args : others arguments
      * @return string
      */
     function rtcrm_text_diff($left_title, $right_title, $left_content, $right_content, $args = null) {
@@ -106,13 +105,13 @@ if (!function_exists('rtcrm_text_diff')) {
         return $r;
     }
 
+   
     /**
      * Wp text diffrent
-     *
-     * @param 
-     *      string $left_string : content of old post
-     *      string $right_string : content of updated post
-     *             $args : others arguments 
+     * 
+     * @param type $left_string : content of old post
+     * @param type $right_string : content of updated post
+     * @param type $args : others arguments
      * @return string
      */
     function rtcrm_text_diff_taxonomy($left_string, $right_string, $args = null) {

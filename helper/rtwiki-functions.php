@@ -8,6 +8,12 @@
  * @author udit
  */
 
+/**
+ * sanitize a taxonomy name
+ * 
+ * @param type $taxonomy
+ * @return type
+ */
 function rtwiki_sanitize_taxonomy_name( $taxonomy ) {
 	$taxonomy = strtolower( stripslashes( strip_tags( $taxonomy ) ) );
 	$taxonomy = preg_replace( '/&.+?;/', '', $taxonomy ); // Kill entities
@@ -17,10 +23,21 @@ function rtwiki_sanitize_taxonomy_name( $taxonomy ) {
 	return $taxonomy;
 }
 
+/**
+ * sanitize a taxonomy name
+ * 
+ * @param type $name
+ * @return type
+ */
 function rtwiki_attribute_taxonomy_name( $name ) {
 	return  rtwiki_sanitize_taxonomy_name( $name );
 }
 
+/**
+ * get supported attributes of rtwiki
+ * 
+ * @return type
+ */
 function rtwiki_get_supported_attribute() {
     $attributes = array();
     $rtwiki_settings = '';

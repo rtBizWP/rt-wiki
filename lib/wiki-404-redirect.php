@@ -1,26 +1,24 @@
 <?php
 
 /**
- * Check for the page in wiki CPT. If not found(404), it would redirect to edit post page 
- * with title and parent properly set.
+ * Check for the page in wiki CPT. If not found(404), it would redirect to edit post page
  * 
  * @global type $wpdb
- * @param 
- *      String $name
- *      String 
+ * @param type $name : Post Name
+ * @param type $post_type
  * @return type
- * */
+ */
 function rtwiki_get_page_id($name, $post_type = 'post') {
     global $wpdb;
     $page_id = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE ( post_name = '" . $name . "' or post_title = '" . $name . "' ) and post_status = 'publish' and post_type='" . $post_type . "'");
     return $page_id;
 }
 
-//add_action('template_redirect', 'redirect_404');
-
 /**
  * Redirect to edit page when page not found in wiki with parent set 
- * */
+ * 
+ * @return URl
+ */
 function redirect_404() {
     $supported_posts = rtwiki_get_supported_attribute();
     $url = NULL;

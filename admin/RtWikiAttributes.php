@@ -19,19 +19,17 @@ if (!defined('ABSPATH'))
 if (!class_exists('RtWikiAttributes')) {
 
     class RtWikiAttributes {
-        
-        /*
+
+        /**
          * constructor 
          */
-
         public function __construct() {
             add_action('admin_init', array($this, 'save_attribute'), 1);
         }
 
-        /*
+        /**
          * show admin interface [rtwiki attributes]
          */
-
         function attributes_page() {
             // Show admin interface
             if (!empty($_GET['edit']))
@@ -40,10 +38,9 @@ if (!class_exists('RtWikiAttributes')) {
                 $this->rtwiki_add_attribute();
         }
 
-        /*
+        /**
          * perform action on attributes && hook-function for admin_init
          */
-
         function save_attribute() {
             $action_completed = $this->perform_action();
             // If an attribute was added, edited or deleted: clear cache and redirect
@@ -52,10 +49,13 @@ if (!class_exists('RtWikiAttributes')) {
             }
         }
 
-        /*
+        /**
          * register a Attributes[taxonomy] 
+         * 
+         * @global type $rtWikiAttributesModel
+         * @param type $post_type
+         * @param type $attr_id
          */
-
         function register_taxonomy($post_type, $attr_id) {
             global $rtWikiAttributesModel;
             $tax = $rtWikiAttributesModel->get_attribute($attr_id);
@@ -86,16 +86,19 @@ if (!class_exists('RtWikiAttributes')) {
                     'show_in_nav_menus' => $show_in_nav_menus,
                     'query_var' => true,
                     'rewrite' => array('slug' => $post_type . '/' . $name),
-                    'with_front' => true
+                    'with_front' => true,
                 );
                 register_taxonomy($name, apply_filters('rtwiki_taxonom  y_objects_' . $name, $post_type), apply_filters('rtwiki_taxonomy_args_' . $name, $args));
             }
         }
 
-        /*
-         * perform action [Add | Update | Delete ] on Attributes[taxonomy] 
+        /**
+         * perform action [Add | Update | Delete ] on Attributes[taxonomy]
+         * 
+         * @global type $wpdb
+         * @global type $rtWikiAttributesModel
+         * @return boolean
          */
-
         function perform_action() {
             global $wpdb, $rtWikiAttributesModel;
             $action_completed = false;
@@ -111,7 +114,6 @@ if (!class_exists('RtWikiAttributes')) {
 
             // Add or edit an attribute
             if ('add' === $action || 'edit' === $action) {
-
                 if ('edit' === $action) {
                     $attribute_id = absint($_GET['edit']);
                 }
@@ -176,9 +178,8 @@ if (!class_exists('RtWikiAttributes')) {
                             'attribute_orderby' => $attribute_orderby,
                             'attribute_post_type' => $attribute_post_type
                         );
-
                         $rtWikiAttributesModel->add_attribute($attribute);
-                        
+
                         do_action('rtwiki_attribute_added', $wpdb->insert_id, $attribute);
 
                         $action_completed = true;
@@ -258,10 +259,12 @@ if (!class_exists('RtWikiAttributes')) {
             return $action_completed;
         }
 
-        /*
-         * Shows the interface for editing new attributes
-         */
-
+       /**
+        * Shows the interface for editing new attributes
+        * 
+        * @global type $wpdb
+        * @global type $rtWikiAttributesModel
+        */
         function rtwiki_edit_attribute() {
             global $wpdb, $rtWikiAttributesModel;
 
@@ -313,16 +316,17 @@ if (!class_exists('RtWikiAttributes')) {
                     </table>
                     <input type='hidden' name='p_type' value='<?php echo isset($_GET['p_type']) ? $_GET['p_type'] : ( ( isset($_GET['post_type']) ? $_GET['post_type'] : '' ) ); ?>' />
                     <p class="submit"><input type="submit" name="save_attribute" id="submit" class="button-primary" value="<?php _e('Update'); ?>"></p>
-            <?php //nonce   ?>
+                    <?php //nonce    ?>
                 </form>
             </div>
             <?php
         }
 
-        /*
-         * Shows the interface for Adding new attributes
-         */
-
+       /**
+        * Shows the interface for Adding new attributes
+        * 
+        * @global type $rtWikiAttributesModel
+        */
         function rtwiki_add_attribute() {
             global $rtWikiAttributesModel;
             ?>
@@ -342,12 +346,12 @@ if (!class_exists('RtWikiAttributes')) {
                                     </tr>
                                 </thead>
                                 <tbody>
-            <?php
-            $post_type = ( isset($_GET['p_type']) ? $_GET['p_type'] : ( ( isset($_GET['post_type']) ? $_GET['post_type'] : 'post' ) ) );
-            $attribute_taxonomies = $rtWikiAttributesModel->get_all_attributes($post_type);
-            if ($attribute_taxonomies) :
-                foreach ($attribute_taxonomies as $tax) :
-                    ?><tr>
+                                    <?php
+                                    $post_type = ( isset($_GET['p_type']) ? $_GET['p_type'] : ( ( isset($_GET['post_type']) ? $_GET['post_type'] : 'post' ) ) );
+                                    $attribute_taxonomies = $rtWikiAttributesModel->get_all_attributes($post_type);
+                                    if ($attribute_taxonomies) :
+                                        foreach ($attribute_taxonomies as $tax) :
+                                            ?><tr>
 
                                                 <td><a href="edit-tags.php?taxonomy=<?php echo esc_html(rtwiki_attribute_taxonomy_name($tax->attribute_name)); ?>&amp;post_type=<?php echo $post_type; ?>"><?php echo esc_html($tax->attribute_label); ?></a>
 
@@ -385,11 +389,11 @@ if (!class_exists('RtWikiAttributes')) {
                                                     ?></td>
                                                 <td><a href="edit-tags.php?taxonomy=<?php echo rtwiki_attribute_taxonomy_name($tax->attribute_name); ?>&amp;post_type=wiki" class="button alignright"><?php _e('Configure&nbsp;terms', 'woocommerce'); ?></a></td>
                                             </tr><?php
-                    endforeach;
-                else :
-                    ?><tr><td colspan="6"><?php _e('No attributes currently exist.') ?></td></tr><?php
-                endif;
-                ?>
+                                        endforeach;
+                                    else :
+                                        ?><tr><td colspan="6"><?php _e('No attributes currently exist.') ?></td></tr><?php
+                                    endif;
+                                    ?>
                                 </tbody>
                             </table>
                         </div>
@@ -423,7 +427,7 @@ if (!class_exists('RtWikiAttributes')) {
                                     </div>
                                     <input type='hidden' name='p_type' value='<?php echo $post_type; ?>' />
                                     <p class="submit"><input type="submit" name="add_new_attribute" id="submit" class="button" value="<?php _e('Add Attribute'); ?>"></p>
-            <?php //nonce    ?>
+                                        <?php //nonce     ?>
                                 </form>
                             </div>
                         </div>
