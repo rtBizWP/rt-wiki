@@ -46,9 +46,8 @@ function rtwiki_enqueue_styles_and_scripts() {
     wp_enqueue_script('rtwiki-custom-script');
     wp_register_script('rtwiki-404-script', plugins_url('/js/rtwiki-404-script.js', __FILE__), array('jquery'));
     if (is_404()) {
-        wp_localize_script('rtwiki-404-script', 'redirectURL', redirect_404());
+        wp_localize_script('rtwiki-404-script', 'redirectURL', "<a href='" . redirect_404() . "'>" . __('Click here. ','rtCamp') . "</a>" .  __('If you want to add this post','rtCamp'));
         wp_enqueue_script('rtwiki-404-script');
-        
     }
 
     wp_register_style('rtwiki-client-styles', plugins_url('/css/rtwiki-client-styles.css', __FILE__));
