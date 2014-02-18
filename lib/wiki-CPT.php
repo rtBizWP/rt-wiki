@@ -9,8 +9,6 @@ require_once dirname(__FILE__) . '/wiki-post-filtering.php';
 /**
  * Creates wiki named CPT.
  */
-add_action('init', 'create_wiki');
-
 function create_wiki() {
 
     $rtwiki_settings = '';
@@ -46,7 +44,7 @@ function create_wiki() {
               'delete_published_posts' => 'delete_published_posts'
               ); */
             $labels = array(
-                'name' => __($slug, 'post type general name', 'rtCamp'),
+                'name' => __($label, 'post type general name', 'rtCamp'),
                 'singular_name' => __($label, 'post type singular name', 'rtCamp'),
                 'add_new' => __('Add New', $label, 'rtCamp'),
                 'add_new_item' => __('Add New ' . $label, 'rtCamp'),
@@ -60,7 +58,7 @@ function create_wiki() {
                 'not_found_in_trash' => __('No ' . $label . ' found in Trash', 'rtCamp'),
                 'all_items' => __('All ' . $label, 'rtCamp'),
                 'parent' => __('Parent ' . $label, 'rtCamp'),
-                'menu_name' => __( $label, 'rtCamp')
+                'menu_name' => __($label, 'rtCamp')
             );
             $args = array(
                 'labels' => $labels,
@@ -75,7 +73,7 @@ function create_wiki() {
                 'has_archive' => true,
                 'hierarchical' => true,
                 'menu_position' => 10,
-                'supports' => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes', 'excerpt'),
+                'supports' => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes', 'excerpt', 'comments'),
                 '_builtin' => false,
                 '_edit_link' => 'post.php?post=%d',
                 'menu_icon' => true,
@@ -89,6 +87,11 @@ function create_wiki() {
     }
 }
 
+add_action('init', 'create_wiki');
+
+/**
+ * Add capabilities to diffrent type user 
+ */
 function add_wiki_caps() {
     $roles = array(get_role('administrator'), get_role('author'), get_role('editor'), get_role('contributor'));
     foreach ($roles as $role) {
@@ -106,12 +109,9 @@ function add_wiki_caps() {
 
 add_action('init', 'add_wiki_caps');
 
-/*
+/**
  * Add User group and permission type metabox  
  */
-
-add_action('admin_init', 'wiki_permission_metabox');
-
 function wiki_permission_metabox() {
     $supported_posts = rtwiki_get_supported_attribute();
     if (is_array($supported_posts) && !empty($supported_posts)) {
@@ -120,10 +120,13 @@ function wiki_permission_metabox() {
     }
 }
 
-/*
- *  Permission And Group MetaBox for wiki CPT
- */
+add_action('admin_init', 'wiki_permission_metabox');
 
+/**
+ * Permission And Group MetaBox for wiki CPT
+ * 
+ * @param type $post
+ */
 function display_wiki_post_access_metabox($post) {
     wp_nonce_field(plugin_basename(__FILE__), $post->post_type . '_noncename');
 
@@ -180,8 +183,6 @@ function display_wiki_post_access_metabox($post) {
                                " class="case_w rtwiki_w" id="w" name="access_rights[<?php echo $groupName ?>]" <?php if (isset($access_rights[$groupName]['w']) && ( $access_rights[$groupName]['w'] == 1 )) { ?>checked="checked"<?php } ?> value="w" /></td>
                 </tr>
             <?php } ?> 
-
-
         </tbody>    
     </table>
 
@@ -203,14 +204,14 @@ function display_wiki_post_access_metabox($post) {
     <?php
 }
 
-/*
- *
+/**
  * Save user and its permission as meta value
- *  
+ * 
+ * @param type $post 
  */
-
 function rtp_wiki_permission_save($post) {
     global $wpdb;
+
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
         return;
 
@@ -242,46 +243,15 @@ function rtp_wiki_permission_save($post) {
                 $access_rights['public'] = 0;
 
             update_post_meta($post, 'access_rights', $access_rights);
-
-            $userId = get_current_user_id();
-            $access_rights = get_post_meta($post, 'access_rights', true);
-
-            if (isset($access_rights['all']['na']) && ( $access_rights['all']['na'] == 1 )) {
-                unSubscriptionAll($post);
-            } else {
-                $terms = get_terms('user-group', array('hide_empty' => true));
-                foreach ($terms as $term) {
-                    if (isset($access_rights[$term->name]) && ( $access_rights[$term->name]['na'] == 1 )) {
-                        $groupusers = $wpdb->get_col($wpdb->prepare("SELECT term_rel.object_id FROM $wpdb->term_relationships term_rel,$wpdb->term_taxonomy term_taxo,$wpdb->terms term WHERE term_rel.term_taxonomy_id = term_taxo.term_taxonomy_id and term_taxo.term_id=term.term_id and term.slug='%s'", $term->slug));
-                        var_dump($groupusers);
-                        if ($groupusers) {
-                            foreach ($groupusers as $id) {
-                                unSubscription($post, $id);
-                            }
-                        }
-                    } else if (isset($access_rights[$term->name]) && (( $access_rights[$term->name]['r'] == 1 ) || ($access_rights[$term->name]['w'] == 1))) {
-                        $groupusers = $wpdb->get_col($wpdb->prepare("SELECT term_rel.object_id FROM $wpdb->term_relationships term_rel,$wpdb->term_taxonomy term_taxo,$wpdb->terms term WHERE term_rel.term_taxonomy_id = term_taxo.term_taxonomy_id and term_taxo.term_id=term.term_id and term.slug='%s'", $term->slug));
-                        var_dump($groupusers);
-                        if ($groupusers) {
-                            foreach ($groupusers as $id) {
-                                if (checkParentSubSubscribe($id)) {
-                                    pageSubscription($post, $id,TRUE);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }
 
 add_action('save_post', 'rtp_wiki_permission_save');
 
-/*
+/**
  * Adds Email Address field in User Group Taxonomy
  */
-
 function user_group_taxonomy_add_new_meta_field() {
     ?>
     <div class="form-field">
@@ -294,10 +264,11 @@ function user_group_taxonomy_add_new_meta_field() {
 
 add_action('user-group_add_form_fields', 'user_group_taxonomy_add_new_meta_field', 10, 2);
 
-/*
- *  Edit User-Group
+/**
+ * Edit User-Group
+ *  
+ * @param type $term
  */
-
 function user_group_taxonomy_edit_meta_field($term) {
     $t_id = $term->term_id;
     $term_meta = '';
@@ -318,10 +289,11 @@ function user_group_taxonomy_edit_meta_field($term) {
 
 add_action('user-group_edit_form_fields', 'user_group_taxonomy_edit_meta_field', 10, 2);
 
-/*
- *  Adds New User-Group Term
+/**
+ * Adds New User-Group Term
+ * 
+ * @param type $term_id
  */
-
 function save_taxonomy_custom_meta($term_id) {
 
     if (isset($_POST['user-group'])) {

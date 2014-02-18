@@ -25,8 +25,8 @@ if (!class_exists('RtWikiSubscribeModel')) {
             parent::__construct('rtwiki_subscribe');
         }
 
-        function is_subscribe($postid, $userid) {
-            $subscribers = $this->get_subscriber($postid,$userid);
+        function isPostSubscibeByUser($postid, $userid) {
+            $subscribers = $this->get_subscriber($postid, $userid);
             foreach ($subscribers as $subscriber) {
                 if ($userid == $subscriber->attribute_userid) {
                     return true;
@@ -34,32 +34,19 @@ if (!class_exists('RtWikiSubscribeModel')) {
             }
             return false;
         }
-        
-        function is_subpage_subscribe($postid,$userid) {
-            $subscribers = $this->get_subscriber($postid,$userid);
+
+        function isSubPostSubscibeByUser($postid, $userid) {
+            $subscribers = $this->get_subscriber($postid, $userid);
             foreach ($subscribers as $subscriber) {
-                if ($subscriber->attribute_sub_subscribe) {
+                if ($subscriber->attribute_sub_subscribe==1) {
                     return true;
                 }
             }
             return false;
         }
 
-        function get_all_subscribers($postid) {
+        function get_subscriber($postid, $userid) {
             $args = array();
-            $return = array();
-            if (!empty($postid)) {
-                $args['attribute_postid'] = array(
-                    'compare' => '=',
-                    'value' => explode(',', $postid)
-                );
-                $return = parent::get($args);
-            }
-            return $return;
-        }
-        
-        function get_subscriber($postid,$userid) {
-             $args = array();
             $return = array();
             if (!empty($postid)) {
                 $args['attribute_postid'] = array(
@@ -75,11 +62,35 @@ if (!class_exists('RtWikiSubscribeModel')) {
             return $return;
         }
 
-        function get_subscribers_by_groups($postid, $groups) {
+        function getAllSubscribersList($postid) {
             $args = array();
             $return = array();
-            if (!empty($postid) && !empty($groups)) {
-                $return = parent::get($args);
+            if (!empty($postid)) {
+                $args['attribute_postid'] = array(
+                    'compare' => 'in',
+                    'value' => explode(',', $postid)
+                );
+                $subscribers = parent::get($args);
+                foreach ($subscribers as $subscriber) {
+                    $return[] = $subscriber->attribute_userid;
+                }
+            }
+            return $return;
+        }
+
+        function getAllParentSubSubscribers($postid) {
+            $args = array();
+            $return = array();
+            if (!empty($postid)) {
+                $args['attribute_postid'] = array(
+                    'compare' => 'in',
+                    'value' => explode(',', $postid)
+                );
+                $subscribers = parent::get($args);
+                foreach ($subscribers as $subscriber) {
+                    if ($subscriber->attribute_sub_subscribe == 1)
+                        $return[] = $subscriber->attribute_userid;
+                }
             }
             return $return;
         }

@@ -53,10 +53,8 @@ class rt_wiki_subPages extends WP_Widget {
 
         if ($isParent) {
             echo $args['before_widget'];
-            if (rt_wiki_subpages_check($post->ID, true, $post->post_type) == true) {
-                echo $args['before_title'] . '<h2>Sub Pages</h2>' . $args['after_title'];
-                getSubPages($post->ID, 0, $post->post_type);
-            }
+            echo $args['before_title'] . '<h2>Sub Pages</h2>' . $args['after_title'];
+            getSubPages($post->ID, 0, $post->post_type);
             echo $args['after_widget'];
         }
     }
@@ -121,44 +119,44 @@ class rt_wiki_page_subscribe extends WP_Widget {
         $subPageCheck = '';
 
         $parentStatus = false;
-        echo $args['before_widget'];
-        echo $args['before_title'] . '<h2>Subscribe For Updates</h2>' . $args['after_title'];
+        if (getPermission($post->ID, get_current_user_id())) {
+            echo $args['before_widget'];
+            echo $args['before_title'] . '<h2>Subscribe For Updates</h2>' . $args['after_title'];
+            if (isPostSubscribeByCurUser(get_current_user_id()) == true) {
+                $singleCheck = "checked";
+            } else {
+                $singleCheck = '';
+            }
+            $isParent = ifSubPages($post->ID, $post->post_type);
 
-        if (checkSubscribe() == true) {
-            $singleCheck = "checked";
-        } else {
-            $singleCheck = '';
-        }
-
-        $isParent = ifSubPages($post->ID, $post->post_type);
-
-        if ($isParent == true) {
-            if (rt_wiki_subpages_check($post->ID, true, $post->post_type) == true) {
-                $parentStatus = true;
-                // Check if user subscribe for sub page
-                if(checkSubPageSubscribe()==true){
-                    $subpageStatus = 1;
-                }else{
-                    $subpageStatus = 0;
+            if ($isParent == true) {
+                if (rt_wiki_subpages_check($post->ID, true, $post->post_type) == true) {
+                    $parentStatus = true;
+                    // Check if user subscribe for sub page
+                    if (isSubPostSubscribe($post, get_current_user_id()) == true) {
+                        $subpageStatus = 1;
+                    } else {
+                        $subpageStatus = 0;
+                    }
                 }
             }
-        }
-       
-        if ($subpageStatus == 1) {
-            $subPageCheck = "checked";
-        } else {
-            $subPageCheck = '';
-        }
-        echo '<form id="user-subscribe" method="post" action="?PageSubscribe=1">
+
+            if ($subpageStatus == 1) {
+                $subPageCheck = "checked";
+            } else {
+                $subPageCheck = '';
+            }
+            echo '<form id="user-subscribe" method="post" action="?PageSubscribe=1">
                 <input type="checkbox" name="single_subscribe" value="current"  ' . $singleCheck . ' >Subscribe to this page <br/>';
-        if ($parentStatus == true) {
-            echo '<input type="checkbox" name="subPage_subscribe" value="subpage"  ' . $subPageCheck . ' >Subscribe to this page and  Sub Pages <br />';
-        }
-        echo '<input type="hidden" name=post-type value=' . $post->post_type . ' /><input type="submit" class="button" name=post-update-subscribe" value="Submit" >
+            if ($parentStatus == true) {
+                echo '<input type="checkbox" name="subPage_subscribe" value="subpage"  ' . $subPageCheck . ' >Subscribe to this page and  Sub Pages <br />';
+            }
+            echo '<input type="hidden" name=post-type value=' . $post->post_type . ' /><input type="submit" class="button" name=post-update-subscribe" value="Submit" >
                 <input type="hidden" name="update-postId"  value=' . $post->ID . '>
             </form>';
 
-        echo $args['after_widget'];
+            echo $args['after_widget'];
+        }
     }
 
     function update($new_instance, $old_instance) {
@@ -172,6 +170,9 @@ class rt_wiki_page_subscribe extends WP_Widget {
 
 }
 
+/**
+ * register rtwiki widgets
+ */
 function rt_wiki_register_widgets() {
     register_widget('rt_wiki_contributers');
     register_widget('rt_wiki_subPages');
@@ -181,10 +182,9 @@ function rt_wiki_register_widgets() {
 
 add_action('widgets_init', 'rt_wiki_register_widgets');
 
-/*
+/**
  * Function to add wiki activity to the dashboard.
  */
-
 function rt_list_wikis() {
     $args = array(
         'post_type' => 'revision',
@@ -262,7 +262,6 @@ function rt_list_wikis() {
 
 /**
  * Add a widget to the dashboard.
- *
  * This function is hooked into the 'wp_dashboard_setup' action below.
  */
 function wiki_add_dashboard_widgets() {
@@ -276,10 +275,13 @@ function wiki_add_dashboard_widgets() {
 
 add_action('wp_dashboard_setup', 'wiki_add_dashboard_widgets');
 
-/*
+/**
  * Function to check whether the post type is registered in rtWiki plugin setting.
+ * 
+ * @global type $post
+ * @param type $post_id
+ * @return boolean
  */
-
 function is_wiki_post_type($post_id = 0) {
     global $post;
     if (is_multisite()) {

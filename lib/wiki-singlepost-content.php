@@ -7,10 +7,12 @@
  * 
  */
 
-/*
+/**
  * Check if contributers exists or not 
+ * 
+ * @param type $postid
+ * @return boolean
  */
-
 function ifWikiContributers($postid) {
     $supported_posts = rtwiki_get_supported_attribute();
     if (!empty($supported_posts) && in_array(get_query_var('post_type'), $supported_posts)) {
@@ -22,10 +24,11 @@ function ifWikiContributers($postid) {
     }
 }
 
-/*
+/**
  * Get post Contributers list via revisions 
+ * 
+ * @param type $postid
  */
-
 function getContributers($postid) {
     $supported_posts = rtwiki_get_supported_attribute();
     if (!empty($supported_posts) && in_array(get_query_var('post_type'), $supported_posts)) {
@@ -44,39 +47,35 @@ function getContributers($postid) {
     }
 }
 
-/*
+/**
  * Get Wiki post SubPages
+ * 
+ * @param type $parentId
+ * @param type $lvl
+ * @param type $post_type
  */
-
 function getSubPages($parentId, $lvl, $post_type = 'post') {
     $args = array('parent' => $parentId, 'post_type' => $post_type);
     $pages = get_pages($args);
     $supported_posts = rtwiki_get_supported_attribute();
-
     if ($pages) {
         $lvl++;
         echo '<ul>';
         foreach ($pages as $page) {
-            if (!empty($supported_posts) && in_array($post_type, $supported_posts)) {
-                $permission = getPermission($page->ID);
-            } else {
-                $permission = true;
-            }
-
-            if ($permission == true) {
-                echo '<li><a href=' . get_permalink($page->ID) . '>' . $page->post_title . "</a></li>";
-            }
-
+            echo '<li><a href=' . get_permalink($page->ID) . '>' . $page->post_title . "</a></li>";
             getSubPages($page->ID, $lvl, $post_type);
         }
         echo '</ul>';
     }
 }
 
-/*
- * Get wiki post taxonomies and its terms list 
+/**
+ * Get wiki post taxonomies and its terms list
+ * 
+ * @global RtWikiAttributeTaxonomyModel $rtWikiAttributesModel
+ * @param type $postid
+ * @param type $display
  */
-
 function wiki_custom_taxonomies($postid, $display = true) {
 
     $post = get_post($postid);
@@ -88,10 +87,10 @@ function wiki_custom_taxonomies($postid, $display = true) {
     if ($display) {
         $out = "";
         foreach ($attributes as $attr) {
-            if($out!=""){
-                $ulstyle="style='display: none;'";
-            }else{
-                $ulstyle="";
+            if ($out != "") {
+                $ulstyle = "style='display: none;'";
+            } else {
+                $ulstyle = "";
             }
             $taxonomy = $attr->attribute_name;
             $out .= "<div class='wikidropdown'><h3><a href='#' >" . $attr->attribute_name . "</a></h3>";
@@ -114,14 +113,13 @@ function wiki_custom_taxonomies($postid, $display = true) {
         }
         //$out .= "</ul>";
         echo $out;
-    } 
+    }
 }
 
-/*
- * Get wiki post taxonomies and its terms list 
+/**
+ * Get wiki post taxonomies and its terms list [category & tags]
  */
-
-function wiki_default_taxonomies($postid, $display = true) {
+/*function wiki_default_taxonomies($postid, $display = true) {
     if (is_single()) {
         $categories = get_the_category($postid);
     } else {
@@ -167,13 +165,12 @@ function wiki_default_taxonomies($postid, $display = true) {
         $out .= "</div>";
         echo $out;
     }
-}
+}*/
 
-/*
+/**
  * gets Top level Parent 
  */
-
-function getTopParent() {
+/*function getTopParent() {
     global $post;
 
     if ($post->post_parent) {
@@ -184,12 +181,12 @@ function getTopParent() {
         $parent = $post->ID;
     }
     echo $parent;
-}
+}*/
 
 /**
  * Custom Shortcode to show post content on single page according to the permission
  */
-function rtwiki_single_shortcode() {
+/*function rtwiki_single_shortcode() {
     global $post;
     $supported_posts = rtwiki_get_supported_attribute();
     if (!empty($supported_posts) && in_array(get_query_var('post_type'), $supported_posts)) {
@@ -197,9 +194,9 @@ function rtwiki_single_shortcode() {
     }
 }
 
-add_shortcode("rtWikiSinglePost", "rtwiki_single_shortcode");
+add_shortcode("rtWikiSinglePost", "rtwiki_single_shortcode");*/
 
-function subpages_non_wiki($post_type) {
+/*function subpages_non_wiki($post_type) {
 
 
     $subpageList = get_option('rtWiki_subpages_options');
@@ -211,4 +208,4 @@ function subpages_non_wiki($post_type) {
     }
 }
 
-add_shortcode("rtwikiSubPages", "subpages_non_wiki");
+add_shortcode("rtwikiSubPages", "subpages_non_wiki");*/

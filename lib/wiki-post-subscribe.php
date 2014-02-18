@@ -1,38 +1,40 @@
 <?php
 
 /**
- * Checks if subscriber ID is in the subscribers list or not 
+ * Check if current user subcribe for globle post
  * 
  * @global type $post
+ * @global type $rtWikiSubscribe
+ * @param type $userid
  * @return boolean
  */
-function checkSubscribe() {
+function isPostSubscribeByCurUser($userid) {
     global $post, $rtWikiSubscribe;
-    $userId = get_current_user_id();
-    return $rtWikiSubscribe->is_subscribe($post->ID, $userId);
+    if ($rtWikiSubscribe->isPostSubscibeByUser($post->ID, $userid)) {
+        return true;
+    } else if (isset($post->post_parent)) {
+        return isSubPostSubscribe(get_post($post->post_parent), $userid);
+    }
 }
 
 /**
- * Checks if parent post subscribe for subpage for perticular user 
+ * Check if any parent post of given post subcribe by user
  * 
- * @global type $post
+ * @global type $rtWikiSubscribe
+ * @param type $post
+ * @param type $userid
  * @return boolean
  */
-function checkParentSubSubscribe($userId) {
-    global $post, $rtWikiSubscribe;
-    return $rtWikiSubscribe->is_subpage_subscribe($post->post_parent, $userId);
-}
-
-/**
- * Checks if subscriber ID is in the sub page subscribers list or not 
- * 
- * @global type $post
- * @return boolean
- */
-function checkSubPageSubscribe() {
-    global $post, $rtWikiSubscribe;
-    $userId = get_current_user_id();
-    return $rtWikiSubscribe->is_subpage_subscribe($post->ID, $userId);
+function isSubPostSubscribe($post, $userid) {
+    global $rtWikiSubscribe;
+    if ($rtWikiSubscribe->isSubPostSubscibeByUser($post->ID, $userid)) {
+        return true;
+    }
+    if (isset($post->post_parent) && $post->post_parent != 0) {
+        return isSubPostSubscribe(get_post($post->post_parent), $userid);
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -40,7 +42,7 @@ function checkSubPageSubscribe() {
  * 
  * @global type $pagenow
  */
-function unSubscribe() {
+/*function unSubscribe() {
     global $pagenow;
 
     if (isset($_REQUEST['unSubscribe']) == '1') {
@@ -63,7 +65,7 @@ function unSubscribe() {
     }
 }
 
-add_action('wp', 'unSubscribe');
+add_action('wp', 'unSubscribe');*/
 
 /**
  * Update subscriber list meta value for the particular post ID. 
@@ -89,36 +91,26 @@ function update() {
             if (isset($_POST['single_subscribe']))
                 $singleStatus = $_POST['single_subscribe'];
 
-            //Current user id 
-            $userId = get_current_user_id();
-
             //Post type 
             $post_type = 'post';
             if (isset($_POST['post-type']))
                 $post_type = $_POST['post-type'];
 
-            //subscribe single post
+            //subscribe or unsubscribe single post
             if (isset($_POST['single_subscribe'])) {
                 if ($_POST['single_subscribe'] == 'current') {
                     if (isset($_POST['subPage_subscribe']) && $_POST['subPage_subscribe'] == 'subpage'):
-                        pageSubscription($postID, $userId, TRUE);
+                        subscribePostByCurUser($postID, TRUE);
                     else:
-                        pageSubscription($postID, $userId, FALSE);
+                        subscribePostByCurUser($postID, FALSE);
                     endif;
                 }
             } else if ($_POST['single_subscribe'] == NULL) {
-                unSubscription($postID, $userId);
-            }
-
-            //subscribe post with subpage 
-            if (isset($_POST['subPage_subscribe'])) {
-                if ($_POST['subPage_subscribe'] == 'subpage') {
-                    pageSubscription($postID, $userId, TRUE);
-                    subcribeSubPages($postID, 0, $userId, $post_type);
-                }
-            } else if ($_POST['subPage_subscribe'] == NULL) {
-                unSubscription($postID, $userId);
-                unSubcribeSubPages($postID, 0, $userId, $post_type);
+                if (isset($_POST['subPage_subscribe']) && $_POST['subPage_subscribe'] == 'subpage'):
+                    unsubcribeSubPostByCurUser($postID, TRUE);
+                else:
+                    unsubscribePostByCurUser($postID);
+                endif;
             }
         }
     }
@@ -127,66 +119,78 @@ function update() {
 add_action('wp', 'update');
 
 /**
- * Subscription funciton for subpages
+ * Function for sunscribe given post for current user
  * 
- * @param
- *      int $parentId
- *      int $lvl : heirarchi level
- *      int $userId
- *      String $post_type : post type of parenrt 
+ * @global type $rtWikiSubscribe
+ * @param type $postid
+ * @param type $is_sub_subscribe : flag if you want to subscribe sub page
  */
-function subcribeSubPages($parentId, $lvl, $userId, $post_type = 'post') {
-
-    $args = array('parent' => $parentId, 'post_type' => $post_type);
-    $pages = get_pages($args);
-    if ($pages) {
-        $lvl++;
-        foreach ($pages as $page) {
-
-            $permission = getPermission($page->ID);
-
-            if ($permission == true) {
-                pageSubscription($page->ID, $userId, TRUE);
-            }
-            subcribeSubPages($page->ID, $lvl, $userId, $post_type);
-        }
+function subscribePostByCurUser($postid, $is_sub_subscribe) {
+    global $rtWikiSubscribe;
+    $userid = get_current_user_id();
+    if (!$rtWikiSubscribe->isPostSubscibeByUser($postid, $userid)) {
+        $subscriber = array(
+            'attribute_postid' => $postid,
+            'attribute_userid' => $userid,
+            'attribute_sub_subscribe' => $is_sub_subscribe
+        );
+        $rtWikiSubscribe->add_subscriber($subscriber);
+    } else {
+        unsubcribeSubPostByCurUser($postid, $is_sub_subscribe);
     }
 }
 
 /**
- * Unsubscription function for subpages
+ * Function to unsubscribe/remove userid from subscriptionsub page list
  * 
- * @param
- *      int $parentId
- *      int $lvl : heirarchi level
- *      int $userId
- *      String $post_type : post type of parenrt 
+ * @global type $rtWikiSubscribe
+ * @param type $postid
+ * @param type $is_sub_subscribe
  */
-function unSubcribeSubPages($parentId, $lvl, $userId, $post_type = 'post') {
+function unsubcribeSubPostByCurUser($postid, $is_sub_subscribe) {
+    global $rtWikiSubscribe;
+    $userid = get_current_user_id();
+    if ($rtWikiSubscribe->isPostSubscibeByUser($postid, $userid)) {
+        $subscriber = array(
+            'attribute_sub_subscribe' => $is_sub_subscribe,
+        );
+        $subscriberWhere = array(
+            'attribute_postid' => $postid,
+            'attribute_userid' => $userid,
+        );
 
-    $args = array('parent' => $parentId, 'post_type' => $post_type);
-    $pages = get_pages($args);
-    if ($pages) {
-        $lvl++;
-        foreach ($pages as $page) {
-
-            $permission = getPermission($page->ID);
-
-            if ($permission == true) {
-                unSubscription($page->ID, $userId);
-            }
-            unSubcribeSubPages($page->ID, $lvl, $userId, $post_type);
-        }
+        $rtWikiSubscribe->update_subscriber($subscriber, $subscriberWhere);
     }
 }
 
 /**
- * Check if pages have any sub pages/child page
+ * Function to unsubscribe/remove userid from subscription list
  * 
- * @param 
- *      int $parentId
- *      String $post_type : post type of parent 
+ * @global type $rtWikiSubscribe
+ * @param type $postid
+ * @param type $userid
+ */
+function unsubscribePostByCurUser($postid, $userid) {
+    global $rtWikiSubscribe;
+
+    if (!isset($userid))
+        $userid = get_current_user_id();
+
+    if ($rtWikiSubscribe->isPostSubscibeByUser($postid, $userid)) {
+
+        $subscriber = array(
+            'attribute_postid' => $postid,
+            'attribute_userid' => $userid
+        );
+        $rtWikiSubscribe->delete_subscriber($subscriber);
+    }
+}
+
+/**
+ * Check if pages have any sub pages/child page [wiki-widgets]
  * 
+ * @param type $parentId
+ * @param type $post_type
  * @return boolean
  */
 function ifSubPages($parentId, $post_type = 'post') {
@@ -201,23 +205,20 @@ function ifSubPages($parentId, $post_type = 'post') {
 }
 
 /**
- * Check permission of sub pages/child page
+ * Check permission of sub pages/child page [wiki-widgets]
  * 
- * @param 
- *      int $parentId
- *      bool $subPage : flag for subpage 
- *      String $post_type : post type of parent 
- * 
+ * @param type $parentId
+ * @param type $subPage : flag for subpage 
+ * @param type $post_type
  * @return boolean
  */
 function rt_wiki_subpages_check($parentId, $subPage, $post_type = 'post') {
     $args = array('parent' => $parentId, 'post_type' => $post_type);
     $subPageFlag = $subPage;
     $pages = get_pages($args);
-
     if ($pages) {
         foreach ($pages as $page) {
-            $permission = getPermission($page->ID);
+            $permission = getPermission($page->ID,get_current_user_id());
             if ($permission == true) {
                 return true;
             } else {
@@ -237,7 +238,7 @@ function rt_wiki_subpages_check($parentId, $subPage, $post_type = 'post') {
  * @param type $post
  * @param type $email
  */
-function post_changes_send_mail($postID, $email, $group, $url = '') {
+/*function post_changes_send_mail($postID, $email, $group, $url = '') {
 
     $revision = wp_get_post_revisions($postID);
     $content = array();
@@ -270,74 +271,23 @@ function post_changes_send_mail($postID, $email, $group, $url = '') {
 
         remove_filter('wp_mail_content_type', 'set_html_content_type');
     }
-}
-
-/**
- * Send mail On post Update having body as diff of content for daily update 
- * 
- * @param 
- *      int  $postID
- *      String $email : Email id of user 
- *      String $tax_diff : body of mail 
- *      String $url : url of post 
- */
-function wiki_page_changes_send_mail($postID, $email, $tax_diff = '', $url = '') {
-
-    $revision = wp_get_post_revisions($postID);
-    $content = array();
-    $title = array();
-
-    foreach ($revision as $revisions) {
-        $content[] = $revisions->post_content;
-        $title[] = $revisions->post_title;
-    }
-
-//    $args = array(
-//        'title' => 'Differences',
-//        'title_left' => $title[1],
-//        'title_right' => $title[0],
-//    );
-
-    if (!empty($content)) {
-        $url = 'Page Link:' . $url . '<br>';
-        $body = rtcrm_text_diff($title[count($title) - 1], $title[0], $content[count($title) - 1], $content[0]);
-        $body.=$tax_diff;
-        $finalBody = $url . '<br>' . $body;
-        add_filter('wp_mail_content_type', 'set_html_content_type');
-
-        $subject = 'Updates for "' . strtoupper(get_the_title($postID)) . '"';
-        // $subject .=':Time: ' . date("F j, Y, g:i a");
-        $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
-
-        wp_mail($email, $subject, $finalBody, $headers);
-
-        remove_filter('wp_mail_content_type', 'set_html_content_type');
-    }
-}
-
-/**
- * get html content type
- * 
- * @return String 
- */
-function set_html_content_type() {
-    return 'text/html';
-}
+}*/
 
 /**
  * Function Called after a Wiki post is Upated 
  * Sends Email to Subscribers of Wiki Posts 
  * 
- * @param type  $post
+ * @global type $rtWikiSubscribe
+ * @param type $post
  */
 function sendMailonPostUpdateWiki($post) {
     global $rtWikiSubscribe;
     $postObject = get_post($post);
     $supported_posts = rtwiki_get_supported_attribute();
-
+    $diff = '';
     if (in_array(get_post_type($post), $supported_posts, true)) {
 
-        if (wp_is_post_revision($postObject->ID)) {
+        /*if (wp_is_post_revision($postObject->ID)) {
             return;
         }
 
@@ -399,17 +349,91 @@ function sendMailonPostUpdateWiki($post) {
                 unset($oldTermId);
                 unset($newTermId);
             }
-        }
-        $subscribersList = $rtWikiSubscribe->get_all_subscribers($postObject->ID);
-
+        }*/
+        $subscribersList = $rtWikiSubscribe->getAllSubscribersList($postObject->ID);
+        $subscribersList = array_unique(array_merge($subscribersList, $rtWikiSubscribe->getAllParentSubSubscribers(getAllParentIDs(get_post($postObject->post_parent)))));
         if (!empty($subscribersList) || $subscribersList != NULL) {
-            foreach ($subscribersList as $subscribers) {
-                $user_info = get_userdata($subscribers->attribute_userid);
-                wiki_page_changes_send_mail($postObject->ID, $user_info->user_email, $diff, get_permalink($postObject->ID));
+            foreach ($subscribersList as $subscriber) {
+                $user_info = get_userdata($subscriber);
+                if (getPermission($postObject->ID, $user_info->ID)) {
+                    wiki_page_changes_send_mail($postObject->ID, $user_info->user_email, $diff, get_permalink($postObject->ID));
+                }
             }
         }
     }
+    //exit();
+    //send_daily_change_mail();
 }
 
-add_action('post_updated', 'sendMailonPostUpdateWiki', 99, 1);
+add_action('save_post', 'sendMailonPostUpdateWiki', 99, 1);
 
+/**
+ * get all parent id of perticular post
+ * 
+ * @param type $post
+ * @param type $postids
+ * @return string
+ */
+function getAllParentIDs($post, $postids) {
+    if (!isset($postids)) {
+        $postids = '';
+    }
+    $postids = $postids . $post->ID . ',';
+    if (isset($post->post_parent) && $post->post_parent != 0) {
+        return getAllParentIDs(get_post($post->post_parent), $postids);
+    }
+    return $postids;
+}
+
+/**
+ * Send mail On post Update having body as diff of content 
+ * 
+ * @param type $postID
+ * @param type $email : Email id of user 
+ * @param type $tax_diff : body of mail 
+ * @param string $url : url of post 
+ */
+function wiki_page_changes_send_mail($postID, $email, $tax_diff = '', $url = '') {
+
+    $revision = wp_get_post_revisions($postID);
+    $content = array();
+    $title = array();
+
+    foreach ($revision as $revisions) {
+        $content[] = $revisions->post_content;
+        $title[] = $revisions->post_title;
+    }
+
+//    $args = array(
+//        'title' => 'Differences',
+//        'title_left' => $title[1],
+//        'title_right' => $title[0],
+//    );
+
+    if (!empty($content)) {
+        $url = 'Page Link:' . $url . '<br>';
+        $body = rtcrm_text_diff($title[count($title) - 1], $title[0], $content[count($title) - 1], $content[0]);
+
+        $body.=$tax_diff;
+        $finalBody = $url . '<br>' . $body;
+        add_filter('wp_mail_content_type', 'set_html_content_type');
+
+        $subject = 'Updates for "' . strtoupper(get_the_title($postID)) . '"';
+        // $subject .=':Time: ' . date("F j, Y, g:i a");
+        $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
+        //var_dump($email, $subject, $finalBody, $headers);
+        //exit();
+        wp_mail($email, $subject, $finalBody, $headers);
+
+        remove_filter('wp_mail_content_type', 'set_html_content_type');
+    }
+}
+
+/**
+ * get html content type
+ * 
+ * @return String 
+ */
+function set_html_content_type() {
+    return 'text/html';
+}
