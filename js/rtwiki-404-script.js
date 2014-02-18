@@ -4,6 +4,6 @@
  */
 
 jQuery(document).ready(function($) {
-    $('.page-content').append("<a href='" + redirectURL + "'>Click here ,</a> If you want to add this post");
+    $('.page-content').append(redirectURL);
 });
 

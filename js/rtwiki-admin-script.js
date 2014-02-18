@@ -15,12 +15,16 @@ function uncheckAll(arg) {
 }
 
 function uncheckAllGroup(arg) {
-    if (arg == 'na' || arg == 'r' || arg == 'w') {
-        jQuery('.case_na').prop('checked', false);
+    if (arg == 'na') {
+        jQuery('.case_na').prop('checked', true);
         jQuery('.case_r').prop('checked', false);
-    }
-    if (arg == 'na' || arg == 'w' ) {
         jQuery('.case_w').prop('checked', false);
+    }else if(arg == 'r'){
+         jQuery('.case_na').prop('checked', false);
+        jQuery('.case_r').prop('checked', true);
+    }else if(arg == 'w'){
+        jQuery('.case_na').prop('checked', false);
+        jQuery('.case_w').prop('checked', true);
     }
 }
 
