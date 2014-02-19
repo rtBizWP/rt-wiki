@@ -42,30 +42,30 @@ function isSubPostSubscribe($post, $userid) {
  * 
  * @global type $pagenow
  */
-/*function unSubscribe() {
-    global $pagenow;
+/* function unSubscribe() {
+  global $pagenow;
 
-    if (isset($_REQUEST['unSubscribe']) == '1') {
-        $params = array_keys($_REQUEST);  //get the keys from request parameter
-        $actionParam = $params[0];
-        $postID = $_REQUEST['unSubscribe-postId'];  //get post id from the request parameter
-        $url = get_permalink($postID);      //get permalink from post id
-        $redirectURl = $url . '?' . $actionParam . '=1'; //form the url
+  if (isset($_REQUEST['unSubscribe']) == '1') {
+  $params = array_keys($_REQUEST);  //get the keys from request parameter
+  $actionParam = $params[0];
+  $postID = $_REQUEST['unSubscribe-postId'];  //get post id from the request parameter
+  $url = get_permalink($postID);      //get permalink from post id
+  $redirectURl = $url . '?' . $actionParam . '=1'; //form the url
 
-        if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
-            wp_redirect(wp_login_url($redirectURl), 302); //after login and if permission is set , user would be subscribed to the page
-        } else {
-            if (isset($_POST['unSubscribe-postId'])) {
-                $id = $_POST['unSubscribe-postId'];
-                $userId = get_current_user_id();
-                $subscribeId = get_post_meta($id, 'subcribers_list', true);
-                unSubscription($id, $userId, $subscribeId);
-            }
-        }
-    }
-}
+  if (!is_user_logged_in() && $pagenow != 'wp-login.php') {
+  wp_redirect(wp_login_url($redirectURl), 302); //after login and if permission is set , user would be subscribed to the page
+  } else {
+  if (isset($_POST['unSubscribe-postId'])) {
+  $id = $_POST['unSubscribe-postId'];
+  $userId = get_current_user_id();
+  $subscribeId = get_post_meta($id, 'subcribers_list', true);
+  unSubscription($id, $userId, $subscribeId);
+  }
+  }
+  }
+  }
 
-add_action('wp', 'unSubscribe');*/
+  add_action('wp', 'unSubscribe'); */
 
 /**
  * Update subscriber list meta value for the particular post ID. 
@@ -218,7 +218,7 @@ function rt_wiki_subpages_check($parentId, $subPage, $post_type = 'post') {
     $pages = get_pages($args);
     if ($pages) {
         foreach ($pages as $page) {
-            $permission = getPermission($page->ID,get_current_user_id());
+            $permission = getPermission($page->ID, get_current_user_id());
             if ($permission == true) {
                 return true;
             } else {
@@ -238,40 +238,40 @@ function rt_wiki_subpages_check($parentId, $subPage, $post_type = 'post') {
  * @param type $post
  * @param type $email
  */
-/*function post_changes_send_mail($postID, $email, $group, $url = '') {
+/* function post_changes_send_mail($postID, $email, $group, $url = '') {
 
-    $revision = wp_get_post_revisions($postID);
-    $content = array();
-    $title = array();
+  $revision = wp_get_post_revisions($postID);
+  $content = array();
+  $title = array();
 
-    foreach ($revision as $revisions) {
-        $content[] = $revisions->post_content;
-        $title[] = $revisions->post_title;
-    }
+  foreach ($revision as $revisions) {
+  $content[] = $revisions->post_content;
+  $title[] = $revisions->post_title;
+  }
 
-//    $args = array(
-//        'title' => 'Differences',
-//        'title_left' => $title[1],
-//        'title_right' => $title[0],
-//    );
+  //    $args = array(
+  //        'title' => 'Differences',
+  //        'title_left' => $title[1],
+  //        'title_right' => $title[0],
+  //    );
 
-    if (!empty($content)) {
-        $url = 'Page Link:' . $url . '<br>';
-        //$diff_table = wp_text_diff($content[1], $content[0], $args);
-        $body = rtcrm_text_diff($title[count($title) - 1], $title[0], $content[count($title) - 1], $content[0]);
-        //$body.=$diff;
-        $finalBody = $url . '<br>' . $body;
-        add_filter('wp_mail_content_type', 'set_html_content_type');
+  if (!empty($content)) {
+  $url = 'Page Link:' . $url . '<br>';
+  //$diff_table = wp_text_diff($content[1], $content[0], $args);
+  $body = rtcrm_text_diff($title[count($title) - 1], $title[0], $content[count($title) - 1], $content[0]);
+  //$body.=$diff;
+  $finalBody = $url . '<br>' . $body;
+  add_filter('wp_mail_content_type', 'set_html_content_type');
 
-        $subject .= 'Updates for "' . strtoupper(get_the_title($postID)) . '"';
-        //$subject .=':Time: ' . date("F j, Y, g:i a");
-        $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
+  $subject .= 'Updates for "' . strtoupper(get_the_title($postID)) . '"';
+  //$subject .=':Time: ' . date("F j, Y, g:i a");
+  $headers[] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes(get_bloginfo('name')) . '.com>';
 
-        wp_mail($email, $subject, $finalBody, $headers);
+  wp_mail($email, $subject, $finalBody, $headers);
 
-        remove_filter('wp_mail_content_type', 'set_html_content_type');
-    }
-}*/
+  remove_filter('wp_mail_content_type', 'set_html_content_type');
+  }
+  } */
 
 /**
  * Function Called after a Wiki post is Upated 
@@ -287,71 +287,71 @@ function sendMailonPostUpdateWiki($post) {
     $diff = '';
     if (in_array(get_post_type($post), $supported_posts, true)) {
 
-        /*if (wp_is_post_revision($postObject->ID)) {
-            return;
-        }
+        /* if (wp_is_post_revision($postObject->ID)) {
+          return;
+          }
 
-        global $rtWikiAttributesModel;
-        $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
-        $attributes = $rtWikiAttributesModel->get_all_attributes();
-        $mainTermArray = array();
-        $termArray = array();
-        $attr_term = array();
-        foreach ($attributes as $attr) {
-            $attr_term[] = $attr->attribute_name;
-        }
-        $taxo = $_REQUEST['tax_input'];
-        foreach ($attr_term as $attr) {
-            $terms = get_the_terms($post, $attr);
+          global $rtWikiAttributesModel;
+          $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
+          $attributes = $rtWikiAttributesModel->get_all_attributes();
+          $mainTermArray = array();
+          $termArray = array();
+          $attr_term = array();
+          foreach ($attributes as $attr) {
+          $attr_term[] = $attr->attribute_name;
+          }
+          $taxo = $_REQUEST['tax_input'];
+          foreach ($attr_term as $attr) {
+          $terms = get_the_terms($post, $attr);
 
-            if (is_array($terms)) {
-                foreach ($terms as $term) {
-                    $termArray[] = $term->name;
-                }
+          if (is_array($terms)) {
+          foreach ($terms as $term) {
+          $termArray[] = $term->name;
+          }
 
-                $mainTermArray[$attr] = $termArray;
-                unset($termArray);
-            }
-        }
+          $mainTermArray[$attr] = $termArray;
+          unset($termArray);
+          }
+          }
 
-        $newTermId = array();
-        $oldTermId = array();
-        $iterator = new MultipleIterator;
-        if (is_array($taxo))
-            $iterator->attachIterator(new ArrayIterator($taxo));
-        $iterator->attachIterator(new ArrayIterator($mainTermArray));
-        $diff = '';
-        foreach ($iterator as $key => $values) {
+          $newTermId = array();
+          $oldTermId = array();
+          $iterator = new MultipleIterator;
+          if (is_array($taxo))
+          $iterator->attachIterator(new ArrayIterator($taxo));
+          $iterator->attachIterator(new ArrayIterator($mainTermArray));
+          $diff = '';
+          foreach ($iterator as $key => $values) {
 
-            if ($key[0] == $key[1]) {
+          if ($key[0] == $key[1]) {
 
-                foreach ($values[0] as $val) {
-                    $newTermId[] = $val;
-                }
+          foreach ($values[0] as $val) {
+          $newTermId[] = $val;
+          }
 
-                foreach ($values[1] as $val1) {
+          foreach ($values[1] as $val1) {
 
-                    if ($key[1] == NULL) {
+          if ($key[1] == NULL) {
 
-                        //unset($oldTermId);
-                        $oldTermId[] = '-';
-                    } else {
-                        if (!empty($val1)) {
-                            $oldTermId[] = $val1;
-                        } else {
-                            $oldTermId[] = ' ';
-                        }
-                    }
-                }
+          //unset($oldTermId);
+          $oldTermId[] = '-';
+          } else {
+          if (!empty($val1)) {
+          $oldTermId[] = $val1;
+          } else {
+          $oldTermId[] = ' ';
+          }
+          }
+          }
 
-                $diff.=contacts_diff_on_lead($post, $newTermId, $oldTermId, $key[0]);
+          $diff.=contacts_diff_on_lead($post, $newTermId, $oldTermId, $key[0]);
 
-                unset($oldTermId);
-                unset($newTermId);
-            }
-        }*/
+          unset($oldTermId);
+          unset($newTermId);
+          }
+          } */
         $subscribersList = $rtWikiSubscribe->getAllSubscribersList($postObject->ID);
-        $subscribersList = array_unique(array_merge($subscribersList, $rtWikiSubscribe->getAllParentSubSubscribers(getAllParentIDs(get_post($postObject->post_parent)))));
+        $subscribersList = array_unique(array_merge($subscribersList, $rtWikiSubscribe->getAllParentSubSubscribers(getAllParentIDs(get_post($postObject->post_parent), ''))));
         if (!empty($subscribersList) || $subscribersList != NULL) {
             foreach ($subscribersList as $subscriber) {
                 $user_info = get_userdata($subscriber);
@@ -378,9 +378,11 @@ function getAllParentIDs($post, $postids) {
     if (!isset($postids)) {
         $postids = '';
     }
-    $postids = $postids . $post->ID . ',';
-    if (isset($post->post_parent) && $post->post_parent != 0) {
-        return getAllParentIDs(get_post($post->post_parent), $postids);
+    if (is_object($post)) {
+        $postids = $postids . $post->ID . ',';
+        if (isset($post->post_parent) && $post->post_parent != 0) {
+            return getAllParentIDs(get_post($post->post_parent), $postids);
+        }
     }
     return $postids;
 }
