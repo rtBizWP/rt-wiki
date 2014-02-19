@@ -372,10 +372,11 @@ function my_do_feed() {
  * @param type $wp_query
  * @return type
  */
-function rtwiki_search_filter($wp_query) {
-    $supported_posts = rtwiki_get_supported_attribute();
-    if (isset($wp_query->posts) && is_search()) {
-        foreach ($wp_query->posts as $post) {
+function rtwiki_search_filter($Posts) {
+    if (isset($Posts) && (is_search() || is_archive() ) ) {
+        $newpostArray = array();
+        $supported_posts = rtwiki_get_supported_attribute();
+        foreach ($Posts as $post) {
             if (in_array($post->post_type, $supported_posts)) {
                 if (getPermission($post->ID, get_current_user_id())) {
                     $newpostArray[] = $post;
@@ -384,14 +385,12 @@ function rtwiki_search_filter($wp_query) {
                 $newpostArray[] = $post;
             }
         }
-        $wp_query->posts = $newpostArray;
-        $wp_query->post_count = count($newpostArray);
-        $wp_query->found_posts = count($newpostArray);
+        $Posts=$newpostArray;
     }
-    return $wp_query;
+    return $Posts;
 }
 
-add_action('loop_start', 'rtwiki_search_filter');
+add_action('the_posts', 'rtwiki_search_filter');
 
 /**
  * check permission for CPT content.
