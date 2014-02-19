@@ -31,17 +31,17 @@ function create_wiki() {
             $slug = $name['slug'];
             $label = ucwords($name['label']);
             /* $capabilities = array(
-              'read_post' => 'read_post',
-              'publish_posts' => 'publish_posts',
-              'edit_posts' => 'edit_posts',
-              'edit_others_posts' => 'edit_others_posts',
-              'delete_posts' => 'delete_posts',
-              'delete_others_posts' => 'delete_others_posts',
-              'read_private_posts' => 'read_private_posts',
-              'edit_post' => 'edit_post',
-              'delete_post' => 'delete_post',
-              'edit_published_posts' => 'edit_published_posts',
-              'delete_published_posts' => 'delete_published_posts'
+                'read_post' => 'read_post',
+                'publish_posts' => 'publish_posts',
+                'edit_posts' => 'edit_posts',
+                'edit_others_posts' => 'edit_others_posts',
+                'delete_posts' => 'delete_posts',
+                'delete_others_posts' => 'delete_others_posts',
+                'read_private_posts' => 'read_private_posts',
+                'edit_post' => 'edit_post',
+                'delete_post' => 'delete_post',
+                'edit_published_posts' => 'edit_published_posts',
+                'delete_published_posts' => 'delete_published_posts'
               ); */
             $labels = array(
                 'name' => __($label, 'post type general name', 'rtCamp'),
@@ -93,7 +93,7 @@ add_action('init', 'create_wiki');
  * Add capabilities to diffrent type user 
  */
 function add_wiki_caps() {
-    $roles = array(get_role('administrator'), get_role('author'), get_role('editor'), get_role('contributor'));
+    $roles = array(get_role('administrator'), get_role('author'), get_role('editor'), get_role('contributor'),  get_role('rtwikicontributor'));
     foreach ($roles as $role) {
         $role->add_cap('edit_wiki');
         $role->add_cap('edit_others_wiki');
@@ -148,16 +148,16 @@ function display_wiki_post_access_metabox($post) {
             <tr>
                 <td>All</td>
                 <td><input type="radio" onclick="if (this.checked) {
-                            uncheckAllGroup('na');
-                        }
+                                uncheckAllGroup('na');
+                            }
                            " <?php echo $disabled; ?> class="rtwiki_all_na rtwiki_na" name="access_rights[all]" <?php if (isset($access_rights['all']['na']) && ( $access_rights['all']['na'] == 1 )) { ?>checked="checked"<?php } ?> value="na" /></td>
                 <td><input type="radio" onclick="if (this.checked) {
-                            uncheckAllGroup('r');
-                        }
+                                uncheckAllGroup('r');
+                            }
                            " class="rtwiki_all_r rtwiki_r" name="access_rights[all]" <?php if (isset($access_rights['all']['r']) == 1) { ?>checked="checked"<?php } ?> value="r" /></td>
                 <td><input type="radio" onclick="if (this.checked) {
-                            uncheckAllGroup('w');
-                        }
+                                uncheckAllGroup('w');
+                            }
                            " class="rtwiki_all_w rtwiki_w" name="access_rights[all]" <?php if (isset($access_rights['all']['w']) == 1) { ?>checked="checked"<?php } ?> value="w" /></td>
             </tr>
 
@@ -170,16 +170,16 @@ function display_wiki_post_access_metabox($post) {
                 <tr>
                     <td><?php echo $groupName ?></td>
                     <td><input type="radio" onclick="if (this.checked) {
-                                uncheckAll('na');
-                            }
+                                        uncheckAll('na');
+                                    }
                                " class="case_na rtwiki_na" <?php echo $disabled; ?> id="na" name="access_rights[<?php echo $groupName ?>]"  <?php if (isset($access_rights[$groupName]['na']) && ( $access_rights[$groupName]['na'] == 1 )) { ?>checked="checked"<?php } ?> value="na" /></td>
                     <td><input type="radio" onclick="if (this.checked) {
-                                uncheckAll('r');
-                            }
+                                        uncheckAll('r');
+                                    }
                                " class="case_r rtwiki_r" id="r" name="access_rights[<?php echo $groupName ?>]" <?php if (( '' != $disabled ) || ( isset($access_rights[$groupName]['r']) && ( $access_rights[$groupName]['r'] == 1 ) )) { ?>checked="checked"<?php } ?> value="r" /></td>
                     <td><input type="radio" onclick="if (this.checked) {
-                                uncheckAll('w');
-                            }
+                                        uncheckAll('w');
+                                    }
                                " class="case_w rtwiki_w" id="w" name="access_rights[<?php echo $groupName ?>]" <?php if (isset($access_rights[$groupName]['w']) && ( $access_rights[$groupName]['w'] == 1 )) { ?>checked="checked"<?php } ?> value="w" /></td>
                 </tr>
             <?php } ?> 
@@ -192,11 +192,11 @@ function display_wiki_post_access_metabox($post) {
     <tr>
         <td>Public</td> 
         <td colspan='2'><input type="checkbox" onclick='if (this.checked) {
-                    jQuery(".rtwiki_na").prop("checked", false);
-                    jQuery(".rtwiki_na").prop("disabled", true);
-                } else {
-                    jQuery(".rtwiki_na").prop("disabled", false);
-                }' id="rtwiki_public_na" name="access_rights[public]" <?php if (isset($access_rights['public']) && ( 1 == $access_rights['public'] )) { ?> checked="checked" <?php } ?> value='1' /> </td>    
+                        jQuery(".rtwiki_na").prop("checked", false);
+                        jQuery(".rtwiki_na").prop("disabled", true);
+                    } else {
+                        jQuery(".rtwiki_na").prop("disabled", false);
+                    }' id="rtwiki_public_na" name="access_rights[public]" <?php if (isset($access_rights['public']) && ( 1 == $access_rights['public'] )) { ?> checked="checked" <?php } ?> value='1' /> </td>    
     </tr>
     </tbody>
 

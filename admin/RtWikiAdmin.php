@@ -42,6 +42,13 @@ if (!class_exists('RtWikiAdmin')) {
             $rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
             $rtWikiSubscribe = new RtWikiSubscribeModel();
             $rtWikiAttributes = new RtWikiAttributes();
+            add_role('rtwikicontributor', __('RtWikiContributor'), array(
+                'read' => true, // true allows this capability
+                'edit_posts' => true,
+                'edit_others_posts' => true,
+                'edit_published_posts' => true,
+                'delete_posts' => false, // Use false to explicitly deny
+            ));
         }
 
         /**

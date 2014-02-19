@@ -96,16 +96,14 @@ function get_term_if_exists($term, $userid) {
 /**
  * check permission before move post of CPT to trash
  * 
- * @global type $current_user
  * @param type $post_id
  */
 function my_wp_trash_post($post_id) {
-    global $current_user;
     $post = get_post($post_id);
     $supported_posts = rtwiki_get_supported_attribute();
     if (in_array($post->post_type, $supported_posts) && in_array($post->post_status, array('publish', 'draft', 'future'))) {
-        if (( 'administrator' != $current_user->roles[0] ) && ( is_object($post) && ( $post->post_author != get_current_user_id() ) )) {
-            WP_DIE(__('You Dont have enough access rights to move this post into trash') . "<br><a href='edit.php?post_type=$post->post_type'>" . __("Go Back") . "</a>");
+        if (!current_user_can($post_id, 'delete_wiki')) {
+            WP_DIE(__('You dont have enough access rights to move this post to the trash') . "<br><a href='edit.php?post_type=$post->post_type'>" . __("Go Back") . "</a>");
         }
     }
 }
@@ -122,11 +120,18 @@ add_action('wp_trash_post', 'my_wp_trash_post');
  */
 function remove_quick_edit($actions) {
     global $post;
-    // global $current_user;
     $supported_posts = rtwiki_get_supported_attribute();
     if (in_array($post->post_type, $supported_posts)) {
-        $post_permission = getAdminPanelSidePermission($post->ID);
-        if ($post_permission == FALSE) {
+        if (!current_user_can('edit_wiki', $post->ID)) {
+            unset($actions['edit']);
+            unset($actions['inline hide-if-no-js']);
+        }
+
+        if (!current_user_can('delete_wiki', $post->ID)) {
+            unset($actions['trash']);
+        }
+
+        if (!current_user_can('read_wiki', $post->ID)) {
             unset($actions['view']);
         }
     }
@@ -139,24 +144,20 @@ add_filter('page_row_actions', 'remove_quick_edit', 10);
  * Check permissions at Admin side for edit post & delete post
  */
 function postCheck() {
+    $page = isset($_GET['post']) ? $_GET['post'] : 0;
+    $supported_posts = rtwiki_get_supported_attribute();
+    $posttype = get_post_type($page);
     if (isset($_GET['action']) && $_GET['action'] == 'edit') {
-        $page = isset($_GET['post']) ? $_GET['post'] : 0;
-        $supported_posts = rtwiki_get_supported_attribute();
-        $post_permission = getAdminPanelSidePermission($page);
-        $posttype = get_post_type($page);
         if (in_array($posttype, $supported_posts)) {
-            if ($post_permission == false || $post_permission == 'r') {
-                WP_DIE(__('You Dont have enough access rights to Edit this post') . "<br><a href='edit.php?post_type=$posttype'>" . __("Go Back") . "</a>");
+            if (!current_user_can($page, 'edit_wiki')) {
+                WP_DIE(__('You dont have enough access rights to Edit this post') . "<br><a href='edit.php?post_type=$posttype'>" . __("Go Back") . "</a>");
             }
         }
     }
     if (isset($_GET['action']) && $_GET['action'] == 'trash') {
-        $page = isset($_GET['post']) ? $_GET['post'] : 0;
-        $supported_posts = rtwiki_get_supported_attribute();
-        $post = get_post($page);
-        if (in_array(get_post_type($page), $supported_posts)) {
-            if ($post->post_author != get_current_user_id()) {
-                WP_DIE(__('You Dont have enough access rights to Delete this post') . "<br><a href='edit.php?post_type=$post->post_type'>" . __("Go Back") . "</a>");
+        if (in_array($posttype, $supported_posts)) {
+            if (!current_user_can($page, 'delete_wiki')) {
+                WP_DIE(__('You dont have enough access rights to move this post to the trash') . "<br><a href='edit.php?post_type=$posttype'>" . __("Go Back") . "</a>");
             }
         }
     }
@@ -175,24 +176,37 @@ add_action('admin_init', 'postCheck');
  * @return type
  */
 function addCapabilities($capabilities, $cap, $args, $user) {
-    global $post;
-    global $current_user;
-    $access = 'na';
+    global $post, $current_user;
     $supported_posts = rtwiki_get_supported_attribute();
-    if (is_object($user) && !empty($user->roles) && ( 'administrator' == $user->roles[0] )) {
-        return $user->allcaps;
-    }
     if (is_object($post) && in_array($post->post_type, $supported_posts)) {
+        $access = 'na';
+        if (is_object($user) && !empty($user->roles) && ( 'administrator' == $user->roles[0] )) {
+            return $user->allcaps;
+        }
+
+        if (is_object($user) && !empty($user->roles) && ( 'rtwikicontributor' == $user->roles[0] )) {
+            return $capabilities;
+        }
+
         $access = getAdminPanelSidePermission($post->ID);
         if (( is_object($post) && $post->post_author != get_current_user_id())) {
-            $capabilities["delete_posts"] = false;
-            $capabilities["delete_others_posts"] = false;
-            $capabilities["delete_published_posts"] = false;
+            $capabilities["delete_wiki"] = false;
+            $capabilities["delete_others_wiki"] = false;
+            $capabilities["delete_published_wiki"] = false;
         }
         if ($access == false || $access == 'r') {
+            $capabilities["edit_posts"] = false;
             $capabilities["edit_others_posts"] = false;
             $capabilities["edit_published_posts"] = false;
-            $capabilities["publish_posts"] = false;
+            $capabilities["edit_wiki"] = false;
+            $capabilities["edit_others_wiki"] = false;
+            $capabilities["edit_published_wiki"] = false;
+            $capabilities["publish_wiki"] = false;
+        }
+
+        if ($access == false) {
+            $capabilities["read_private_wiki"] = false;
+            $capabilities["read_wiki"] = false;
         }
     }
 
@@ -315,7 +329,7 @@ function getPermission($pageID, $user) {
         return true;
     } else if (is_user_logged_in()) {
         $post_details = get_post($pageID);
-        if (( 'administrator' == $current_user->roles[0] ) || ( is_object($post_details) && ( $post_details->post_author == $user ) )) {
+        if (( 'rtwikicontributor' == $current_user->roles[0] ) || ( 'administrator' == $current_user->roles[0] ) || ( is_object($post_details) && ( $post_details->post_author == $user ) )) {
             return true;
         } elseif (isset($access_rights['all'])) {
             if (( isset($access_rights['all']['r']) && ( $access_rights['all']['r'] == 1 ) ) || ( isset($access_rights['all']['w']) && ( $access_rights['all']['w'] == 1 ) )) {
