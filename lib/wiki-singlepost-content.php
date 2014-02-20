@@ -15,7 +15,7 @@
  */
 function ifWikiContributers($postid) {
     $supported_posts = rtwiki_get_supported_attribute();
-    if (!empty($supported_posts) && in_array(get_query_var('post_type'), $supported_posts)) {
+    if (!empty($supported_posts) && in_array(get_post_type($postid), $supported_posts)) {
         $revision = wp_get_post_revisions($postid);
         if (!empty($revision))
             return true;
@@ -31,8 +31,7 @@ function ifWikiContributers($postid) {
  */
 function getContributers($postid) {
     $supported_posts = rtwiki_get_supported_attribute();
-    if (!empty($supported_posts) && in_array(get_query_var('post_type'), $supported_posts)) {
-
+    if (!empty($supported_posts) && in_array(get_post_type($postid), $supported_posts)) {
         $revision = wp_get_post_revisions($postid);
         $authorId = array();
         echo '<ul id="contributers">';
