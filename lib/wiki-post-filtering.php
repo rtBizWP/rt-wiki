@@ -102,7 +102,7 @@ function my_wp_trash_post($post_id) {
     $post = get_post($post_id);
     $supported_posts = rtwiki_get_supported_attribute();
     if (in_array($post->post_type, $supported_posts) && in_array($post->post_status, array('publish', 'draft', 'future'))) {
-        if (!current_user_can('delete_wiki',$post_id)) {
+        if (!current_user_can('delete_wiki', $post_id)) {
             WP_DIE(__('You dont have enough access rights to move this post to the trash') . "<br><a href='edit.php?post_type=$post->post_type'>" . __("Go Back") . "</a>");
         }
     }
@@ -144,7 +144,7 @@ add_filter('page_row_actions', 'remove_quick_edit', 10);
  * Check permissions at Admin side for edit post & delete post
  */
 function postCheck() {
-    global $pagenow,$current_user;
+    global $pagenow, $current_user;
     if (!is_admin())
         return;
 
@@ -153,14 +153,14 @@ function postCheck() {
     $posttype = get_post_type($page);
     if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         if (in_array($posttype, $supported_posts)) {
-            if (!current_user_can('edit_post',$page)) {
+            if (!current_user_can('edit_wiki', $page)) {
                 WP_DIE(__('You dont have enough access rights to Edit this post') . "<br><a href='edit.php?post_type=$posttype'>" . __("Go Back") . "</a>");
             }
         }
     }
     if (isset($_GET['action']) && $_GET['action'] == 'trash') {
         if (in_array($posttype, $supported_posts)) {
-            if (!current_user_can('delete_wiki',$page)) {
+            if (!current_user_can('delete_wiki', $page)) {
                 WP_DIE(__('You dont have enough access rights to move this post to the trash') . "<br><a href='edit.php?post_type=$posttype'>" . __("Go Back") . "</a>");
             }
         }
@@ -184,8 +184,17 @@ function addCapabilities($capabilities, $cap, $args, $user) {
     $supported_posts = rtwiki_get_supported_attribute();
     if (is_object($post) && in_array($post->post_type, $supported_posts)) {
         $access = 'na';
-        if (is_object($user) && !empty($user->roles) && ( 'administrator' == $user->roles[0] )) {
+        if ((is_object($user) && !empty($user->roles) && 'administrator' == $user->roles[0]) /* || (is_object($post) && $post->post_author == get_current_user_id()) */) {
             return $user->allcaps;
+        }
+
+        if (is_object($post) && $post->post_author == get_current_user_id()) {
+            $capabilities = array_merge($capabilities, array(
+                'delete_posts' => 'delete_posts',
+                'delete_others_posts' => 'delete_others_posts',
+                'delete_post' => 'delete_post',
+                'delete_published_posts' => 'delete_published_posts'
+            ));
         }
 
         if (is_object($user) && !empty($user->roles) && ( 'rtwikicontributor' == $user->roles[0] )) {
@@ -200,50 +209,35 @@ function addCapabilities($capabilities, $cap, $args, $user) {
         }
         if ($access == false || $access == 'r') {
             //$capabilities["edit_posts"] = false;
+            if ($access == false) {
+                $capabilities["read_private_wiki"] = false;
+                $capabilities["read_wiki"] = false;
+            }
             $capabilities["edit_others_posts"] = false;
             $capabilities["edit_published_posts"] = false;
             $capabilities["edit_wiki"] = false;
             $capabilities["edit_others_wiki"] = false;
             $capabilities["edit_published_wiki"] = false;
             $capabilities["publish_wiki"] = false;
+            if ($access == 'r') {
+                $capabilities = array_merge($capabilities, array('read_post' => 'read_post',
+                    'read_private_posts' => 'read_private_posts'
+                        )
+                );
+            }
         }
 
-        if ($access == false) {
-            $capabilities["read_private_wiki"] = false;
-            $capabilities["read_wiki"] = false;
+        if ('w' == $access) {
+            $capabilities = array_merge($capabilities, array('read_post' => 'read_post',
+                'publish_posts' => 'publish_posts',
+                'edit_posts' => 'edit_posts',
+                'edit_others_posts' => 'edit_others_posts',
+                'read_private_posts' => 'read_private_posts',
+                'edit_post' => 'edit_post',
+                'edit_published_posts' => 'edit_published_posts',
+            ));
         }
     }
-
-    /* if (is_object($user) && !empty($user->roles) && ( 'administrator' == $user->roles[0] )) {
-      return $user->allcaps;
-      }
-
-      if (is_object($post) && $post->post_author == get_current_user_id()) {
-      $capabilities = array_merge($capabilities, array(
-      'delete_posts' => 'delete_posts',
-      'delete_others_posts' => 'delete_others_posts',
-      'delete_post' => 'delete_post',
-      'delete_published_posts' => 'delete_published_posts'
-      )
-      );
-      }
-
-      if ('w' == $access) {
-      $capabilities = array_merge($capabilities, array('read_post' => 'read_post',
-      'publish_posts' => 'publish_posts',
-      'edit_posts' => 'edit_posts',
-      'edit_others_posts' => 'edit_others_posts',
-      'read_private_posts' => 'read_private_posts',
-      'edit_post' => 'edit_post',
-      'edit_published_posts' => 'edit_published_posts',
-      )
-      );
-      } else if ('r' == $access) {
-      $capabilities = array_merge($capabilities, array('read_post' => 'read_post',
-      'read_private_posts' => 'read_private_posts'
-      )
-      );
-      } */
     return $capabilities;
 }
 
