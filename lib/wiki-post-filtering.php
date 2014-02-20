@@ -555,7 +555,7 @@ function rtwiki_sitemap_taxonomies($taxonomies) {
     return $taxonomies;
 }
 
-add_filter('wpseo_sitemaps_supported_taxonomies', rtwiki_sitemap_taxonomies);
+add_filter('wpseo_sitemaps_supported_taxonomies', 'rtwiki_sitemap_taxonomies');
 
 /**
  * sitemap posttype filter [Yoast plugin]
@@ -575,4 +575,4 @@ function rtwiki_sitemap_posttypes($posttypes) {
     return $posttypes;
 }
 
-add_filter('wpseo_sitemaps_supported_post_types', rtwiki_sitemap_posttypes);
+add_filter('wpseo_sitemaps_supported_post_types', 'rtwiki_sitemap_posttypes');
