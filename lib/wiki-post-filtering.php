@@ -102,7 +102,7 @@ function my_wp_trash_post($post_id) {
     $post = get_post($post_id);
     $supported_posts = rtwiki_get_supported_attribute();
     if (in_array($post->post_type, $supported_posts) && in_array($post->post_status, array('publish', 'draft', 'future'))) {
-        if (!current_user_can($post_id, 'delete_wiki')) {
+        if (!current_user_can('delete_wiki',$post_id)) {
             WP_DIE(__('You dont have enough access rights to move this post to the trash') . "<br><a href='edit.php?post_type=$post->post_type'>" . __("Go Back") . "</a>");
         }
     }
@@ -144,19 +144,23 @@ add_filter('page_row_actions', 'remove_quick_edit', 10);
  * Check permissions at Admin side for edit post & delete post
  */
 function postCheck() {
+    global $pagenow,$current_user;
+    if (!is_admin())
+        return;
+
     $page = isset($_GET['post']) ? $_GET['post'] : 0;
     $supported_posts = rtwiki_get_supported_attribute();
     $posttype = get_post_type($page);
     if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         if (in_array($posttype, $supported_posts)) {
-            if (!current_user_can($page, 'edit_wiki')) {
+            if (!current_user_can('edit_post',$page)) {
                 WP_DIE(__('You dont have enough access rights to Edit this post') . "<br><a href='edit.php?post_type=$posttype'>" . __("Go Back") . "</a>");
             }
         }
     }
     if (isset($_GET['action']) && $_GET['action'] == 'trash') {
         if (in_array($posttype, $supported_posts)) {
-            if (!current_user_can($page, 'delete_wiki')) {
+            if (!current_user_can('delete_wiki',$page)) {
                 WP_DIE(__('You dont have enough access rights to move this post to the trash') . "<br><a href='edit.php?post_type=$posttype'>" . __("Go Back") . "</a>");
             }
         }
@@ -195,7 +199,7 @@ function addCapabilities($capabilities, $cap, $args, $user) {
             $capabilities["delete_published_wiki"] = false;
         }
         if ($access == false || $access == 'r') {
-            $capabilities["edit_posts"] = false;
+            //$capabilities["edit_posts"] = false;
             $capabilities["edit_others_posts"] = false;
             $capabilities["edit_published_posts"] = false;
             $capabilities["edit_wiki"] = false;

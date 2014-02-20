@@ -214,7 +214,11 @@ function rtp_wiki_permission_save($post) {
 
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
         return;
-
+    
+    if(!isset($_REQUEST['post_type'])){
+        $_REQUEST['post_type']='post';
+    }
+    
     if (!isset($_REQUEST[$_REQUEST['post_type'] . '_noncename']) || !wp_verify_nonce(@$_POST[$_POST['post_type'] . '_noncename'], plugin_basename(__FILE__)))
         return;
 
