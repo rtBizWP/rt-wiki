@@ -9,124 +9,115 @@
   Contributors: Prannoy Tank, Sohil
  */
 
-require_once dirname(__FILE__) . '/helper/rtwiki-functions.php';
-require_once dirname(__FILE__) . '/lib/wiki-CPT.php';
-require_once dirname(__FILE__) . '/lib/user-groups.php';
-require_once dirname(__FILE__) . '/lib/wiki-single-custom-template.php';
-require_once dirname(__FILE__) . '/lib/wiki-404-redirect.php';
-require_once dirname(__FILE__) . '/lib/wiki-post-filtering.php';
-require_once dirname(__FILE__) . '/lib/wiki-post-subscribe.php';
-require_once dirname(__FILE__) . '/lib/wiki-singlepost-content.php';
-require_once dirname(__FILE__) . '/lib/class-daily-changes.php';
-require_once dirname(__FILE__) . '/lib/wiki-sidebar.php';
-require_once dirname(__FILE__) . '/lib/wiki-widgets.php';
-
-function rtwiki_admin_enqueue_styles_and_scripts() {
-    global $hook_suffix;
-    wp_register_script('rtwiki-admin-script', plugins_url('/js/rtwiki-admin-script.js', __FILE__), array('jquery'));
-    wp_enqueue_script('rtwiki-admin-script');
-
-    wp_register_script('rtwiki-new-post-script', plugins_url('/js/rtwiki-new-post-script.js', __FILE__), array('jquery'));
-
-
-    if (is_admin() && $hook_suffix == 'post-new.php') {
-        wp_enqueue_script('rtwiki-new-post-script');
-    }
-
-    wp_register_style('rtwiki-admin-styles', plugins_url('/css/rtwiki-admin-styles.css', __FILE__));
-
-    if (is_admin())
-        wp_enqueue_style('rtwiki-admin-styles');
+/**
+ * Main file, contains the plugin metadata and activation processes
+ *
+ */
+if ( ! defined( 'RT_WIKI_VERSION' ) ){
+	define( 'RT_WIKI_VERSION', '1.0' );
 }
-
-add_action('admin_enqueue_scripts', 'rtwiki_admin_enqueue_styles_and_scripts');
-
-function rtwiki_enqueue_styles_and_scripts() {
-    wp_register_script('rtwiki-custom-script', plugins_url('/js/rtwiki-custom-script.js', __FILE__), array('jquery'));
-    wp_enqueue_script('rtwiki-custom-script');
-    wp_register_script('rtwiki-404-script', plugins_url('/js/rtwiki-404-script.js', __FILE__), array('jquery'));
-    if (is_404()) {
-        wp_localize_script('rtwiki-404-script', 'redirectURL', "<a href='" . redirect_404() . "'>" . __('Click here. ','rtCamp') . "</a>" .  __('If you want to add this post','rtCamp'));
-        wp_enqueue_script('rtwiki-404-script');
-    }
-
-    wp_register_style('rtwiki-client-styles', plugins_url('/css/rtwiki-client-styles.css', __FILE__));
-    wp_enqueue_style('rtwiki-client-styles');
-}
-
-add_action('wp_enqueue_scripts', 'rtwiki_enqueue_styles_and_scripts');
-
-if (!defined('RC_TC_BASE_FILE'))
-    define('RC_TC_BASE_FILE', __FILE__);
-if (!defined('RC_TC_BASE_DIR'))
-    define('RC_TC_BASE_DIR', dirname(RC_TC_BASE_FILE));
-if (!defined('RC_TC_PLUGIN_URL'))
-    define('RC_TC_PLUGIN_URL', plugin_dir_url(__FILE__));
-
 
 /**
- * Admin Files Loaded
+ * The server file system path to the plugin directory
+ *
  */
-if (!defined('RT_WIKI_VERSION')) {
-    define('RT_WIKI_VERSION', '1.0');
-}
-if (!defined('RT_WIKI_PATH')) {
-    define('RT_WIKI_PATH', plugin_dir_path(__FILE__));
-}
-if (!defined('RT_WIKI_URL')) {
-    define('RT_WIKI_URL', plugin_dir_url(__FILE__));
-}
-if (!defined('RT_WIKI_PATH_ADMIN')) {
-    define('RT_WIKI_PATH_ADMIN', plugin_dir_path(__FILE__) . 'admin/');
-}
-if (!defined('RT_WIKI_PATH_LIB')) {
-    define('RT_WIKI_PATH_LIB', plugin_dir_path(__FILE__) . 'lib/');
-}
-if (!defined('RT_WIKI_PATH_MODELS')) {
-    define('RT_WIKI_PATH_MODELS', plugin_dir_path(__FILE__) . 'models/');
-}
-if (!defined('RT_WIKI_PATH_HELPER')) {
-    define('RT_WIKI_PATH_HELPER', plugin_dir_path(__FILE__) . 'helper/');
+if ( ! defined( 'RT_WIKI_PATH' ) ){
+	define( 'RT_WIKI_PATH', plugin_dir_path( __FILE__ ) );
 }
 
-function rtwiki_include_class_file($dir) {
-    if ($dh = opendir($dir)) {
-        while ($file = readdir($dh)) {
-            //Loop
-            if ($file !== '.' && $file !== '..' && $file[0] !== '.') {
-                if (is_dir($dir . $file)) {
-                    rtwiki_include_class_file($dir . $file . '/');
-                } else {
-                    include_once $dir . $file;
-                }
-            }
-        }
-        closedir($dh);
-        return 0;
-    }
+/**
+ * The url to the plugin directory
+ *
+ */
+if ( ! defined( 'RT_WIKI_URL' ) ){
+	define( 'RT_WIKI_URL', plugin_dir_url( __FILE__ ) );
 }
 
-function rtwiki_include() {
-    $rtWooCLIncludePaths = array(
-        RT_WIKI_PATH_LIB,
-        RT_WIKI_PATH_MODELS,
-        RT_WIKI_PATH_HELPER,
-        RT_WIKI_PATH_ADMIN,
-    );
-    foreach ($rtWooCLIncludePaths as $path) {
-        rtwiki_include_class_file($path);
-    }
+/**
+ * The server file system path to the admin directory
+ *
+ */
+if ( ! defined( 'RT_WIKI_PATH_ADMIN' ) ){
+	define( 'RT_WIKI_PATH_ADMIN', plugin_dir_path( __FILE__ ) . 'app/admin/' );
 }
 
-function rtwiki_init() {
-    rtwiki_include();
-
-    // DB Upgrade
-    $updateDB = new RTDBUpdate(false, RT_WIKI_PATH . 'index.php', RT_WIKI_PATH . 'schema/');
-    $updateDB->do_upgrade();
-
-    global $rtWikiAdmin;
-    $rtWikiAdmin = new RtWikiAdmin();
+/**
+ * The server file system path to the lib directory
+ *
+ */
+if ( ! defined( 'RT_WIKI_PATH_LIB' ) ){
+	define( 'RT_WIKI_PATH_LIB', plugin_dir_path( __FILE__ ) . 'lib/' );
 }
 
-add_action('init', 'rtwiki_init', 0);
+/**
+ * The server file system path to the models directory
+ *
+ */
+if ( ! defined( 'RT_WIKI_PATH_MODELS' ) ){
+	define( 'RT_WIKI_PATH_MODELS', plugin_dir_path( __FILE__ ) . 'app/models/' );
+}
+
+/**
+ * The server file system path to the helper directory
+ *
+ */
+if ( ! defined( 'RT_WIKI_PATH_HELPER' ) ){
+	define( 'RT_WIKI_PATH_HELPER', plugin_dir_path( __FILE__ ) . 'app/helper/' );
+}
+
+/**
+ * The server file system path to the assets directory
+ *
+ */
+if ( ! defined( 'RT_WIKI_PATH_ASSETS' ) ){
+	define( 'RT_WIKI_PATH_ASSETS', plugin_dir_path( __FILE__ ) . 'app/assets/' );
+}
+
+/**
+ * The server file system path to the schema directory
+ *
+ */
+if ( ! defined( 'RT_WIKI_PATH_SCHEMA' ) ){
+	define( 'RT_WIKI_PATH_SCHEMA', plugin_dir_path( __FILE__ ) . 'app/schema/' );
+}
+
+if ( ! defined( 'RC_TC_BASE_FILE' ) ) define( 'RC_TC_BASE_FILE', __FILE__ );
+if ( ! defined( 'RC_TC_BASE_DIR' ) ) define( 'RC_TC_BASE_DIR', dirname( RC_TC_BASE_FILE ) );
+if ( ! defined( 'RC_TC_PLUGIN_URL' ) ) define( 'RC_TC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
+/**
+ * Auto Loader Function
+ *
+ * Autoloads classes on instantiation. Used by spl_autoload_register.
+ *
+ * @param string $class_name The name of the class to autoload
+ */
+function rtwiki_autoloader( $class_name )
+{
+	$rtLibPath = array(
+		'app/helper/' . $class_name . '.php',
+		'app/helper/rtLib/rtdbmodel/' . $class_name . '.php',
+		'app/admin/' . $class_name . '.php',
+		'app/models/' . $class_name . '.php',
+		'app/main/' . $class_name . '.php', );
+
+	foreach ( $rtLibPath as $path ) {
+		$path = RT_WIKI_PATH . $path;
+		if ( file_exists( $path ) ){
+			include $path;
+			break;
+		}
+	}
+}
+
+/**
+ * Register the autoloader function into spl_autoload
+ */
+spl_autoload_register( 'rtwiki_autoloader' );
+
+global $rtWiki;
+$rtWiki = new RTWiki();
+
+/**
+ * Next File: /app/main/RTWiki.php
+ */

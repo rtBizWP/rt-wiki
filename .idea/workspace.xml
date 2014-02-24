@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="3" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="" />
+    <ignored path="rtwiki.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="rtwiki" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="single-wiki.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="17" column="12" selection-start="330" selection-end="330" vertical-scroll-proportion="-0.083333336" vertical-offset="193" max-vertical-offset="795">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RTWiki.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/main/RTWiki.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="116" column="39" selection-start="3676" selection-end="3676" vertical-scroll-proportion="-50.791668" vertical-offset="491" max-vertical-offset="2610">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.php" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/index.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="112" column="3" selection-start="2714" selection-end="2714" vertical-scroll-proportion="2.1461794" vertical-offset="283" max-vertical-offset="1830">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/app/models/RtWikiAttributeTaxonomyModel.php" />
+        <option value="$PROJECT_DIR$/app/models/RtWikiSubscribeModel.php" />
+        <option value="$PROJECT_DIR$/app/admin/wiki-CPT.php" />
+        <option value="$PROJECT_DIR$/app/admin/RtWikiAttributes.php" />
+        <option value="$PROJECT_DIR$/app/admin/wiki-settings.php" />
+        <option value="$PROJECT_DIR$/app/helper/rtwiki-functions.php" />
+        <option value="$PROJECT_DIR$/app/helper/wiki-single-custom-template.php" />
+        <option value="$PROJECT_DIR$/app/helper/wiki-404-redirect.php" />
+        <option value="$PROJECT_DIR$/app/helper/class-daily-changes.php" />
+        <option value="$PROJECT_DIR$/app/helper/RtWikiDailyChanges.php" />
+        <option value="$PROJECT_DIR$/app/admin/wiki-sidebar.php" />
+        <option value="$PROJECT_DIR$/index.php" />
+        <option value="$PROJECT_DIR$/app/helper/RtCRMEmailDiff.php" />
+        <option value="$PROJECT_DIR$/app/helper/wiki-post-subscribe.php" />
+        <option value="$PROJECT_DIR$/app/admin/RtWikiAdmin.php" />
+        <option value="$PROJECT_DIR$/app/admin/user-groups.php" />
+        <option value="$PROJECT_DIR$/app/main/RTWiki.php" />
+        <option value="$PROJECT_DIR$/app/admin/RtWikiRoles.php" />
+        <option value="$PROJECT_DIR$/templates/archive-wiki.php" />
+        <option value="$PROJECT_DIR$/app/admin/wiki-widgets.php" />
+        <option value="$PROJECT_DIR$/app/admin/RtWikiCPT.php" />
+        <option value="$PROJECT_DIR$/app/helper/wiki-settings.php" />
+        <option value="$PROJECT_DIR$/app/helper/wiki-post-filtering.php" />
+        <option value="$PROJECT_DIR$/app/helper/wiki-singlepost-content.php" />
+        <option value="$PROJECT_DIR$/templates/single-wiki.php" />
+      </list>
+    </option>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="64" />
+    <option name="y" value="-4" />
+    <option name="width" value="1303" />
+    <option name="height" value="773" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>Control FlowPHP</id>
+          </State>
+          <State>
+            <id>GeneralPHP</id>
+          </State>
+          <State>
+            <id>PHP</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Code SmellPHP</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scope">
+        <subPane subId="Default" />
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rtwiki" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rtwiki" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rtwiki" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rtwiki" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rtwiki" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rtwiki" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rtwiki" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="options.lastSelected" value="preferences.sourceCode.CoffeeScript" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="FullScreen" value="false" />
+    <property name="LayoutCode.rearrangeEntriesPHP" value="false" />
+    <property name="LayoutCode.rearrangeEntries" value="false" />
+    <property name="recentsLimit" value="5" />
+    <property name="SearchEverywhereHistory" value="" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/helper" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpBuiltInWebServerConfigurationType" factoryName="PHP Built-in Web Server">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpHttpRequestRunConfigurationType" factoryName="PHP HTTP Request">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpRemoteDebugRunConfigurationType" factoryName="PHP Remote Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+      <method />
+    </configuration>
+    <configuration default="true" type="AppEnginePhpConfigurationType" factoryName="App Engine for PHP">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
+    <configuration default="true" type="com.intellij.persistence.run.ConsoleRunConfigurationType" factoryName="Query Language Console">
+      <option name="VM_PARAMETERS" value="" />
+      <option name="USER_CFG_CLASS" />
+      <option name="CONTEXT_PROVIDER" />
+      <method />
+    </configuration>
+    <list size="0" />
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false" SSL_PROTOCOLS="all">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="mySSHConnectionTimeout" value="30000" />
+    <option name="mySSHReadTimeout" value="30000" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
+    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
+    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+    <option name="FORCE_UPDATE" value="false" />
+    <option name="IGNORE_EXTERNALS" value="false" />
+    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="" />
+      <created>1392914281604</created>
+      <updated>1392914281604</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TodoView" selected-index="0">
+    <todo-panel id="selected-file">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="default-changelist">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="64" y="-4" width="1303" height="773" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32671756" sideWeight="0.49960285" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32671756" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32057416" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924962" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24980111" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15409055" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3541985" sideWeight="0.50039715" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3541985" sideWeight="0.49960285" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977098" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32671756" sideWeight="0.49960285" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32671756" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32977098" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3541985" sideWeight="0.50039715" order="10" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32894737" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32057416" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24980111" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15170771" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3541985" sideWeight="0.49960285" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977098" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="112" column="3" selection-start="2678" selection-end="2678" vertical-scroll-proportion="0.0" vertical-offset="1500" max-vertical-offset="3270">
+          <folding>
+            <element signature="e#7#269#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/RtWikiAttributeTaxonomyModel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="3" selection-start="85" selection-end="257" vertical-scroll-proportion="0.37251654" vertical-offset="0" max-vertical-offset="2265" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/schema/rtwiki_subscribe.schema">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="412" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/RtWikiSubscribeModel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="47" selection-start="1743" selection-end="1773" vertical-scroll-proportion="2.976804" vertical-offset="0" max-vertical-offset="1725" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/helper/wiki-404-redirect.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="3" selection-start="6" selection-end="250" vertical-scroll-proportion="0.27918783" vertical-offset="0" max-vertical-offset="1140">
+          <folding>
+            <element signature="e#6#250#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/helper/Tax Diff.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="30" selection-start="270" selection-end="291" vertical-scroll-proportion="-0.23195876" vertical-offset="270" max-vertical-offset="795" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/helper/RtWikiDailyChanges.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="7" selection-start="345" selection-end="345" vertical-scroll-proportion="0.49668875" vertical-offset="0" max-vertical-offset="1545" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/helper/RtCRMEmailDiff.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="29" selection-start="226" selection-end="226" vertical-scroll-proportion="0.38071066" vertical-offset="0" max-vertical-offset="2490" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/assets/js/rtwiki-admin-script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="628" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/assets/js/rtwiki-new-post-script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="628" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/helper/wiki-post-subscribe.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="96" column="44" selection-start="2736" selection-end="2736" vertical-scroll-proportion="2.4365482" vertical-offset="0" max-vertical-offset="4755">
+          <folding>
+            <element signature="e#6#155#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/RtWikiAttributes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="428" column="89" selection-start="16617" selection-end="16617" vertical-scroll-proportion="0.33333334" vertical-offset="6265" max-vertical-offset="6825">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/user-groups.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="342" column="17" selection-start="11896" selection-end="11896" vertical-scroll-proportion="3.5106952" vertical-offset="3817" max-vertical-offset="12975">
+          <folding>
+            <marker date="1393251357592" expanded="true" signature="-1:-1" placeholder="SELECT COUNT..$wpdb-&gt;term_relationships WHERE..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/standard_1.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="570" column="9" selection-start="16575" selection-end="16575" vertical-scroll-proportion="0.34551495" vertical-offset="8342" max-vertical-offset="16890">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/RtWikiRoles.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="110" column="76" selection-start="3198" selection-end="3691" vertical-scroll-proportion="0.9168081" vertical-offset="1110" max-vertical-offset="3825">
+          <folding>
+            <element signature="e#6#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/RtWikiAdmin.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="21" selection-start="894" selection-end="894" vertical-scroll-proportion="0.53480476" vertical-offset="285" max-vertical-offset="1920">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="62" selection-start="490" selection-end="490" vertical-scroll-proportion="0.10186757" vertical-offset="225" max-vertical-offset="990">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/RtWikiCPT.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="321" column="54" selection-start="11649" selection-end="11649" vertical-scroll-proportion="0.516129" vertical-offset="4361" max-vertical-offset="5265">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/wiki-widgets.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="141" column="38" selection-start="3824" selection-end="3824" vertical-scroll-proportion="0.45840406" vertical-offset="1845" max-vertical-offset="5580">
+          <folding>
+            <element signature="e#6#50#0" expanded="true" />
+            <marker date="1393251357592" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/helper/rtwiki-functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="15" selection-start="876" selection-end="876" vertical-scroll-proportion="0.15280136" vertical-offset="585" max-vertical-offset="1365">
+          <folding>
+            <element signature="e#7#136#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/helper/wiki-post-filtering.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="52" selection-start="288" selection-end="288" vertical-scroll-proportion="0.12733446" vertical-offset="0" max-vertical-offset="7200">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/helper/wiki-single-custom-template.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="1" selection-start="7" selection-end="156" vertical-scroll-proportion="-0.15280136" vertical-offset="105" max-vertical-offset="960">
+          <folding>
+            <element signature="e#6#156#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/helper/wiki-singlepost-content.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="80" column="35" selection-start="1976" selection-end="1976" vertical-scroll-proportion="0.43293718" vertical-offset="945" max-vertical-offset="2205">
+          <folding>
+            <element signature="e#6#168#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/helper/wiki-settings.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="86" column="22" selection-start="4327" selection-end="4327" vertical-scroll-proportion="0.50933784" vertical-offset="990" max-vertical-offset="2610">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="12" selection-start="330" selection-end="330" vertical-scroll-proportion="-0.083333336" vertical-offset="193" max-vertical-offset="795">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/main/RTWiki.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="116" column="39" selection-start="3676" selection-end="3676" vertical-scroll-proportion="-50.791668" vertical-offset="491" max-vertical-offset="2610">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="112" column="3" selection-start="2714" selection-end="2714" vertical-scroll-proportion="2.1461794" vertical-offset="283" max-vertical-offset="1830">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
+

@@ -31,7 +31,7 @@ $content_class = apply_filters('rtwiki_content_class', 'large-8 small-12 columns
             <?php while (have_posts()) : the_post(); ?>
                     <article id="post-<?php the_ID(); ?>" <?php post_class( 'clearfix' ); ?> >
                         <header class="entry-header">
-                            <h1 class="entry-title"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permanent Link to %s', 'rtCamp' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></h1>
+                            <h2 class="entry-title"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permanent Link to %s', 'rtCamp' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></h2>
                         </header>
                         <div class="entry-content">
                             <?php the_excerpt(); ?>
