@@ -96,7 +96,7 @@ function rtwiki_autoloader( $class_name )
 {
 	$rtLibPath = array(
 		'app/helper/' . $class_name . '.php',
-		'app/helper/rtLib/rtdbmodel/' . $class_name . '.php',
+		'app/helper/rtdbmodel/' . $class_name . '.php',
 		'app/admin/' . $class_name . '.php',
 		'app/models/' . $class_name . '.php',
 		'app/main/' . $class_name . '.php', );
