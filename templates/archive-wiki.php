@@ -28,7 +28,7 @@ endif;
 	?>
 			</h1>
 		</header>
-		<article id="docslist" class='clearfix rtp-post-box'>
+		<article id="<?php echo get_post_type() . '-list'; ?>" class='wikilist clearfix rtp-post-box'>
 			<div class="post-content">
 
 				<?php

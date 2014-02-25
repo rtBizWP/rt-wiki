@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/archive-wiki.php" afterPath="$PROJECT_DIR$/templates/archive-wiki.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="rtwiki.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,7 +31,7 @@
       <file leaf-file-name="single-wiki.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="24" selection-start="523" selection-end="523" vertical-scroll-proportion="-9.375" vertical-offset="0" max-vertical-offset="720">
+            <state line="17" column="75" selection-start="351" selection-end="397" vertical-scroll-proportion="-8.125" vertical-offset="0" max-vertical-offset="720">
               <folding />
             </state>
           </provider>
@@ -41,7 +40,7 @@
       <file leaf-file-name="archive-wiki.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="36" selection-start="1118" selection-end="1118" vertical-scroll-proportion="1.0191637" vertical-offset="0" max-vertical-offset="1020">
+            <state line="30" column="73" selection-start="967" selection-end="967" vertical-scroll-proportion="0.5487805" vertical-offset="135" max-vertical-offset="1020">
               <folding />
             </state>
           </provider>
@@ -672,14 +671,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="24" selection-start="523" selection-end="523" vertical-scroll-proportion="-9.375" vertical-offset="0" max-vertical-offset="720">
+        <state line="17" column="75" selection-start="351" selection-end="397" vertical-scroll-proportion="-8.125" vertical-offset="0" max-vertical-offset="720">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="36" selection-start="1118" selection-end="1118" vertical-scroll-proportion="1.0191637" vertical-offset="0" max-vertical-offset="1020">
+        <state line="30" column="73" selection-start="967" selection-end="967" vertical-scroll-proportion="0.5487805" vertical-offset="135" max-vertical-offset="1020">
           <folding />
         </state>
       </provider>
