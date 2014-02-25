@@ -128,7 +128,7 @@ if ( ! class_exists( 'RTWiki' ) ){
 				'description' => __( 'An optional sidebar for the rtWiki Widget', 'rtCamp' ),
 				'before_widget' => '<div id="%1$s" class="widget %2$s sidebar-widget rtp-subscribe-widget-container">',
 				'after_widget' => '</div>',
-				'before_title' => '<h3 class="widget-title">',
+				'before_title' => '<h3 class="widgettitle">',
 				'after_title' => '</h3>', ) ;
 
 			register_sidebar( $arg );

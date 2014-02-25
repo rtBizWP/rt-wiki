@@ -24,7 +24,9 @@ class RtWikiContributers extends WP_Widget
 		if ( has_wiki_contributers( $post->ID ) ){
 			echo $args[ 'before_widget' ];
 			echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+			echo '<div class="rtwikicontributers" >';
 			get_contributers( $post->ID );
+			echo '</div" >';
 			echo $args[ 'after_widget' ];
 		}
 	}
@@ -80,7 +82,9 @@ class RtWikiSubPage extends WP_Widget
 		if ( $isParent ){
 			echo $args[ 'before_widget' ];
 			echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+			echo '<div class="rtwikisubpage" >';
 			get_subpages( $post->ID, 0, $post->post_type );
+			echo '</div>';
 			echo $args[ 'after_widget' ];
 		}
 	}
@@ -135,7 +139,9 @@ class RtWikiTaxonimies extends WP_Widget
 		echo $args[ 'before_widget' ];
 		echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
 		//wiki_default_taxonomies($post->ID);
+		echo '<div class="rtwikitaxonimies" >';
 		wiki_custom_taxonomies( $post->ID );
+		echo '</div>';
 		echo $args[ 'after_widget' ];
 	}
 
@@ -193,6 +199,7 @@ class RtWikiPageSubscribe extends WP_Widget
 		if ( get_permission( $post->ID, get_current_user_id() ) ){
 			echo $args[ 'before_widget' ];
 			echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+			echo '<div class="rtwikipagesubscribe" >';
 			if ( is_post_subscribe_cur_user( get_current_user_id() ) == true ){
 				$singleCheck = 'checked';
 			} else {
@@ -225,7 +232,7 @@ class RtWikiPageSubscribe extends WP_Widget
 			echo '<input type="hidden" name=post-type value=' . $post->post_type . ' /><input type="submit" class="button" name=post-update-subscribe" value="Submit" >
                 <input type="hidden" name="update-postId"  value=' . $post->ID . '>
             </form>';
-
+			echo '</div>';
 			echo $args[ 'after_widget' ];
 		}
 	}

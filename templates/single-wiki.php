@@ -7,21 +7,20 @@
 
 get_header();
 
-$content_class = apply_filters( 'rtwiki_content_class', 'large-8 small-12 columns' );
+$content_class = apply_filters( 'rtwiki_content_class', 'large-8 columns rtp-singular' );
 ?>
-
-	<div id="primary" class="content-area <?php echo $content_class ?>">
-		<div id="content" class="site-content" role="main">
+	<section id="content" class="rtp-content-section <?php echo $content_class ?> " role="main">
 <?php
 			/* The loop */
 if ( have_posts() ){
 	the_post();
 	?>
-				<article id="<?php get_post_type() . '-' . get_the_ID(); ?>" <?php post_class( 'clearfix' ); ?> >
-					<header class="entry-header">
-						<h1 class="entry-title post-title"><?php echo the_title(); ?></h1>
+				<article id="<?php get_post_type() . '-' . get_the_ID(); ?>" <?php post_class( 'clearfix rtp-post-box' ); ?> >
+					<header class="post-header"><div class="rtp-secondary-header">
+						<h1 class="post-title"><?php echo the_title(); ?></h1>
+						</div>
 					</header>
-					<div class="entry-content">
+					<div class="post-content">
 						<?php the_content(); ?>
 					</div>
 				</article>
@@ -29,10 +28,7 @@ if ( have_posts() ){
 }
 			comments_template();
 ?>
-
-		</div>
-		<!-- #content -->
-	</div><!-- #primary -->
+	</section>
 <?php
 $supported_posts = rtwiki_get_supported_attribute();
 $post_type = get_post_type();
