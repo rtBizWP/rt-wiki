@@ -21,7 +21,7 @@ elseif ( is_month() ) :
 elseif ( is_year() ) :
 	printf( __( 'Yearly Archives: %s', 'rtCamp' ), get_the_date( _x( 'Y', 'yearly archives date format', 'rtCamp' ) ) );
 elseif ( is_post_type_archive() ) :
-	_e( sprintf( '%s' , get_post_type() ) , 'rtCamp' );
+	_e( sprintf( '%s' , strtoupper( get_post_type() ) ) , 'rtCamp' );
 else :
 	_e( 'Archive', 'rtCamp' );
 endif;
