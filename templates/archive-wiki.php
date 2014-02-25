@@ -8,7 +8,7 @@
  */
 get_header();
 
-$content_class = apply_filters('rtwiki_content_class', 'large-8 small-12 columns');
+$content_class = apply_filters( 'rtwiki_content_class', 'large-8 small-12 columns' );
 ?>
 
 <div id="primary" class="content-area <?php echo $content_class; ?>">
@@ -16,11 +16,11 @@ $content_class = apply_filters('rtwiki_content_class', 'large-8 small-12 columns
 
         <header class="page-header">
             <h1 class="page-title"><?php
-            if (is_day()) :
+if ( is_day() ) :
                 printf(__('Daily Archives: %s', 'rtCamp'), get_the_date());
-            elseif (is_month()) :
+elseif ( is_month() ) :
                 printf(__('Monthly Archives: %s', 'rtCamp'), get_the_date(_x('F Y', 'monthly archives date format', 'rtCamp')));
-            elseif (is_year()) :
+elseif (is_year()) :
                 printf(__('Yearly Archives: %s', 'rtCamp'), get_the_date(_x('Y', 'yearly archives date format', 'rtCamp')));
             else :
                 _e('Archives', 'rtCamp');
@@ -37,8 +37,8 @@ $content_class = apply_filters('rtwiki_content_class', 'large-8 small-12 columns
                             <?php the_excerpt(); ?>
                         </div>
                     </article>
-            <?php 
-                endwhile; 
+            <?php
+                endwhile;
             ?>
             <div class="navigation">
                 <div class="alignleft"><?php previous_posts_link('&laquo; Previous Page') ?></div>
@@ -50,10 +50,10 @@ $content_class = apply_filters('rtwiki_content_class', 'large-8 small-12 columns
             <?php get_template_part('content', 'none'); ?>
         <?php endif; ?>
 
-                 
-      
 
-      
+
+
+
     </div><!-- #content -->
 </div><!-- #primary -->
 
