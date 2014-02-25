@@ -18,6 +18,12 @@ if ( have_posts() ){
 				<article id="<?php get_post_type() . '-' . get_the_ID(); ?>" <?php post_class( 'clearfix rtp-post-box' ); ?> >
 					<header class="post-header"><div class="rtp-secondary-header">
 						<h1 class="post-title"><?php echo the_title(); ?></h1>
+						<?php
+	if ( function_exists( 'yoast_breadcrumb' ) ) {
+		echo '<hr class="rtp-separator" />';
+		yoast_breadcrumb( '<p id="breadcrumbs" class="breadcrumbs clearfix rtp-breadcrumb-secondary">' , '</p>' );
+	}
+	?>
 						</div>
 					</header>
 					<div class="post-content">

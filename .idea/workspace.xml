@@ -4,7 +4,9 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed." />
+    <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed.">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/single-wiki.php" afterPath="$PROJECT_DIR$/templates/single-wiki.php" />
+    </list>
     <ignored path="rtwiki.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -26,19 +28,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="single-wiki.php" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="single-wiki.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="75" selection-start="351" selection-end="397" vertical-scroll-proportion="-8.125" vertical-offset="0" max-vertical-offset="720">
+            <state line="22" column="44" selection-start="676" selection-end="676" vertical-scroll-proportion="0.4703833" vertical-offset="0" max-vertical-offset="810">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="archive-wiki.php" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="archive-wiki.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="26" selection-start="789" selection-end="789" vertical-scroll-proportion="0.26132405" vertical-offset="195" max-vertical-offset="1020">
+            <state line="23" column="26" selection-start="789" selection-end="789" vertical-scroll-proportion="-8.916667" vertical-offset="131" max-vertical-offset="1020">
               <folding />
             </state>
           </provider>
@@ -78,11 +80,11 @@
         <option value="$PROJECT_DIR$/app/helper/wiki-settings.php" />
         <option value="$PROJECT_DIR$/app/helper/wiki-post-filtering.php" />
         <option value="$PROJECT_DIR$/app/helper/wiki-singlepost-content.php" />
-        <option value="$PROJECT_DIR$/templates/single-wiki.php" />
         <option value="$PROJECT_DIR$/app/main/RTWiki.php" />
         <option value="$PROJECT_DIR$/app/admin/wiki-widgets.php" />
         <option value="$PROJECT_DIR$/app/assets/css/rtwiki-client-styles.css" />
         <option value="$PROJECT_DIR$/templates/archive-wiki.php" />
+        <option value="$PROJECT_DIR$/templates/single-wiki.php" />
       </list>
     </option>
   </component>
@@ -667,16 +669,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
+    <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="75" selection-start="351" selection-end="397" vertical-scroll-proportion="-8.125" vertical-offset="0" max-vertical-offset="720">
+        <state line="23" column="26" selection-start="789" selection-end="789" vertical-scroll-proportion="-8.916667" vertical-offset="131" max-vertical-offset="1020">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
+    <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="26" selection-start="789" selection-end="789" vertical-scroll-proportion="0.26132405" vertical-offset="195" max-vertical-offset="1020">
+        <state line="22" column="44" selection-start="676" selection-end="676" vertical-scroll-proportion="0.4703833" vertical-offset="0" max-vertical-offset="810">
           <folding />
         </state>
       </provider>
