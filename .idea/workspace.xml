@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/archive-wiki.php" afterPath="$PROJECT_DIR$/templates/archive-wiki.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="rtwiki.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,7 +32,7 @@
       <file leaf-file-name="single-wiki.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="29" selection-start="454" selection-end="820" vertical-scroll-proportion="-14.375" vertical-offset="0" max-vertical-offset="810">
+            <state line="25" column="6" selection-start="584" selection-end="792" vertical-scroll-proportion="-13.125" vertical-offset="0" max-vertical-offset="810">
               <folding />
             </state>
           </provider>
@@ -40,8 +41,12 @@
       <file leaf-file-name="archive-wiki.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="38" selection-start="664" selection-end="664" vertical-scroll-proportion="0.4773519" vertical-offset="41" max-vertical-offset="870">
-              <folding />
+            <state line="48" column="12" selection-start="1205" selection-end="1205" vertical-scroll-proportion="0.81010455" vertical-offset="255" max-vertical-offset="870">
+              <folding>
+                <marker date="1393332330930" expanded="true" signature="442:524" placeholder="..." />
+                <marker date="1393332330930" expanded="true" signature="476:524" placeholder="..." />
+                <marker date="1393332330930" expanded="true" signature="638:702" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -671,15 +676,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="29" selection-start="454" selection-end="820" vertical-scroll-proportion="-14.375" vertical-offset="0" max-vertical-offset="810">
+        <state line="25" column="6" selection-start="584" selection-end="792" vertical-scroll-proportion="-13.125" vertical-offset="0" max-vertical-offset="810">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="38" selection-start="664" selection-end="664" vertical-scroll-proportion="0.4773519" vertical-offset="41" max-vertical-offset="870">
-          <folding />
+        <state line="48" column="12" selection-start="1205" selection-end="1205" vertical-scroll-proportion="0.81010455" vertical-offset="255" max-vertical-offset="870">
+          <folding>
+            <marker date="1393332330930" expanded="true" signature="442:524" placeholder="..." />
+            <marker date="1393332330930" expanded="true" signature="476:524" placeholder="..." />
+            <marker date="1393332330930" expanded="true" signature="638:702" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>

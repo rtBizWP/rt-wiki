@@ -12,14 +12,13 @@ $content_class = apply_filters( 'rtwiki_content_class', 'large-8 columns rtp-sin
 ?>
 	<section id="content" class="rtp-content-section <?php echo $content_class ?> " role="main">
 
-		<header class="page-header">
-		</header>
-		<article id="<?php echo get_post_type() . '-list'; ?>" class='wikilist clearfix rtp-post-box'>
+		<article id="<?php echo get_post_type() . '-list'; ?>" <?php post_class( 'clearfix wikilist rtp-post-box' ); ?>>
 			<header class="post-header"><div class="rtp-secondary-header">
 					<h1 class="post-title"><?php _e( sprintf( '%s' , strtoupper( get_post_type() ) ) , 'rtCamp' ); ?></h1>
 				</div>
 			</header>
 			<div class="post-content">
+				<ul class="ulwikilist">
 
 				<?php
 				$args = array(
@@ -46,6 +45,7 @@ if ( isset( $wikis ) ){
 	get_template_part( 'content', 'none' );
 }
 	?>
+				</ul>
 			</div>
 		</article>
 	</section>
