@@ -4,12 +4,7 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed.">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/main/RTWiki.php" afterPath="$PROJECT_DIR$/app/main/RTWiki.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/single-wiki.php" afterPath="$PROJECT_DIR$/templates/single-wiki.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/wiki-widgets.php" afterPath="$PROJECT_DIR$/app/admin/wiki-widgets.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed." />
     <ignored path="rtwiki.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -31,10 +26,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="single-wiki.php" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="single-wiki.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="24" selection-start="600" selection-end="600" vertical-scroll-proportion="-10.625" vertical-offset="0" max-vertical-offset="720">
+            <state line="21" column="24" selection-start="600" selection-end="600" vertical-scroll-proportion="0.19379845" vertical-offset="180" max-vertical-offset="720">
               <folding />
             </state>
           </provider>
@@ -49,10 +44,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="wiki-widgets.php" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="wiki-widgets.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/admin/wiki-widgets.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="202" column="46" selection-start="5631" selection-end="5631" vertical-scroll-proportion="0.64171124" vertical-offset="2790" max-vertical-offset="5685">
+            <state line="205" column="34" selection-start="5729" selection-end="5729" vertical-scroll-proportion="3.125" vertical-offset="3150" max-vertical-offset="5685">
               <folding>
                 <element signature="e#6#50#0" expanded="true" />
               </folding>
@@ -651,13 +646,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="24" selection-start="600" selection-end="600" vertical-scroll-proportion="-10.625" vertical-offset="0" max-vertical-offset="720">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/main/RTWiki.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="130" column="57" selection-start="4161" selection-end="4161" vertical-scroll-proportion="-10.5" vertical-offset="1668" max-vertical-offset="2610">
@@ -667,10 +655,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/admin/wiki-widgets.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="202" column="46" selection-start="5631" selection-end="5631" vertical-scroll-proportion="0.64171124" vertical-offset="2790" max-vertical-offset="5685">
+        <state line="205" column="34" selection-start="5729" selection-end="5729" vertical-scroll-proportion="3.125" vertical-offset="3150" max-vertical-offset="5685">
           <folding>
             <element signature="e#6#50#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="24" selection-start="600" selection-end="600" vertical-scroll-proportion="0.19379845" vertical-offset="180" max-vertical-offset="720">
+          <folding />
         </state>
       </provider>
     </entry>
