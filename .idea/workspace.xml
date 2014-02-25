@@ -4,9 +4,7 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed.">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/archive-wiki.php" afterPath="$PROJECT_DIR$/templates/archive-wiki.php" />
-    </list>
+    <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed." />
     <ignored path="rtwiki.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -40,7 +38,7 @@
       <file leaf-file-name="archive-wiki.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="73" selection-start="967" selection-end="967" vertical-scroll-proportion="0.5487805" vertical-offset="135" max-vertical-offset="1020">
+            <state line="23" column="26" selection-start="789" selection-end="789" vertical-scroll-proportion="0.26132405" vertical-offset="195" max-vertical-offset="1020">
               <folding />
             </state>
           </provider>
@@ -678,7 +676,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="73" selection-start="967" selection-end="967" vertical-scroll-proportion="0.5487805" vertical-offset="135" max-vertical-offset="1020">
+        <state line="23" column="26" selection-start="789" selection-end="789" vertical-scroll-proportion="0.26132405" vertical-offset="195" max-vertical-offset="1020">
           <folding />
         </state>
       </provider>
