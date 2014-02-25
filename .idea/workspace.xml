@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/archive-wiki.php" afterPath="$PROJECT_DIR$/templates/archive-wiki.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/deployment.xml" afterPath="$PROJECT_DIR$/.idea/deployment.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="rtwiki.iws" />
@@ -42,7 +41,7 @@
       <file leaf-file-name="archive-wiki.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="51" column="16" selection-start="1418" selection-end="1418" vertical-scroll-proportion="1.3327526" vertical-offset="0" max-vertical-offset="990">
+            <state line="25" column="32" selection-start="537" selection-end="537" vertical-scroll-proportion="0.6533101" vertical-offset="0" max-vertical-offset="825">
               <folding />
             </state>
           </provider>
@@ -520,7 +519,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/helper/wiki-404-redirect.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="3" selection-start="6" selection-end="250" vertical-scroll-proportion="0.27918783" vertical-offset="0" max-vertical-offset="1140" />
+        <state line="11" column="3" selection-start="6" selection-end="250" vertical-scroll-proportion="0.27918783" vertical-offset="0" max-vertical-offset="1140">
+          <folding>
+            <element signature="e#6#250#0" expanded="false" />
+          </folding>
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/helper/Tax Diff.php">
@@ -676,7 +679,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="16" selection-start="1418" selection-end="1418" vertical-scroll-proportion="1.3327526" vertical-offset="0" max-vertical-offset="990">
+        <state line="25" column="32" selection-start="537" selection-end="537" vertical-scroll-proportion="0.6533101" vertical-offset="0" max-vertical-offset="825">
           <folding />
         </state>
       </provider>
