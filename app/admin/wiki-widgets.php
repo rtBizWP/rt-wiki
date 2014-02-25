@@ -19,11 +19,18 @@ class RtWikiContributers extends WP_Widget
 	{
 		extract( $args, EXTR_SKIP );
 		global $post;
-		$title = apply_filters( 'widget_title', $instance['title'] );
+
+		if ( isset( $instance['title']  ) ){
+			$title = apply_filters( 'widget_title', $instance['title'] );
+		} else {
+			$title = apply_filters( 'widget_title', 'Contributers' );
+		}
 
 		if ( has_wiki_contributers( $post->ID ) ){
 			echo $args[ 'before_widget' ];
-			echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+			if ( isset( $title ) ){
+				echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+			}
 			echo '<div class="rtwikicontributers" >';
 			get_contributers( $post->ID );
 			echo '</div" >';
@@ -34,7 +41,7 @@ class RtWikiContributers extends WP_Widget
 	function update( $new_instance, $old_instance )
 	{
 		$instance = array();
-		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : 'Contributers';
 
 		return $instance;
 	}
@@ -77,11 +84,18 @@ class RtWikiSubPage extends WP_Widget
 		extract( $args, EXTR_SKIP );
 		global $post;
 		$isParent = if_sub_pages( $post->ID, $post->post_type );
-		$title    = apply_filters( 'widget_title', $instance['title'] );
+
+		if ( isset( $instance['title']  ) ){
+			$title = apply_filters( 'widget_title', $instance['title'] );
+		} else {
+			$title = apply_filters( 'widget_title', 'SubPages' );
+		}
 
 		if ( $isParent ){
 			echo $args[ 'before_widget' ];
-			echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+			if ( isset( $title ) ){
+				echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+			}
 			echo '<div class="rtwikisubpage" >';
 			get_subpages( $post->ID, 0, $post->post_type );
 			echo '</div>';
@@ -92,7 +106,7 @@ class RtWikiSubPage extends WP_Widget
 	function update( $new_instance, $old_instance )
 	{
 		$instance = array();
-		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : 'SubPages';
 
 		return $instance;
 	}
@@ -134,10 +148,18 @@ class RtWikiTaxonimies extends WP_Widget
 	{
 		extract( $args, EXTR_SKIP );
 		global $post;
-		$title = apply_filters( 'widget_title', $instance['title'] );
+
+
+		if ( isset( $instance['title']  ) ){
+			$title = apply_filters( 'widget_title', $instance['title'] );
+		} else {
+			$title = apply_filters( 'widget_title', 'Taxonimies' );
+		}
 
 		echo $args[ 'before_widget' ];
-		echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+		if ( isset( $title ) ){
+			echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+		}
 		//wiki_default_taxonomies($post->ID);
 		echo '<div class="rtwikitaxonimies" >';
 		wiki_custom_taxonomies( $post->ID );
@@ -148,7 +170,7 @@ class RtWikiTaxonimies extends WP_Widget
 	function update( $new_instance, $old_instance )
 	{
 		$instance = array();
-		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : 'Taxonimies';
 
 		return $instance;
 	}
@@ -193,12 +215,19 @@ class RtWikiPageSubscribe extends WP_Widget
 		$subpageStatus = '';
 		$singleCheck   = '';
 		$subPageCheck  = '';
-		$title = apply_filters( 'widget_title', $instance['title'] );
+
+		if ( isset( $instance['title']  ) ){
+			$title = apply_filters( 'widget_title', $instance['title'] );
+		} else {
+			$title = apply_filters( 'widget_title', 'Subscribe' );
+		}
 
 		$parentStatus = false;
 		if ( get_permission( $post->ID, get_current_user_id() ) ){
 			echo $args[ 'before_widget' ];
-			echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+			if ( isset( $title ) ){
+				echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+			}
 			echo '<div class="rtwikipagesubscribe" >';
 			if ( is_post_subscribe_cur_user( get_current_user_id() ) == true ){
 				$singleCheck = 'checked';
@@ -240,7 +269,7 @@ class RtWikiPageSubscribe extends WP_Widget
 	function update( $new_instance, $old_instance )
 	{
 		$instance = array();
-		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : 'Subscribe';
 
 		return $instance;
 	}
