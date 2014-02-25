@@ -21,8 +21,9 @@ function my_wp_trash_post( $post_id )
 {
 	$post            = get_post( $post_id );
 	$supported_posts = rtwiki_get_supported_attribute();
+	$access = get_admin_panel_permission( $post_id );
 	if ( in_array( $post->post_type, $supported_posts ) && in_array( $post->post_status, array( 'publish', 'draft', 'future' ) ) ){
-		if ( ! current_user_can( 'delete_wiki', $post_id ) ){
+		if ( $access != 'a' ){
 			WP_DIE( __( 'You dont have enough access rights to move this post to the trash' ) . "<br><a href='edit.php?post_type=$post->post_type'>" . __( 'Go Back' , 'rtCamp' ) . '</a>' );
 		}
 	}
@@ -43,16 +44,17 @@ function remove_quick_edit( $actions )
 	global $post;
 	$supported_posts = rtwiki_get_supported_attribute();
 	if ( in_array( $post->post_type, $supported_posts ) ){
-		if ( ! current_user_can( 'edit_wiki', $post->ID ) ){
+		$access = get_admin_panel_permission( $post->ID );
+		if ( $access != 'w' && $access != 'a' ){
 			unset( $actions[ 'edit' ] );
 			unset( $actions[ 'inline hide-if-no-js' ] );
 		}
 
-		if ( ! current_user_can( 'delete_wiki', $post->ID ) ){
+		if ( $access != 'a' ){
 			unset( $actions[ 'trash' ] );
 		}
 
-		if ( ! current_user_can( 'read_wiki', $post->ID ) ){
+		if ( $access == false ){
 			unset( $actions[ 'view' ] );
 		}
 	}
@@ -71,16 +73,17 @@ function post_check()
 	$page            = isset( $_GET[ 'post' ] ) ? $_GET[ 'post' ] : 0;
 	$supported_posts = rtwiki_get_supported_attribute();
 	$posttype        = get_post_type( $page );
+	$access = get_admin_panel_permission( $page );
 	if ( isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] == 'edit' ){
 		if ( in_array( $posttype, $supported_posts ) ){
-			if ( ! current_user_can( 'edit_wiki', $page ) ){
+			if ( $access != 'w' && $access != 'a' ){
 				WP_DIE( __( 'You dont have enough access rights to Edit this post' ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
 			}
 		}
 	}
 	if ( isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] == 'trash' ){
 		if ( in_array( $posttype, $supported_posts ) ){
-			if ( ! current_user_can( 'delete_wiki', $page ) ){
+			if ( $access != 'a' ){
 				WP_DIE( __( 'You dont have enough access rights to move this post to the trash' ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
 			}
 		}
@@ -109,6 +112,7 @@ function add_capabilities( $capabilities, $cap, $args, $user )
 			return $user->allcaps;
 		}
 		$access = get_admin_panel_permission( $post->ID );
+
 		if ( ( is_object( $post ) && $post->post_author != get_current_user_id() ) ){
 			$capabilities[ 'edit_wiki' ] = false;
 			$capabilities[ 'edit_others_wiki' ] = false;
@@ -174,13 +178,16 @@ function get_admin_panel_permission( $pageID )
 
 		$post_meta = get_post( $pageID );
 
-		if ( in_array( 'rtwikiadmin', $current_user->roles ) || in_array( 'rtwikieditor', $current_user->roles ) || $user == $post_meta->post_author ){
-			return 'w';
+		if ( is_object( $post_meta ) && ( in_array( 'rtwikiadmin', $current_user->roles ) || in_array( 'rtwikieditor', $current_user->roles ) || $user == $post_meta->post_author ) ){
+			return 'a';
 		} else {
 			if ( isset( $access_rights[ 'public' ] ) && 1 == $access_rights[ 'public' ] ){
 				return 'r';
 			} else if ( isset( $access_rights[ 'all' ] ) ){
 				if ( isset( $access_rights[ 'all' ][ 'w' ] ) && ( $access_rights[ 'all' ][ 'w' ] == 1 ) ){
+					if ( in_array( 'rtwikisubscriber', $current_user->roles ) ) {
+						return 'r';
+					}
 					return 'w';
 				} else if ( isset( $access_rights[ 'all' ][ 'r' ] ) && ( $access_rights[ 'all' ][ 'r' ] == 1 ) ){
 					return 'r';
@@ -192,6 +199,9 @@ function get_admin_panel_permission( $pageID )
 					$ans = get_term_if_exists( $term->slug, $user );
 					if ( $ans == $term->slug && isset( $access_rights[ $term->name ] ) ){
 						if ( isset( $access_rights[ $term->name ][ 'w' ] ) && ( $access_rights[ $term->name ][ 'w' ] == 1 ) ){
+							if ( in_array( 'rtwikisubscriber', $current_user->roles ) ) {
+								return 'r';
+							}
 							return 'w';
 						} else if ( isset( $access_rights[ $term->name ][ 'r' ] ) && ( $access_rights[ $term->name ][ 'r' ] == 1 ) ){
 							return 'r';

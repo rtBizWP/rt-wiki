@@ -38,10 +38,10 @@ if ( ! class_exists( 'RtWikiAdmin' ) ){
 			rtwiki_save_settings();
 
 			//Post filtering
-			//add_action( 'wp_trash_post', 'my_wp_trash_post' );
-			//add_filter( 'page_row_actions', 'remove_quick_edit', 10 );
-			//add_action( 'admin_init', 'post_check' );
-			//add_filter( 'user_has_cap', 'add_capabilities', 10, 4 );
+			add_action( 'wp_trash_post', 'my_wp_trash_post' );
+			add_filter( 'page_row_actions', 'remove_quick_edit', 10 );
+			add_action( 'admin_init', 'post_check' );
+			add_filter( 'user_has_cap', 'add_capabilities', 10, 4 );
 
 			//Yoast plugin Sitemap rtWiki filtering
 			add_filter( 'wpseo_sitemaps_supported_taxonomies', 'rtwiki_sitemap_taxonomies' );
