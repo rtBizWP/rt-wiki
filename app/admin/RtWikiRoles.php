@@ -113,7 +113,7 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 				}
 
 				$label = strtolower( str_replace( '-', '_', sanitize_title( $rtwikirole[ 'label' ] ) ) );
-				remove_role( $label );
+				//remove_role( $label );
 				$role = get_role( $label );
 				if ( empty( $role ) ){
 					add_role( $label, __( ucfirst( $rtwikirole[ 'name' ] ) ), $caps );

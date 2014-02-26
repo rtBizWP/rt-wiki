@@ -4,7 +4,9 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed." />
+    <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed.">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/RtWikiRoles.php" afterPath="$PROJECT_DIR$/app/admin/RtWikiRoles.php" />
+    </list>
     <ignored path="rtwiki.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -29,7 +31,7 @@
       <file leaf-file-name="RtWikiRoles.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/admin/RtWikiRoles.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="124" column="9" selection-start="4010" selection-end="4010" vertical-scroll-proportion="0.70714283" vertical-offset="1434" max-vertical-offset="3795">
+            <state line="115" column="18" selection-start="3793" selection-end="3793" vertical-scroll-proportion="0.3857143" vertical-offset="1479" max-vertical-offset="3795">
               <folding />
             </state>
           </provider>
@@ -611,7 +613,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/admin/RtWikiRoles.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="124" column="9" selection-start="4010" selection-end="4010" vertical-scroll-proportion="0.70714283" vertical-offset="1434" max-vertical-offset="3795">
+        <state line="115" column="18" selection-start="3793" selection-end="3793" vertical-scroll-proportion="0.3857143" vertical-offset="1479" max-vertical-offset="3795">
           <folding />
         </state>
       </provider>
