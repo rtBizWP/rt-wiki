@@ -4,7 +4,10 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed." />
+    <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed.">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/helper/RtWikiWalker.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="rtwiki.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,7 +28,17 @@
     <favorites_list name="rtwiki" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="archive-wiki.php" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="36" column="37" selection-start="1038" selection-end="1038" vertical-scroll-proportion="0.6243478" vertical-offset="181" max-vertical-offset="870">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -75,10 +88,10 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="64" />
+    <option name="x" value="65" />
     <option name="y" value="24" />
-    <option name="width" value="1303" />
-    <option name="height" value="745" />
+    <option name="width" value="1301" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -131,17 +144,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Default" />
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -306,6 +308,17 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope">
+        <subPane subId="Default" />
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -337,10 +350,10 @@
     <configuration default="true" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application">
       <method />
     </configuration>
-    <configuration default="true" type="PhpHttpRequestRunConfigurationType" factoryName="PHP HTTP Request">
+    <configuration default="true" type="PhpRemoteDebugRunConfigurationType" factoryName="PHP Remote Debug">
       <method />
     </configuration>
-    <configuration default="true" type="PhpRemoteDebugRunConfigurationType" factoryName="PHP Remote Debug">
+    <configuration default="true" type="PhpHttpRequestRunConfigurationType" factoryName="PHP HTTP Request">
       <method />
     </configuration>
     <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
@@ -410,7 +423,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="64" y="24" width="1303" height="745" extended-state="7" />
+    <frame x="65" y="24" width="1301" height="744" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32618684" sideWeight="0.49960285" order="7" side_tool="false" content_ui="tabs" />
@@ -418,7 +431,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32006127" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24980111" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17950754" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1821798" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924962" sideWeight="0.50039715" order="7" side_tool="true" content_ui="tabs" />
@@ -427,12 +440,12 @@
       <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34303215" sideWeight="0.49960285" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924962" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924962" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924962" sideWeight="0.49960285" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3541985" sideWeight="0.49960285" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3541985" sideWeight="0.49960285" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977098" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -451,9 +464,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24980111" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15170771" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3541985" sideWeight="0.49960285" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3541985" sideWeight="0.49960285" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977098" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
@@ -486,17 +499,13 @@
     <entry file="file://$USER_HOME$/Downloads/wordpress/wp-includes/post-template.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="992" column="28" selection-start="28734" selection-end="28734" vertical-scroll-proportion="0.0" vertical-offset="14880" max-vertical-offset="21765">
-          <folding>
-            <marker date="1382635760000" expanded="true" signature="-1:-1" placeholder="SELECT ID FR..$wpdb-&gt;posts WHERE..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Downloads/wordpress/wp-includes/class-wp-walker.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="123" column="13" selection-start="3815" selection-end="3815" vertical-scroll-proportion="0.0" vertical-offset="1845" max-vertical-offset="6210">
-          <folding />
-        </state>
+        <state line="123" column="13" selection-start="3815" selection-end="3815" vertical-scroll-proportion="0.0" vertical-offset="1845" max-vertical-offset="6210" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
@@ -518,23 +527,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/main/RTWiki.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="116" column="39" selection-start="3676" selection-end="3676" vertical-scroll-proportion="0.0" vertical-offset="1740" max-vertical-offset="2640">
-          <folding />
-        </state>
+        <state line="116" column="39" selection-start="3676" selection-end="3676" vertical-scroll-proportion="0.0" vertical-offset="1740" max-vertical-offset="2640" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="112" column="3" selection-start="2708" selection-end="2708" vertical-scroll-proportion="0.0" vertical-offset="1680" max-vertical-offset="1830">
-          <folding />
-        </state>
+        <state line="112" column="3" selection-start="2708" selection-end="2708" vertical-scroll-proportion="0.0" vertical-offset="1680" max-vertical-offset="1830" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="112" column="3" selection-start="2678" selection-end="2678" vertical-scroll-proportion="0.0" vertical-offset="1500" max-vertical-offset="3270">
-          <folding />
-        </state>
+        <state line="112" column="3" selection-start="2678" selection-end="2678" vertical-scroll-proportion="0.0" vertical-offset="1500" max-vertical-offset="3270" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/models/RtWikiAttributeTaxonomyModel.php">
@@ -606,9 +609,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="112" column="3" selection-start="2708" selection-end="2708" vertical-scroll-proportion="0.95607233" vertical-offset="1205" max-vertical-offset="1830">
-          <folding />
-        </state>
+        <state line="112" column="3" selection-start="2708" selection-end="2708" vertical-scroll-proportion="0.95607233" vertical-offset="1205" max-vertical-offset="1830" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/assets/css/rtwiki-client-styles.css">
@@ -653,12 +654,10 @@
     </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/standard_4.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="9" selection-start="1661" selection-end="1661" vertical-scroll-proportion="0.4205298" vertical-offset="496" max-vertical-offset="16320">
-          <folding />
-        </state>
+        <state line="50" column="9" selection-start="1661" selection-end="1661" vertical-scroll-proportion="0.4205298" vertical-offset="496" max-vertical-offset="16320" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/helper/rtdbmodel/RtWikiWalker.php">
+    <entry file="file://$PROJECT_DIR$/app/helper/RtWikiWalker.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="41" column="9" selection-start="1695" selection-end="1695" vertical-scroll-proportion="1.0441426" vertical-offset="0" max-vertical-offset="735">
           <folding />
@@ -667,55 +666,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/helper/wiki-post-filtering.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="246" column="24" selection-start="7784" selection-end="7784" vertical-scroll-proportion="-1.5263158" vertical-offset="4439" max-vertical-offset="7350">
-          <folding />
-        </state>
+        <state line="246" column="24" selection-start="7784" selection-end="7784" vertical-scroll-proportion="-1.5263158" vertical-offset="4439" max-vertical-offset="7350" />
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Downloads/wordpress/wp-includes/class-wp-walker.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="21" selection-start="2304" selection-end="2312" vertical-scroll-proportion="0.2740864" vertical-offset="1125" max-vertical-offset="6210">
-          <folding />
-        </state>
+        <state line="86" column="21" selection-start="2304" selection-end="2312" vertical-scroll-proportion="0.2740864" vertical-offset="1125" max-vertical-offset="6210" />
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Downloads/wordpress/wp-includes/post-template.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="823" column="9" selection-start="23592" selection-end="23592" vertical-scroll-proportion="0.11714771" vertical-offset="12171" max-vertical-offset="21660">
-          <folding>
-            <marker date="1382635760000" expanded="true" signature="-1:-1" placeholder="SELECT ID FR..$wpdb-&gt;posts WHERE..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/helper/wiki-singlepost-content.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="19" selection-start="1952" selection-end="1952" vertical-scroll-proportion="0.57894737" vertical-offset="709" max-vertical-offset="2070">
-          <folding />
-        </state>
+        <state line="79" column="19" selection-start="1952" selection-end="1952" vertical-scroll-proportion="0.57894737" vertical-offset="709" max-vertical-offset="2070" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/assets/js/rtwiki-new-post-script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="626">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="626" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/helper/RtCRMEmailDiff.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="29" selection-start="226" selection-end="226" vertical-scroll-proportion="-2.2392027" vertical-offset="1573" max-vertical-offset="2490">
-          <folding>
-            <marker date="1393310980890" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1393310980890" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1393310980890" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1393310980890" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1393310980890" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1393310980890" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1393310980890" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1393310980890" expanded="false" signature="-1:-1" placeholder="..." />
-          </folding>
-        </state>
+        <state line="17" column="29" selection-start="226" selection-end="226" vertical-scroll-proportion="-2.2392027" vertical-offset="1573" max-vertical-offset="2490" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/helper/rtwiki-functions.php">
@@ -727,14 +705,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/main/RTWiki.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="38" selection-start="2451" selection-end="2451" vertical-scroll-proportion="0.30560273" vertical-offset="990" max-vertical-offset="2625">
-          <folding />
-        </state>
+        <state line="80" column="38" selection-start="2451" selection-end="2451" vertical-scroll-proportion="0.30560273" vertical-offset="990" max-vertical-offset="2625" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/archive-wiki.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="32" selection-start="778" selection-end="778" vertical-scroll-proportion="0.67275745" vertical-offset="0" max-vertical-offset="870">
+        <state line="36" column="37" selection-start="1038" selection-end="1038" vertical-scroll-proportion="0.6243478" vertical-offset="181" max-vertical-offset="870">
           <folding />
         </state>
       </provider>
