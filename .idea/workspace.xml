@@ -28,28 +28,7 @@
     <favorites_list name="rtwiki" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="RtWikiRoles.php" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/admin/RtWikiRoles.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="189" column="54" selection-start="5347" selection-end="5347" vertical-scroll-proportion="0.4375" vertical-offset="2560" max-vertical-offset="3795">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="capabilities.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Downloads/wordpress/wp-includes/capabilities.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="511" column="43" selection-start="11341" selection-end="11345" vertical-scroll-proportion="-15.583333" vertical-offset="7216" max-vertical-offset="22935">
-              <folding>
-                <marker date="1393338597128" expanded="true" signature="13041:13088" placeholder="SELECT * FRO..$wpdb-&gt;users WHERE..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -89,6 +68,8 @@
         <option value="$PROJECT_DIR$/app/helper/rtwiki-functions.php" />
         <option value="$PROJECT_DIR$/app/main/RTWiki.php" />
         <option value="$PROJECT_DIR$/templates/archive-wiki.php" />
+        <option value="$USER_HOME$/Downloads/wordpress/wp-admin/users.php" />
+        <option value="$USER_HOME$/Downloads/wordpress/wp-admin/includes/class-wp-list-table.php" />
         <option value="$PROJECT_DIR$/app/admin/RtWikiRoles.php" />
       </list>
     </option>
@@ -161,6 +142,66 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="rtwiki" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.jetbrains.php.config.PhpExternalLibrariesNodePatcher$PatchedExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PHP" />
+              <option name="myItemType" value="com.jetbrains.php.config.PhpExternalLibrariesNodePatcher$PatchedLibraryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wordpress" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rtwiki" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.jetbrains.php.config.PhpExternalLibrariesNodePatcher$PatchedExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PHP" />
+              <option name="myItemType" value="com.jetbrains.php.config.PhpExternalLibrariesNodePatcher$PatchedLibraryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wordpress" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wp-admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rtwiki" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.jetbrains.php.config.PhpExternalLibrariesNodePatcher$PatchedExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PHP" />
+              <option name="myItemType" value="com.jetbrains.php.config.PhpExternalLibrariesNodePatcher$PatchedLibraryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wordpress" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wp-admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="includes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -245,7 +286,7 @@
     <property name="LayoutCode.rearrangeEntries" value="false" />
     <property name="recentsLimit" value="5" />
     <property name="SearchEverywhereHistory" value="" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/wordpress" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/bbpress" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -337,24 +378,24 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1301" height="744" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3429487" sideWeight="0.49960285" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32618684" sideWeight="0.49960285" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32618684" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32006127" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852563" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24980111" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1821798" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924962" sideWeight="0.50039715" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32006127" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24980111" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1821798" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924962" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924962" sideWeight="0.49960285" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -418,7 +459,9 @@
     </entry>
     <entry file="file://$USER_HOME$/Downloads/wordpress/wp-includes/class-wp-walker.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="123" column="13" selection-start="3815" selection-end="3815" vertical-scroll-proportion="0.0" vertical-offset="1845" max-vertical-offset="6210" />
+        <state line="123" column="13" selection-start="3815" selection-end="3815" vertical-scroll-proportion="0.0" vertical-offset="1845" max-vertical-offset="6210">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/single-wiki.php">
@@ -576,7 +619,9 @@
     </entry>
     <entry file="file://$USER_HOME$/Downloads/wordpress/wp-includes/class-wp-walker.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="21" selection-start="2304" selection-end="2312" vertical-scroll-proportion="0.2740864" vertical-offset="1125" max-vertical-offset="6210" />
+        <state line="86" column="21" selection-start="2304" selection-end="2312" vertical-scroll-proportion="0.2740864" vertical-offset="1125" max-vertical-offset="6210">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Downloads/wordpress/wp-includes/post-template.php">
@@ -624,15 +669,81 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="511" column="43" selection-start="11341" selection-end="11345" vertical-scroll-proportion="-15.583333" vertical-offset="7216" max-vertical-offset="22935">
           <folding>
-            <marker date="1393338597128" expanded="true" signature="13041:13088" placeholder="SELECT * FRO..$wpdb-&gt;users WHERE..." />
+            <marker date="1393338597128" expanded="true" signature="-1:-1" placeholder="SELECT * FRO..$wpdb-&gt;users WHERE..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/wordpress/wp-admin/includes/user.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="199" column="9" selection-start="7922" selection-end="7922" vertical-scroll-proportion="0.025" vertical-offset="2896" max-vertical-offset="6405">
+          <folding>
+            <marker date="1385900650000" expanded="true" signature="-1:-1" placeholder="SELECT ID, p..$wpdb-&gt;posts WHERE..." />
+            <marker date="1385900650000" expanded="true" signature="-1:-1" placeholder="SELECT ID FR..$wpdb-&gt;posts WHERE..." />
+            <marker date="1385900650000" expanded="true" signature="-1:-1" placeholder="SELECT link_..$wpdb-&gt;links WHERE..." />
+            <marker date="1385900650000" expanded="true" signature="-1:-1" placeholder="SELECT ID FR..$wpdb-&gt;posts WHERE..." />
+            <marker date="1385900650000" expanded="true" signature="-1:-1" placeholder="SELECT link_..$wpdb-&gt;links WHERE..." />
+            <marker date="1385900650000" expanded="true" signature="-1:-1" placeholder="SELECT umeta..$wpdb-&gt;usermeta WHERE..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/wordpress/wp-includes/pluggable.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="119" column="9" selection-start="3206" selection-end="3206" vertical-scroll-proportion="0.34642857" vertical-offset="1516" max-vertical-offset="27495">
+          <folding>
+            <marker date="1385419210000" expanded="true" signature="-1:-1" placeholder="SELECT * FRO..$wpdb-&gt;users WHERE..." />
+            <marker date="1385419210000" expanded="true" signature="-1:-1" placeholder="SELECT count..$wpdb-&gt;comments WHERE..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/wordpress/wp-admin/includes/class-wp-users-list-table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="150" column="41" selection-start="4113" selection-end="4134" vertical-scroll-proportion="0.50093806" vertical-offset="1983" max-vertical-offset="4950">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/wordpress/wp-admin/includes/class-wp-list-table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="824" column="29" selection-start="21170" selection-end="21184" vertical-scroll-proportion="0.8667917" vertical-offset="11808" max-vertical-offset="14610">
+          <folding>
+            <marker date="1393416286594" expanded="true" signature="-1:-1" placeholder="SELECT DISTI..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/wordpress/wp-admin/includes/list-table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="9" selection-start="502" selection-end="502" vertical-scroll-proportion="0.10471204" vertical-offset="135" max-vertical-offset="1695">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/wordpress/wp-admin/users.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="444" column="30" selection-start="15542" selection-end="15550" vertical-scroll-proportion="0.521576" vertical-offset="6307" max-vertical-offset="6840">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/wordpress/wp-admin/includes/template.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1621" column="9" selection-start="58423" selection-end="58423" vertical-scroll-proportion="0.34642857" vertical-offset="24016" max-vertical-offset="30330">
+          <folding>
+            <marker date="1386337692000" expanded="true" signature="-1:-1" placeholder="SELECT meta_..$wpdb-&gt;postmeta&#10;&#9;&#9;GROUP..." />
+            <marker date="1386337692000" expanded="true" signature="-1:-1" placeholder="SELECT ID, p..$wpdb-&gt;posts WHERE..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/admin/RtWikiRoles.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="189" column="54" selection-start="5347" selection-end="5347" vertical-scroll-proportion="0.4375" vertical-offset="2560" max-vertical-offset="3795">
-          <folding />
+        <state line="265" column="39" selection-start="7565" selection-end="7565" vertical-scroll-proportion="0.65178573" vertical-offset="3580" max-vertical-offset="4545">
+          <folding>
+            <element signature="e#7063#7104#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

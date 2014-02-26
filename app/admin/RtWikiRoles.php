@@ -48,6 +48,11 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 			add_action( 'profile_update', array( $this, 'update_access_profile_fields' ), 10, 2 );
 
 			add_filter( 'editable_roles', array( $this, 'remove_wp_crm_roles' ) );
+
+			add_action( 'restrict_manage_users', array( $this, 'wiki_user_role_bulk_dropdown' ) );
+
+			add_action( 'load-users.php', array( $this, 'wiki_user_role_bulk_change'   ) );
+
 		}
 
 		function remove_wp_crm_roles( $roles )
@@ -161,8 +166,7 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 						$selected = '';
 					}
 					?>
-									<option
-										value="<?php echo strtolower( str_replace( '-', '_', sanitize_title( $rtwikirole[ 'label' ] ) ) ); ?>" <?php echo $selected; ?>><?php _e(  $rtwikirole[ 'name' ] ); ?></option>
+									<option value="<?php echo strtolower( str_replace( '-', '_', sanitize_title( $rtwikirole[ 'label' ] ) ) ); ?>" <?php echo $selected; ?>><?php _e(  $rtwikirole[ 'name' ] ); ?></option>
 
 				<?php } ?>
 							</select>
@@ -242,6 +246,52 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 				}
 			}
 		}
+
+		function wiki_user_role_bulk_dropdown(){
+			// if current user cannot promote users
+			if ( ! current_user_can( 'promote_users' ) )
+				return;
+			?>
+
+			<label class="screen-reader-text" for="wiki-new-role"><?php esc_html_e( 'Change wiki role;', 'rtcamp' ) ?></label>
+			<select name="rt_wiki_role" id="rt_wiki_role" style="display:inline-block; float:none;">
+			<option value="no_role"><?php _e( 'Change wiki role' ); ?></option>
+			<?php foreach ( $this->rtwikiroles as $rtwikirole ) : ?>
+				<option value="<?php echo strtolower( str_replace( '-', '_', sanitize_title( $rtwikirole[ 'label' ] ) ) ); ?>" ><?php _e(  $rtwikirole[ 'name' ] ); ?></option>
+			<?php endforeach; ?>
+
+			</select><?php submit_button( __( 'Change', 'rtcamp' ), 'secondary', 'wiki-change-role', false );
+		}
+
+		public function wiki_user_role_bulk_change() {
+
+			// if current user cannot promote users
+			if ( ! current_user_can( 'promote_users' ) )
+				return;
+			// if no users specified
+			if ( empty( $_REQUEST['users'] ) )
+				return;
+			// if this isn't a wiki action
+			if ( empty( $_REQUEST['rt_wiki_role'] ) || empty( $_REQUEST['wiki-change-role'] ) )
+				return;
+
+			// Get the current user ID
+			$current_user_id = (int) get_current_user_id();
+
+			// Run through user ids
+			foreach ( (array) $_REQUEST['users'] as $user_id ) {
+				$user_id = (int) $user_id;
+
+				// Don't let a user change their own role
+				if ( $user_id === $current_user_id )
+					continue;
+
+				$this->update_access_profile_fields( $user_id, null );
+
+			}
+		}
+
+
 
 	}
 
