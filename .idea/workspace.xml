@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c5ab435c-1552-4e6d-a7b5-e08c70c24af6" name="Default" comment="widget issue fixed.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin/RtWikiRoles.php" afterPath="$PROJECT_DIR$/app/admin/RtWikiRoles.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="rtwiki.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,8 +32,19 @@
       <file leaf-file-name="RtWikiRoles.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/admin/RtWikiRoles.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="115" column="18" selection-start="3793" selection-end="3793" vertical-scroll-proportion="0.3857143" vertical-offset="1479" max-vertical-offset="3795">
+            <state line="189" column="54" selection-start="5347" selection-end="5347" vertical-scroll-proportion="0.4375" vertical-offset="2560" max-vertical-offset="3795">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="capabilities.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Downloads/wordpress/wp-includes/capabilities.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="511" column="43" selection-start="11341" selection-end="11345" vertical-scroll-proportion="-15.583333" vertical-offset="7216" max-vertical-offset="22935">
+              <folding>
+                <marker date="1393338597128" expanded="true" signature="13041:13088" placeholder="SELECT * FRO..$wpdb-&gt;users WHERE..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -528,11 +540,6 @@
         <state line="37" column="35" selection-start="744" selection-end="744" vertical-scroll-proportion="0.53475934" vertical-offset="225" max-vertical-offset="1920" />
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Downloads/wordpress/wp-includes/capabilities.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1361" column="9" selection-start="34550" selection-end="34550" vertical-scroll-proportion="0.026737968" vertical-offset="20325" max-vertical-offset="22935" />
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Downloads/wordpress/wp-includes/user.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="879" column="71" selection-start="25280" selection-end="25291" vertical-scroll-proportion="0.34634975" vertical-offset="12921" max-vertical-offset="25620" />
@@ -550,7 +557,9 @@
     </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/standard_4.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="9" selection-start="1661" selection-end="1661" vertical-scroll-proportion="0.4205298" vertical-offset="496" max-vertical-offset="16320" />
+        <state line="50" column="9" selection-start="1661" selection-end="1661" vertical-scroll-proportion="0.4205298" vertical-offset="496" max-vertical-offset="16320">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/helper/RtWikiWalker.php">
@@ -611,9 +620,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/Downloads/wordpress/wp-includes/capabilities.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="511" column="43" selection-start="11341" selection-end="11345" vertical-scroll-proportion="-15.583333" vertical-offset="7216" max-vertical-offset="22935">
+          <folding>
+            <marker date="1393338597128" expanded="true" signature="13041:13088" placeholder="SELECT * FRO..$wpdb-&gt;users WHERE..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/admin/RtWikiRoles.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="18" selection-start="3793" selection-end="3793" vertical-scroll-proportion="0.3857143" vertical-offset="1479" max-vertical-offset="3795">
+        <state line="189" column="54" selection-start="5347" selection-end="5347" vertical-scroll-proportion="0.4375" vertical-offset="2560" max-vertical-offset="3795">
           <folding />
         </state>
       </provider>

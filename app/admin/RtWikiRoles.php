@@ -187,7 +187,7 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 			if ( current_user_can( 'create_users' ) ){
 
-				$user = new WP_User( $user_id );
+				$user = get_user_by( 'id', $user_id );
 
 				foreach ( $this->rtwikiroles as $rtwikirole ) {
 
