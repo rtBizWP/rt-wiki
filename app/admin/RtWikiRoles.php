@@ -24,19 +24,19 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 			$this->rtwikiroles = array(
 				array(
-					'name' => 'RtWiki Admin',
+					'name' => 'Wiki Admin',
 					'label' => 'rtwikiadmin', ),
 				array(
-					'name' => 'RtWiki Editor',
+					'name' => 'Wiki Editor',
 					'label' => 'rtwikieditor', ),
 				array(
-					'name' => 'RtWiki Author',
+					'name' => 'Wiki Author',
 					'label' => 'rtwikiauthor', ),
 				array(
-					'name' => 'RtWiki Contributor',
+					'name' => 'Wiki Contributor',
 					'label' => 'rtwikicontributor', ),
 				array(
-					'name' => 'RtWiki Subscriber',
+					'name' => 'Wiki Subscriber',
 					'label' => 'rtwikisubscriber', ), );
 
 			$this->register_roles();
@@ -113,7 +113,7 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 				}
 
 				$label = strtolower( str_replace( '-', '_', sanitize_title( $rtwikirole[ 'label' ] ) ) );
-
+				remove_role( $label );
 				$role = get_role( $label );
 				if ( empty( $role ) ){
 					add_role( $label, __( ucfirst( $rtwikirole[ 'name' ] ) ), $caps );
