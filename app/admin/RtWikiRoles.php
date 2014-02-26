@@ -275,16 +275,9 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 			if ( empty( $_REQUEST['rt_wiki_role'] ) || empty( $_REQUEST['wiki-change-role'] ) )
 				return;
 
-			// Get the current user ID
-			$current_user_id = (int) get_current_user_id();
-
 			// Run through user ids
 			foreach ( (array) $_REQUEST['users'] as $user_id ) {
 				$user_id = (int) $user_id;
-
-				// Don't let a user change their own role
-				if ( $user_id === $current_user_id )
-					continue;
 
 				$this->update_access_profile_fields( $user_id, null );
 
