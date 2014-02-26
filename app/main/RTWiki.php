@@ -74,7 +74,8 @@ if ( ! class_exists( 'RTWiki' ) ){
 			//Send Content diff through email on wikipostupdate
 			add_action( 'save_post', 'send_mail_postupdate_wiki', 99, 1 );
 
-
+			//shortcode for wiki archive link
+			add_shortcode( 'rtwikiarchive', 'get_rtwiki_archive' );
 		}
 
 		function rtwiki_require_once()

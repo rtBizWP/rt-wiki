@@ -35,7 +35,7 @@ $content_class = apply_filters( 'rtwiki_content_class', 'large-8 columns rtp-sin
 					'show_date' => '',
 					'sort_column' => 'menu_order, post_title',
 					'title_li' => '',
-					'walker' => '', );
+					'walker' => new RtWikiWalker(), );
 
 $wikis = wp_list_pages( $args );
 

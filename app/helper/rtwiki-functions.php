@@ -83,3 +83,30 @@ function get_term_if_exists( $term, $userid )
 
 	return $page_id;
 }
+
+
+function get_rtwiki_archive( $atts ) {
+	$args = array(
+		'authors' => '',
+		'child_of' => 0,
+		'depth' => 0,
+		'echo' => 0,
+		'exclude' => '',
+		'include' => '',
+		'link_after' => '',
+		'link_before' => '',
+		'post_type' => get_post_type(),
+		'post_status' => 'publish',
+		'show_date' => '',
+		'sort_column' => 'menu_order, post_title',
+		'title_li' => '',
+		'walker' => new RtWikiWalker(), );
+
+	$wikis = wp_list_pages( $args );
+
+	if ( isset( $wikis ) ){
+		echo $wikis;
+	} else {
+		get_template_part( 'content', 'none' );
+	}
+}
