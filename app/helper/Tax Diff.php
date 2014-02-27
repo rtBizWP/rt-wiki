@@ -38,7 +38,7 @@ function contacts_diff_on_lead( $post_id, $newLead, $oldLead, $tax )
 		$newContactsString = implode( ',', $contactsArr );
 	}
 
-	$diff = rtcrm_text_diff_taxonomy( $oldContactsString, $newContactsString );
+	$diff = rtwiki_text_diff_taxonomy( $oldContactsString, $newContactsString );
 	if ( $diff ){
 		$diffHTML .= '<tr><th style="padding: .5em;border: 0;">' . $tax . '</th><td>' . $diff . '</td><td></td></tr>';
 	}

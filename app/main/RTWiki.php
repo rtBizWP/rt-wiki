@@ -76,6 +76,11 @@ if ( ! class_exists( 'RTWiki' ) ){
 
 			//shortcode for wiki archive link
 			add_shortcode( 'rtwikiarchive', 'get_rtwiki_archive' );
+
+			//Wiki Daily update
+			/*register_activation_hook( __FILE__, array( $this, 'wiki_prefix_activation' ) );*/
+
+
 		}
 
 		function rtwiki_require_once()
@@ -90,7 +95,7 @@ if ( ! class_exists( 'RTWiki' ) ){
 			require_once RT_WIKI_PATH_HELPER . 'wiki-singlepost-content.php';
 			require_once RT_WIKI_PATH_HELPER . 'RtWikiDailyChanges.php';
 			require_once RT_WIKI_PATH_ADMIN . 'wiki-widgets.php';
-			require_once RT_WIKI_PATH_HELPER . 'RtCRMEmailDiff.php';
+			require_once RT_WIKI_PATH_HELPER . 'RtWikiEmailDiff.php';
 		}
 
 		function update_db()
@@ -165,6 +170,17 @@ if ( ! class_exists( 'RTWiki' ) ){
 			wp_register_style( 'rtwiki-client-styles', plugins_url( '../assets/css/rtwiki-client-styles.css', __FILE__ ) );
 			wp_enqueue_style( 'rtwiki-client-styles' );
 		}
+
+		function wiki_prefix_activation() {
+			$rtwikidailychange = new RtWikiDailyChanges();
+			add_action( 'wiki_dialy_event_hook', array( $rtwikidailychange, 'send_daily_change_mail' ) );
+			wp_schedule_event( time(), 'hourly', 'wiki_dialy_event_hook' );
+		}
+
+		function wiki_prefix_deactivation() {
+			wp_clear_scheduled_hook( 'prefix_hourly_event_hook' );
+		}
+
 
 	}
 
