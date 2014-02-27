@@ -47,7 +47,7 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 			add_action( 'profile_update', array( $this, 'update_access_profile_fields' ), 10, 2 );
 
-			add_filter( 'editable_roles', array( $this, 'remove_wp_crm_roles' ) );
+			add_filter( 'editable_roles', array( $this, 'remove_wp_wiki_roles' ) );
 
 			add_action( 'restrict_manage_users', array( $this, 'wiki_user_role_bulk_dropdown' ) );
 
@@ -55,11 +55,8 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 		}
 
-		function remove_wp_crm_roles( $roles )
+		function remove_wp_wiki_roles( $roles )
 		{
-
-			unset( $roles[ 'rt_wp_crm_manager' ] );
-
 
 			foreach ( $this->rtwikiroles as $rtwikirole ) {
 
@@ -133,13 +130,6 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 			if ( $current_user->has_cap( 'create_users' ) ){
 
-				if ( in_array( 'rt_wp_crm_manager', $user->roles ) ){
-
-					$selected = 'selected="selected"';
-				} else {
-
-					$selected = '';
-				}
 				?>
 
 				<table class="form-table">

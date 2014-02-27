@@ -283,7 +283,7 @@ function wiki_page_changes_send_mail( $postID, $email, $tax_diff = '', $url = ''
 
 	if ( ! empty( $content ) ){
 		$url  = 'Page Link:' . $url . '<br>';
-		$body = rtcrm_text_diff( $title[ count( $title ) - 1 ], $title[ 0 ], $content[ count( $title ) - 1 ], $content[ 0 ] );
+		$body = rtwiki_text_diff( $title[ count( $title ) - 1 ], $title[ 0 ], $content[ count( $title ) - 1 ], $content[ 0 ] );
 
 		$body     .= $tax_diff;
 		$finalBody = $url . '<br>' . $body;

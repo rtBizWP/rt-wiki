@@ -6,7 +6,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
- * Description of RtCRMEmailDiff
+ * Description of RtWikiEmailDiff
  *
  * @author udit
  */
@@ -15,18 +15,18 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * Helper functions for rtwiki
  *
- * @package    RtCRMEmailDiff
+ * @package    RtWikiEmailDiff
  * @subpackage Helper
  *
  * @author     Udit
  */
-if ( ! class_exists( 'RtCRMEmailDiff' ) ){
+if ( ! class_exists( 'RtWikiEmailDiff' ) ){
 
 	if ( ! class_exists( 'WP_Text_Diff_Renderer_Table' ) ){
 		require( ABSPATH . WPINC . '/wp-diff.php' );
 	}
 
-	class RtCRMEmailDiff extends WP_Text_Diff_Renderer_Table
+	class RtWikiEmailDiff extends WP_Text_Diff_Renderer_Table
 	{
 
 		var $_leading_context_lines  = 2;
@@ -66,7 +66,7 @@ if ( ! class_exists( 'RtCRMEmailDiff' ) ){
 }
 
 
-if ( ! function_exists( 'rtcrm_text_diff' ) ){
+if ( ! function_exists( 'rtwiki_text_diff' ) ){
 
 	/**
 	 * Wp text diffrent
@@ -79,7 +79,7 @@ if ( ! function_exists( 'rtcrm_text_diff' ) ){
 	 *
 	 * @return string
 	 */
-	function rtcrm_text_diff( $left_title, $right_title, $left_content, $right_content, $args = null )
+	function rtwiki_text_diff( $left_title, $right_title, $left_content, $right_content, $args = null )
 	{
 		$defaults = array( 'title' => 'Updates', 'title_left' => $left_title, 'title_right' => $right_title );
 		$args = wp_parse_args( $args, $defaults );
@@ -90,7 +90,7 @@ if ( ! function_exists( 'rtcrm_text_diff' ) ){
 		$right_lines  = explode( "\n", $right_string );
 
 		$text_diff = new Text_Diff( $left_lines, $right_lines );
-		$renderer  = new RtCRMEmailDiff();
+		$renderer  = new RtWikiEmailDiff();
 		$diff      = $renderer->render( $text_diff );
 
 		if ( ! $diff ) return '';
@@ -123,7 +123,7 @@ if ( ! function_exists( 'rtcrm_text_diff' ) ){
 	 *
 	 * @return string
 	 */
-	function rtcrm_text_diff_taxonomy( $left_string, $right_string, $args = null )
+	function rtwiki_text_diff_taxonomy( $left_string, $right_string, $args = null )
 	{
 
 
@@ -136,7 +136,7 @@ if ( ! function_exists( 'rtcrm_text_diff' ) ){
 		$right_lines  = explode( "\n", $right_string );
 
 		$text_diff = new Text_Diff( $left_lines, $right_lines );
-		$renderer  = new RtCRMEmailDiff();
+		$renderer  = new RtWikiEmailDiff();
 		$diff      = $renderer->render( $text_diff );
 
 		if ( ! $diff ) return '';
