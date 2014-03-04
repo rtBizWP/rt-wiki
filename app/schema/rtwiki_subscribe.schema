@@ -3,6 +3,6 @@ CREATE TABLE %s (
 	attribute_postid  bigint(20) NOT NULL,
 	attribute_userid VARCHAR(100) NOT NULL,
         attribute_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        attribute_sub_subscribe BOOLEAN NOT NULL,
+        attribute_sub_subscribe int NOT NULL DEFAULT 1 ,
 	PRIMARY KEY  (id)
 );

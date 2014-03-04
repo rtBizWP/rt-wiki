@@ -3,7 +3,7 @@
 /*
   Plugin Name: rtWiki
   Description: Creates a Wiki CPT. Check for pages inside it. If not found will create it. Post filtering for different user groups
-  Version: 1.1.1
+  Version: 0.1 BETA
   Author: rtCamp
   Author Uri: http://rtcamp.com
   Contributors: Prannoy Tank, Sohil
@@ -14,7 +14,7 @@
  *
  */
 if ( ! defined( 'RT_WIKI_VERSION' ) ){
-	define( 'RT_WIKI_VERSION', '1.0' );
+	define( 'RT_WIKI_VERSION', '1.1' );
 }
 
 /**
@@ -30,7 +30,7 @@ if ( ! defined( 'RT_WIKI_PATH' ) ){
  *
  */
 if ( ! defined( 'RT_WIKI_URL' ) ){
-	define( 'RT_WIKI_URL', plugin_dir_url( __FILE__ ) );
+	define( 'RT_WIKI_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 }
 
 /**

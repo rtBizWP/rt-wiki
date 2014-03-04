@@ -85,14 +85,14 @@ function update_subscribe()
 			if ( isset( $_POST[ 'single_subscribe' ] ) ){
 				if ( $_POST[ 'single_subscribe' ] == 'current' ){
 					if ( isset( $_POST[ 'subPage_subscribe' ] ) && $_POST[ 'subPage_subscribe' ] == 'subpage' ) :
-						subscribe_post_curuser( $postID, true );
+						subscribe_post_curuser( $postID, 1 );
 					else :
-						subscribe_post_curuser( $postID, false );
+						subscribe_post_curuser( $postID, 0 );
 					endif;
 				}
 			} else if ( $_POST[ 'single_subscribe' ] == null ){
 				if ( isset( $_POST[ 'subPage_subscribe' ] ) && $_POST[ 'subPage_subscribe' ] == 'subpage' ):
-					unsubcribe_subpost_curuser( $postID, true );
+					unsubcribe_subpost_curuser( $postID, 1 );
 				else :
 					unsubscribe_post_curuser( $postID );
 				endif;
@@ -114,7 +114,11 @@ function subscribe_post_curuser( $postid, $is_sub_subscribe )
 	global $rtWikiSubscribe;
 	$userid = get_current_user_id();
 	if ( ! $rtWikiSubscribe->is_post_subscibe( $postid, $userid ) ){
-		$subscriber = array( 'attribute_postid' => $postid, 'attribute_userid' => $userid, 'attribute_sub_subscribe' => $is_sub_subscribe );
+		$subscriber = array(
+								'attribute_postid' => $postid,
+								'attribute_userid' => $userid,
+								'attribute_sub_subscribe' => $is_sub_subscribe,
+							);
 		$rtWikiSubscribe->add_subscriber( $subscriber );
 	} else {
 		unsubcribe_subpost_curuser( $postid, $is_sub_subscribe );
@@ -196,7 +200,7 @@ function rt_wiki_subpages_check( $parentId, $subPage, $post_type = 'post' )
 	$pages       = get_pages( $args );
 	if ( $pages ){
 		foreach ( $pages as $page ) {
-			$permission = get_permission( $page->ID, get_current_user_id(), 0 );
+			$permission = get_permission( $page->ID, get_current_user_id() );
 			if ( $permission == true ){
 				return true;
 			} else {
@@ -228,7 +232,7 @@ function send_mail_postupdate_wiki( $post )
 		if ( ! empty( $subscribersList ) || $subscribersList != null ){
 			foreach ( $subscribersList as $subscriber ) {
 				$user_info = get_userdata( $subscriber );
-				if ( get_permission( $postObject->ID, $user_info->ID, 0 ) ){
+				if ( get_permission( $postObject->ID, $user_info->ID ) ){
 					wiki_page_changes_send_mail( $postObject->ID, $user_info->user_email, $diff, get_permalink( $postObject->ID ) );
 				}
 			}

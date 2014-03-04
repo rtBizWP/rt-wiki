@@ -239,7 +239,7 @@ function get_permission( $pageID, $userid, $flag = 0 )
 	$noPublic      = 0;
 	$terms         = get_terms( 'user-group', array( 'hide_empty' => true ) );
 	$access_rights = get_post_meta( $pageID, 'access_rights', true );
-	$curuser = get_users( $userid );
+	$curuser = get_user_by( 'id', $userid );
 	if ( is_array( $curuser ) ){
 		$curuser = $curuser[0];
 	}
@@ -414,7 +414,7 @@ function rtwiki_comment_filter( $comments, $post_id )
 	$post            = get_post( $post_id );
 	if ( in_array( $post->post_type, $supported_posts ) ){
 		$rtwiki_settings = get_option( 'rtwiki_settings', array() );
-		if ( $rtwiki_settings[ 'wiki_comment' ] == 'y' && get_permission( $post_id, get_current_user_id(), 0 ) ){
+		if ( isset( $rtwiki_settings[ 'wiki_comment' ] ) && $rtwiki_settings[ 'wiki_comment' ] == 'y' && get_permission( $post_id, get_current_user_id(), 0 ) ){
 			return $comments;
 		}
 		return array();
@@ -438,7 +438,7 @@ function rtwiki_comment_form_filter( $open, $post_id )
 	$post            = get_post( $post_id );
 	if ( in_array( $post->post_type, $supported_posts ) ){
 		$rtwiki_settings = get_option( 'rtwiki_settings', array() );
-		if ( $rtwiki_settings[ 'wiki_comment' ] == 'y' && get_permission( $post_id, get_current_user_id(), 0 ) ){
+		if ( isset( $rtwiki_settings[ 'wiki_comment' ] ) && $rtwiki_settings[ 'wiki_comment' ] == 'y' && get_permission( $post_id, get_current_user_id(), 0 ) ){
 			return $open;
 		}
 

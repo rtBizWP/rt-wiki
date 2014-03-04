@@ -83,7 +83,7 @@ class RtWikiDailyChanges
 
 		foreach ( $revision as $revisions ) {
 			$content[ ]     = $revisions->post_content;
-			$title[ ] = $revisions->post_title;
+			$title[ ]       = $revisions->post_title;
 			$modifieddate[] = $revisions->post_modified;
 		}
 		if ( ! empty( $content ) && date( 'Y-m-d', strtotime( $modifieddate[ 0 ] ) ) == date( 'Y-m-d' ) ){

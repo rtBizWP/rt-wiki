@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 if ( ! class_exists( 'RtWikiSubscribeModel' ) ){
 
-	class RtWikiSubscribeModel extends RTDBModel
+	class RtWikiSubscribeModel extends RTDBModels
 	{
 
 		public function __construct()
@@ -94,7 +94,8 @@ if ( ! class_exists( 'RtWikiSubscribeModel' ) ){
 
 		function add_subscriber( $data )
 		{
-			return parent::insert( $data );
+            global $wpdb;
+			return $wpdb->insert( $this->table_name, $data );
 		}
 
 		function update_subscriber( $data, $where )
