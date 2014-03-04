@@ -196,7 +196,7 @@ function rt_wiki_subpages_check( $parentId, $subPage, $post_type = 'post' )
 	$pages       = get_pages( $args );
 	if ( $pages ){
 		foreach ( $pages as $page ) {
-			$permission = get_permission( $page->ID, get_current_user_id() );
+			$permission = get_permission( $page->ID, get_current_user_id(), 0 );
 			if ( $permission == true ){
 				return true;
 			} else {
@@ -228,7 +228,7 @@ function send_mail_postupdate_wiki( $post )
 		if ( ! empty( $subscribersList ) || $subscribersList != null ){
 			foreach ( $subscribersList as $subscriber ) {
 				$user_info = get_userdata( $subscriber );
-				if ( get_permission( $postObject->ID, $user_info->ID ) ){
+				if ( get_permission( $postObject->ID, $user_info->ID, 0 ) ){
 					wiki_page_changes_send_mail( $postObject->ID, $user_info->user_email, $diff, get_permalink( $postObject->ID ) );
 				}
 			}

@@ -76,7 +76,7 @@ function get_subpages( $parentId, $lvl, $post_type = 'post' )
 		echo '<ul>';
 		foreach ( $pages as $page ) {
 			if ( ! empty( $supported_posts ) && in_array( $post_type, $supported_posts ) ) {
-				$permission = get_permission( $page->ID, get_current_user_id() );
+				$permission = get_permission( $page->ID, get_current_user_id(), 0 );
 			}else {
 				$permission = true;
 			}

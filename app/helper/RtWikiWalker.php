@@ -31,7 +31,7 @@ class RtWikiWalker extends Walker_Page
 		if ( '' === $page->post_title ) $page->post_title = sprintf( __( '#%d (no title)' ), $page->ID );
 
 		/** This filter is documented in wp-includes/post-template.php */
-		if ( get_permission( $page->ID, get_current_user_id() ) ) {
+		if ( get_permission( $page->ID, get_current_user_id(), 0 ) ) {
 			$output .= $indent . '<li class="' . $css_class . '"><a href="' . get_permalink( $page->ID ) . '">' . $link_before . apply_filters( 'the_title', $page->post_title, $page->ID ) . $link_after . '</a>';
 		}
 		if ( ! empty( $show_date ) ){

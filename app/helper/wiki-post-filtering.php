@@ -223,27 +223,32 @@ function get_admin_panel_permission( $pageID )
 /**
  * Checks the permission of the user for the post(Frontend)
  *
+ * @param type  $pageID
+ * @param       $userid
+ * @param int   $flag : function call by scheduler (1) ot not (0)
+ *
  * @global type $current_user
  *
- * @param type  $pageID
- * @param type  $user
+ * @internal param \type $user
  *
  * @return boolean
  */
-function get_permission( $pageID, $user )
+function get_permission( $pageID, $userid, $flag = 0 )
 {
-	global $current_user;
 	$noflag        = 0;
 	$noPublic      = 0;
 	$terms         = get_terms( 'user-group', array( 'hide_empty' => true ) );
 	$access_rights = get_post_meta( $pageID, 'access_rights', true );
+	$curuser = get_users( $userid );
+	if ( is_array( $curuser ) ){
+		$curuser = $curuser[0];
+	}
 	if ( isset( $access_rights[ 'public' ] ) && ( 1 == $access_rights[ 'public' ] ) ){
 		return true;
-	} else if ( is_user_logged_in() ){
+	} else if ( is_user_logged_in( ) || $flag == 1 ){
 		$post_details = get_post( $pageID );
-
 		// if rtwikiAdmin or rtwikieditor or postauthor
-		if ( in_array( 'rtwikiadmin', $current_user->roles ) || in_array( 'rtwikieditor', $current_user->roles ) || $user == $post_details->post_author ){
+		if ( in_array( 'rtwikiadmin', $curuser->roles ) || in_array( 'rtwikieditor', $curuser->roles ) || $userid == $post_details->post_author ){
 			return true;
 		}else if ( isset( $access_rights[ 'all' ] ) ) {
 			if ( ( isset( $access_rights[ 'all' ][ 'r' ] ) && ( $access_rights[ 'all' ][ 'r' ] == 1 ) ) || ( isset( $access_rights[ 'all' ][ 'w' ] ) && ( $access_rights[ 'all' ][ 'w' ] == 1 ) ) ){
@@ -253,7 +258,7 @@ function get_permission( $pageID, $user )
 			}
 		}else {
 			foreach ( $terms as $term ) {
-				$ans = get_term_if_exists( $term->slug, $user );
+				$ans = get_term_if_exists( $term->slug, $userid );
 				if ( $ans == $term->slug && isset( $access_rights[ $term->name ] ) ){
 					if ( ( isset( $access_rights[ $term->name ][ 'r' ] ) && ( $access_rights[ $term->name ][ 'r' ] == 1 ) ) || ( isset( $access_rights[ $term->name ][ 'w' ] ) && ( $access_rights[ $term->name ][ 'w' ] == 1 ) ) ){
 						return true;
@@ -294,7 +299,7 @@ function my_do_feed()
 		if ( isset( $wp_query->posts ) ){
 			foreach ( $wp_query->posts as $post ) {
 				if ( in_array( get_post_type(), $supported_posts ) ){
-					if ( get_permission( get_the_ID(), get_current_user_id() ) ){
+					if ( get_permission( get_the_ID(), get_current_user_id(), 0 ) ){
 						$newpostArray[ ] = $post;
 					}
 				} else {
@@ -309,7 +314,7 @@ function my_do_feed()
 			$newCommentArray = array();
 			foreach ( $wp_query->comments as $comment ) {
 				if ( in_array( get_post_type( $comment->comment_post_ID ), $supported_posts ) ){
-					if ( get_permission( $comment->comment_post_ID, get_current_user_id() ) ){
+					if ( get_permission( $comment->comment_post_ID, get_current_user_id(), 0 ) ){
 						$newCommentArray[ ] = $comment;
 					}
 				} else {
@@ -337,7 +342,7 @@ function rtwiki_search_filter( $Posts )
 		$supported_posts = rtwiki_get_supported_attribute();
 		foreach ( $Posts as $post ) {
 			if ( in_array( $post->post_type, $supported_posts ) ){
-				if ( get_permission( $post->ID, get_current_user_id() ) ){
+				if ( get_permission( $post->ID, get_current_user_id(), 0 ) ){
 					$newpostArray[ ] = $post;
 				}
 			} else {
@@ -361,7 +366,7 @@ function rtwiki_content_filter( $content )
 {
 	$supported_posts = rtwiki_get_supported_attribute();
 	if ( in_array( get_post_type(), $supported_posts ) ){
-		if ( get_permission( get_the_ID(), get_current_user_id() ) ){
+		if ( get_permission( get_the_ID(), get_current_user_id(), 0 ) ){
 			$post_thumbnail = get_the_post_thumbnail();
 
 			return $post_thumbnail . $content;
@@ -384,7 +389,7 @@ function rtwiki_edit_post_link_filter( $output )
 {
 	$supported_posts = rtwiki_get_supported_attribute();
 	if ( in_array( get_post_type(), $supported_posts ) ){
-		if ( get_permission( get_the_ID(), get_current_user_id() ) ){
+		if ( get_permission( get_the_ID(), get_current_user_id(), 0 ) ){
 			return $output;
 		} else {
 			return '';
@@ -409,7 +414,7 @@ function rtwiki_comment_filter( $comments, $post_id )
 	$post            = get_post( $post_id );
 	if ( in_array( $post->post_type, $supported_posts ) ){
 		$rtwiki_settings = get_option( 'rtwiki_settings', array() );
-		if ( $rtwiki_settings[ 'wiki_comment' ] == 'y' && get_permission( $post_id, get_current_user_id() ) ){
+		if ( $rtwiki_settings[ 'wiki_comment' ] == 'y' && get_permission( $post_id, get_current_user_id(), 0 ) ){
 			return $comments;
 		}
 		return array();
@@ -433,7 +438,7 @@ function rtwiki_comment_form_filter( $open, $post_id )
 	$post            = get_post( $post_id );
 	if ( in_array( $post->post_type, $supported_posts ) ){
 		$rtwiki_settings = get_option( 'rtwiki_settings', array() );
-		if ( $rtwiki_settings[ 'wiki_comment' ] == 'y' && get_permission( $post_id, get_current_user_id() ) ){
+		if ( $rtwiki_settings[ 'wiki_comment' ] == 'y' && get_permission( $post_id, get_current_user_id(), 0 ) ){
 			return $open;
 		}
 

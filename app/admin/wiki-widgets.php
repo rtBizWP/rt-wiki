@@ -223,7 +223,7 @@ class RtWikiPageSubscribe extends WP_Widget
 		}
 
 		$parentStatus = false;
-		if ( get_permission( $post->ID, get_current_user_id() ) ){
+		if ( get_permission( $post->ID, get_current_user_id(), 0 ) ){
 			echo $args[ 'before_widget' ];
 			if ( isset( $title ) ){
 				echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
