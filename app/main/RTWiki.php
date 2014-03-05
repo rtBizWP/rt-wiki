@@ -37,7 +37,7 @@ if ( ! class_exists( 'RTWiki' ) ){
 		{
 			$this->rtwiki_require_once();
 			$this->update_db();
-            
+
 			//Rtwiki enqueue scripts
 			add_action( 'admin_enqueue_scripts', array( $this, 'rtwiki_admin_enqueue_styles_and_scripts' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'rtwiki_enqueue_styles_and_scripts' ) );
@@ -93,7 +93,10 @@ if ( ! class_exists( 'RTWiki' ) ){
 			//disable wiki daily update schedula
 			//wp_clear_scheduled_hook( 'wiki_daily_event_hook' );
 
-
+			if (  wp_next_scheduled( 'wiki_daily_event_hook' ) ) {
+				//var_dump( 'hi' );
+				//$rtwikidailychange->send_daily_change_mail();
+			}
 
 		}
 

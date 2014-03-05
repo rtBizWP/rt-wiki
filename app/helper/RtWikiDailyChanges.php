@@ -50,6 +50,8 @@ class RtWikiDailyChanges
 	function send_daily_change_mail()
 	{
 		$subscriberslist = $this->get_users_subscribeposts_list();
+		var_dump( $subscriberslist );
+		exit;
 		foreach ( $subscriberslist as $key => $value ) {
 			$user_info = get_userdata( $key );
 			$finalBody = '';
