@@ -38,6 +38,7 @@ if ( ! class_exists( 'RTWiki' ) ){
 			$this->rtwiki_require_once();
 			$this->update_db();
 
+
 			//Rtwiki enqueue scripts
 			add_action( 'admin_enqueue_scripts', array( $this, 'rtwiki_admin_enqueue_styles_and_scripts' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'rtwiki_enqueue_styles_and_scripts' ) );
@@ -84,19 +85,18 @@ if ( ! class_exists( 'RTWiki' ) ){
 			add_filter( 'cron_schedules', array( $this, 'wiki_add_weekly_schedule' ) );
 
 			//Wiki Daily update
+			$rtwikidailychange = new RtWikiDailyChanges();
+			add_action( 'wiki_daily_event_hook', array( $rtwikidailychange, 'send_daily_change_mail' ) );
 			register_activation_hook( __FILE__, array( $this, 'wiki_prefix_activation' ) );
 			register_deactivation_hook( __FILE__, array( $this, 'wiki_prefix_deactivation' )  );
 			add_action( 'init',array( $this, 'wiki_prefix_setup_schedule' ) );
-			$rtwikidailychange = new RtWikiDailyChanges();
-			add_action( 'wiki_daily_event_hook', array( $rtwikidailychange, 'send_daily_change_mail' ) );
 
 			//disable wiki daily update schedula
 			//wp_clear_scheduled_hook( 'wiki_daily_event_hook' );
 
-			if (  wp_next_scheduled( 'wiki_daily_event_hook' ) ) {
-				//var_dump( 'hi' );
-				//$rtwikidailychange->send_daily_change_mail();
-			}
+			/*if (wp_next_scheduled( 'wiki_daily_event_hook' ) ) {
+				var_dump( 'hi' );
+			}*/
 
 		}
 
@@ -220,7 +220,7 @@ if ( ! class_exists( 'RTWiki' ) ){
 
 		function wiki_add_weekly_schedule( $schedules ) {
 			$schedules['weekly'] = array(
-				'interval' => 7 * 5 * 60,
+				'interval' => 30 * 60,
 				'display' => __( 'Every Other Week', 'my-plugin-domain' )
 			);
 			return $schedules;

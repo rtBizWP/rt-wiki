@@ -98,7 +98,7 @@ function rtwiki_autoloader( $class_name )
 		'app/helper/' . $class_name . '.php',
 		'app/admin/' . $class_name . '.php',
 		'app/models/' . $class_name . '.php',
-		'app/main/' . $class_name . '.php', );
+		'app/main/' . $class_name . '.php',);
 
 	foreach ( $rtLibPath as $path ) {
 		$path = RT_WIKI_PATH . $path;
@@ -109,7 +109,11 @@ function rtwiki_autoloader( $class_name )
 	}
 }
 
+/**
+ * Rtdb helper class
+ */
 include_once 'app/lib/wp-helpers.php';
+
 /**
  * Register the autoloader function into spl_autoload
  */

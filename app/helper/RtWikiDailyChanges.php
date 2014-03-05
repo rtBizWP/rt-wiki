@@ -22,7 +22,7 @@ class RtWikiDailyChanges
 	function get_users_subscribeposts_list()
 	{
 		$subscriberslist = array();
-		$blogusers       = get_users();
+		$blogusers       = get_users( );
 		$supported_posts = rtwiki_get_supported_attribute();
 		if ( is_array( $supported_posts ) && ! empty( $supported_posts ) ){
 			foreach ( $supported_posts as $post_types ) {
@@ -40,7 +40,6 @@ class RtWikiDailyChanges
 				}
 			}
 		}
-
 		return $subscriberslist;
 	}
 
@@ -49,9 +48,10 @@ class RtWikiDailyChanges
 	 */
 	function send_daily_change_mail()
 	{
+		error_log( 'dips' );
 		$subscriberslist = $this->get_users_subscribeposts_list();
-		var_dump( $subscriberslist );
-		exit;
+		error_log( 'dips' );
+		error_log( $subscriberslist );
 		foreach ( $subscriberslist as $key => $value ) {
 			$user_info = get_userdata( $key );
 			$finalBody = '';

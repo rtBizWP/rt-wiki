@@ -94,8 +94,7 @@ if ( ! class_exists( 'RtWikiSubscribeModel' ) ){
 
 		function add_subscriber( $data )
 		{
-            global $wpdb;
-			return $wpdb->insert( $this->table_name, $data );
+			return parent::insert( $data );
 		}
 
 		function update_subscriber( $data, $where )
