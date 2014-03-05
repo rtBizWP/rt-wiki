@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 if ( ! class_exists( 'RtWikiSubscribeModel' ) ){
 
-	class RtWikiSubscribeModel extends RTDBModels
+	class RtWikiSubscribeModel extends RT_DB_Model
 	{
 
 		public function __construct()
