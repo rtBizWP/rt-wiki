@@ -171,7 +171,7 @@ if ( ! class_exists( 'KWS_User_Groups' ) ){
 					<th>
 						<label for="user-group"
 							   style="font-weight:bold; display:block;"><?php _e( sprintf( _n( __( 'Add to Group', 'user-groups' ), __( 'Add to Groups', 'user-groups' ), sizeof( $terms ) ) ) ); ?></label>
-						<a href="<?php echo esc_url( admin_url( 'edit-tags.php?taxonomy=user-group' ) ); ?>"><?php _e( 'Add a User Group', 'user-groups' ); ?></a>
+						<a href="<?php echo admin_url( 'edit-tags.php?taxonomy=user-group' ); ?>"><?php _e( 'Add a User Group', 'user-groups' ); ?></a>
 					</th>
 
 					<td><?php
@@ -605,7 +605,7 @@ if ( ! class_exists( 'KWS_User_Groups' ) ){
 				<div id="user-group-header">
 					<h2><?php echo $colorblock;
 						echo esc_html( sprintf( __( 'User Group: %s', 'user-group' ), $current->name ) ); ?> <a
-							href="<?php echo esc_url( admin_url( 'edit-tags.php?action=edit&taxonomy=user-group&tag_ID=' . $current->term_id . '&post_type=post' ) ); ?>"
+							href="<?php echo admin_url( 'edit-tags.php?action=edit&taxonomy=user-group&tag_ID=' . $current->term_id . '&post_type=post' ); ?>"
 							class="add-new-h2"
 							style="background:#fefefe;"><?php _e( 'Edit User Group', 'user-group' ); ?></a></h2>
 					<?php echo esc_html( wpautop( $current->description ) ); ?>
@@ -642,7 +642,7 @@ if ( ! class_exists( 'KWS_User_Groups' ) ){
 			<label for="user-groups-select"><?php _e( 'User Groups:', 'user-group' ); ?></label>
 
 			<form method="get"
-				  action="<?php echo esc_url( preg_replace( '/(.*?)\/users/ism', 'users', add_query_arg( $args, remove_query_arg( 'user-group' ) ) ) ); ?>"
+				  action="<?php echo preg_replace( '/(.*?)\/users/ism', 'users', add_query_arg( $args, remove_query_arg( 'user-group' ) ) ); ?>"
 				  style="display:inline;">
 				<?php echo $select; ?>
 			</form>

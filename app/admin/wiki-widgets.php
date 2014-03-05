@@ -342,7 +342,7 @@ function rt_list_wikis()
 							<div class='rtwiki-diff-wrap'>
 								<h4 class='rtwiki-diff-meta'>
 									<cite class='rtwiki-diff-author'><a
-											href='<?php echo esc_url( get_author_posts_url( $revision->post_author ) ); ?>'><?php echo esc_html( ucwords( get_the_author_meta( 'display_name', $revision->post_author ) ) ); ?></a></cite>
+											href='<?php echo get_author_posts_url( $revision->post_author ); ?>'><?php echo esc_html( ucwords( get_the_author_meta( 'display_name', $revision->post_author ) ) ); ?></a></cite>
 									<?php echo esc_html( __( 'has edited', 'rtCamp' ) ); ?>
 									<a href='post.php?post=<?php echo esc_attr( $posts->post_parent ); ?>&action=edit'><?php echo esc_attr( $revision->post_title ); ?></a>
 									<?php echo esc_html( __( '(' . $hour_ago . ')', 'rtCamp' ) ); ?>
