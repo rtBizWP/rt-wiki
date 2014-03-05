@@ -123,12 +123,7 @@ if ( ! class_exists( 'RTWiki' ) ){
 		 */
 		function update_db()
 		{	
-			$update = new RTDBUpdate( false, RT_WIKI_PATH . 'index.php', RT_WIKI_PATH . 'app/schema/' );
-			/* Current Version. */
-			if ( ! defined( 'RTMEDIA_VERSION' ) ){
-				define( 'RTMEDIA_VERSION', $update->db_version );
-			}
-			$update->install_db_version = '0.0';
+			$update = new RT_DB_Update( RT_WIKI_PATH . 'index.php', RT_WIKI_PATH . 'app/schema/', false );
 			$update->do_upgrade();
 		}
 

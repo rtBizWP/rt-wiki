@@ -18,7 +18,7 @@ if ( ! class_exists( 'RtWikiAttributeTaxonomyModel' ) ){
 	/**
 	 * Class RtWikiAttributeTaxonomyModel
 	 */
-	class RtWikiAttributeTaxonomyModel extends RTDBModels
+	class RtWikiAttributeTaxonomyModel extends RT_DB_Model
 	{
 		/**
 		 *
