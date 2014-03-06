@@ -42,7 +42,7 @@ function get_contributers( $postid )
 		foreach ( $revision as $revisions ) {
 			if ( ! in_array( $revisions->post_author, $authorId, true ) ){
 				$id = $revisions->post_author;
-				echo '<li><a href="' . get_author_posts_url( $id ) . '">' . get_userdata( $id )->display_name . '</a></li>';
+				echo '<li><a href="' . get_author_posts_url( $id ) . '">' . get_avatar( get_the_author_meta( $id ), apply_filters( 'rtwiki_contributers_avatar_size', 32 ) ) . '<span>&nbsp' . get_userdata( $id )->display_name . '</span></a></li>';
 				$authorId[ ] = $revisions->post_author;
 			}
 		}

@@ -33,7 +33,7 @@ class RtWikiContributers extends WP_Widget
 			}
 			echo '<div class="rtwikicontributers" >';
 			get_contributers( $post->ID );
-			echo '</div" >';
+			echo '</div>';
 			echo $args[ 'after_widget' ];
 		}
 	}
@@ -51,7 +51,7 @@ class RtWikiContributers extends WP_Widget
 		if ( isset( $instance[ 'title' ] ) ){
 			$title = $instance[ 'title' ];
 		} else {
-			$title = __( 'New title', 'text_domain' );
+			$title = __( 'Contributers', 'text_domain' );
 		}
 		$number = isset( $instance[ 'number' ] ) ? absint( $instance[ 'number' ] ) : 1;
 		?>
@@ -116,7 +116,7 @@ class RtWikiSubPage extends WP_Widget
 		if ( isset( $instance[ 'title' ] ) ){
 			$title = $instance[ 'title' ];
 		} else {
-			$title = __( 'New title', 'text_domain' );
+			$title = __( 'SubPages', 'text_domain' );
 		}
 		$number = isset( $instance[ 'number' ] ) ? absint( $instance[ 'number' ] ) : 1;
 		?>
@@ -180,7 +180,7 @@ class RtWikiTaxonimies extends WP_Widget
 		if ( isset( $instance[ 'title' ] ) ){
 			$title = $instance[ 'title' ];
 		} else {
-			$title = __( 'New title', 'text_domain' );
+			$title = __( 'Taxonimies', 'text_domain' );
 		}
 		$number = isset( $instance[ 'number' ] ) ? absint( $instance[ 'number' ] ) : 1;
 		?>
@@ -279,7 +279,7 @@ class RtWikiPageSubscribe extends WP_Widget
 		if ( isset( $instance[ 'title' ] ) ){
 			$title = $instance[ 'title' ];
 		} else {
-			$title = __( 'New title', 'text_domain' );
+			$title = __( 'Subscribe', 'text_domain' );
 		}
 		$number = isset( $instance[ 'number' ] ) ? absint( $instance[ 'number' ] ) : 1;
 		?>
