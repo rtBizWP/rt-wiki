@@ -156,15 +156,19 @@ class RtWikiTaxonimies extends WP_Widget
 			$title = apply_filters( 'widget_title', 'Taxonimies' );
 		}
 
-		echo $args[ 'before_widget' ];
-		if ( isset( $title ) ){
-			echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+		$out=wiki_custom_taxonomies( $post->ID );
+
+		if ( isset( $out ) && $out != '' ){
+			echo $args[ 'before_widget' ];
+			if ( isset( $title ) ){
+				echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+			}
+			//wiki_default_taxonomies($post->ID);
+			echo '<div class="rtwikitaxonimies" >';
+			echo $out;
+			echo '</div>';
+			echo $args[ 'after_widget' ];
 		}
-		//wiki_default_taxonomies($post->ID);
-		echo '<div class="rtwikitaxonimies" >';
-		wiki_custom_taxonomies( $post->ID );
-		echo '</div>';
-		echo $args[ 'after_widget' ];
 	}
 
 	function update( $new_instance, $old_instance )
@@ -254,9 +258,9 @@ class RtWikiPageSubscribe extends WP_Widget
 				$subPageCheck = '';
 			}
 			echo '<form id="user-subscribe" method="post" action="?PageSubscribe=1">
-                <input type="checkbox" name="single_subscribe" value="current"  ' . $singleCheck . ' >Subscribe to this page <br/>';
+                <label><input type="checkbox" name="single_subscribe" value="current"  ' . $singleCheck . ' >&nbspSubscribe to this page </label>';
 			if ( $parentStatus == true ){
-				echo '<input type="checkbox" name="subPage_subscribe" value="subpage"  ' . $subPageCheck . ' >Subscribe to this page and  Sub Pages <br />';
+				echo '<label><input type="checkbox" name="subPage_subscribe" value="subpage"  ' . $subPageCheck . ' >&nbspSubscribe to this page and  Sub Pages</label>';
 			}
 			echo '<input type="hidden" name=post-type value=' . $post->post_type . ' /><input type="submit" class="button" name=post-update-subscribe" value="Submit" >
                 <input type="hidden" name="update-postId"  value=' . $post->ID . '>
