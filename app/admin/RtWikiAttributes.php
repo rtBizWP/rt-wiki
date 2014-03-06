@@ -87,14 +87,15 @@ if ( ! class_exists( 'RtWikiAttributes' ) ){
 					'show_in_nav_menus' => $show_in_nav_menus,
 					'query_var' => true,
 					'rewrite' => array(
-						'slug' => 'wiki/' . $name,
+						'slug' => $post_type . '/' . $name,
 						'with_front' => false,
 						'hierarchical' => true,
 					),
 				);
 				register_taxonomy( $name, apply_filters( 'rtwiki_taxonomy_objects_' . $name, $post_type ), apply_filters( 'rtwiki_taxonomy_args_' . $name, $args ) );
+				add_rewrite_rule( '^' . $post_type . '/' . $name . '/([^/]*)/?','index.php?post_type=' . $post_type . '&' . $name . '=$matches[1]', 'top' );
+				add_rewrite_rule( '^' . $post_type . '/' . $name . '/([^/]*)/([^/]*)/([^/]*)/?','index.php?post_type=' . $post_type . '&' . $name . '=$matches[1]&paged=$matches[3]', 'top' );
 			}
-			flush_rewrite_rules( true );
 		}
 
 		/**
