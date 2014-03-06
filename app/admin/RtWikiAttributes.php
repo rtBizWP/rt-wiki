@@ -86,11 +86,15 @@ if ( ! class_exists( 'RtWikiAttributes' ) ){
 					'show_admin_column' => true,
 					'show_in_nav_menus' => $show_in_nav_menus,
 					'query_var' => true,
-					'rewrite' => array( 'slug' => $post_type . '/' . $name ),
-					'with_front' => true, );
+					'rewrite' => array(
+						'slug' => 'wiki/' . $name,
+						'with_front' => false,
+						'hierarchical' => true,
+					),
+				);
 				register_taxonomy( $name, apply_filters( 'rtwiki_taxonomy_objects_' . $name, $post_type ), apply_filters( 'rtwiki_taxonomy_args_' . $name, $args ) );
 			}
-
+			flush_rewrite_rules( true );
 		}
 
 		/**

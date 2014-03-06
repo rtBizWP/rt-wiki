@@ -48,15 +48,16 @@ class RtWikiDailyChanges
 	 */
 	function send_daily_change_mail()
 	{
-		error_log( 'dips' );
+		var_dump( 'Schedule called' );
 		$subscriberslist = $this->get_users_subscribeposts_list();
-		error_log( 'dips' );
-		error_log( $subscriberslist );
 		foreach ( $subscriberslist as $key => $value ) {
 			$user_info = get_userdata( $key );
 			$finalBody = '';
 			foreach ( $value as $postid ) {
-				$finalBody .= $this->get_post_content_diff( $postid ) . '<br/>';
+				$finalBody .= $this->get_post_content_diff( $postid );
+				if ( isset( $finalBody ) && $finalBody != '' ){
+					$finalBody .= '<br/>';
+				}
 			}
 			if ( isset( $finalBody ) && $finalBody != '' ){
 				add_filter( 'wp_mail_content_type', 'set_html_content_type' );

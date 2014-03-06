@@ -52,7 +52,7 @@ if ( ! class_exists( 'RTWiki' ) ){
 
 			//Post filtering
 			add_action( 'the_posts', 'rtwiki_search_filter' );
-			//add_filter( 'the_content', 'rtwiki_content_filter' );
+			add_filter( 'the_content', 'rtwiki_content_filter' );
 			add_filter( 'edit_post_link', 'rtwiki_edit_post_link_filter' );
 			add_filter( 'comments_array', 'rtwiki_comment_filter', 10, 2 );
 			add_filter( 'comments_open', 'rtwiki_comment_form_filter', 10, 2 );
@@ -85,18 +85,14 @@ if ( ! class_exists( 'RTWiki' ) ){
 			add_filter( 'cron_schedules', array( $this, 'wiki_add_weekly_schedule' ) );
 
 			//Wiki Daily update
-			/*$rtwikidailychange = new RtWikiDailyChanges();
+			$rtwikidailychange = new RtWikiDailyChanges();
 			add_action( 'wiki_daily_event_hook', array( $rtwikidailychange, 'send_daily_change_mail' ) );
 			register_activation_hook( __FILE__, array( $this, 'wiki_prefix_activation' ) );
 			register_deactivation_hook( __FILE__, array( $this, 'wiki_prefix_deactivation' )  );
-			add_action( 'init',array( $this, 'wiki_prefix_setup_schedule' ) );*/
+			add_action( 'init',array( $this, 'wiki_prefix_setup_schedule' ) );
 
 			//disable wiki daily update schedula
 			//wp_clear_scheduled_hook( 'wiki_daily_event_hook' );
-
-			if (wp_next_scheduled( 'wiki_daily_event_hook' ) ) {
-				var_dump( 'hi' );
-			}
 
 		}
 
@@ -187,7 +183,7 @@ if ( ! class_exists( 'RTWiki' ) ){
 			wp_enqueue_script( 'rtwiki-custom-script' );
 			if ( is_404() ) {
 				wp_register_script( 'rtwiki-404-script', RT_WIKI_URL . 'app/assets/js/rtwiki-404-script.js', array( 'jquery' ) );
-				wp_localize_script( 'rtwiki-404-script', 'redirectURL', "<a href='" . redirect_404() . "'>" . __( 'Click here. ', 'rtCamp' ) . '</a>' . __( 'If you want to add this post', 'rtCamp' ) );
+				wp_localize_script( 'rtwiki-404-script', 'redirectURL', "<p style='margin: inherit;'><a href='" . redirect_404() . "'>" . __( 'Click here. ', 'rtCamp' ) . '</a>' . __( 'If you want to add this post', 'rtCamp' ) . '</p>' );
 				wp_enqueue_script( 'rtwiki-404-script' );
 			}
 
