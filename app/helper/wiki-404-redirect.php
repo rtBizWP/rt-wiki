@@ -63,6 +63,7 @@ function redirect_404()
 				}
 			}
 			$url = filter_var( $url, FILTER_SANITIZE_URL );
+			$url = "<p style='margin: inherit;'><a href='" . $url . "'>" . __( 'Click here. ', 'rtCamp' ) . '</a>' . __( 'If you want to add this post', 'rtCamp' ) . '</p>';
 		}
 	}
 

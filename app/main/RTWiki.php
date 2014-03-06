@@ -183,7 +183,7 @@ if ( ! class_exists( 'RTWiki' ) ){
 			wp_enqueue_script( 'rtwiki-custom-script' );
 			if ( is_404() ) {
 				wp_register_script( 'rtwiki-404-script', RT_WIKI_URL . 'app/assets/js/rtwiki-404-script.js', array( 'jquery' ) );
-				wp_localize_script( 'rtwiki-404-script', 'redirectURL', "<p style='margin: inherit;'><a href='" . redirect_404() . "'>" . __( 'Click here. ', 'rtCamp' ) . '</a>' . __( 'If you want to add this post', 'rtCamp' ) . '</p>' );
+				wp_localize_script( 'rtwiki-404-script', 'redirectURL', redirect_404() );
 				wp_enqueue_script( 'rtwiki-404-script' );
 			}
 
