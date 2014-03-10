@@ -32,7 +32,7 @@ if ( ! class_exists( 'RtWikiAdmin' ) ){
 			//rtWiki Attributes and taxonomies
 			add_action( 'admin_menu', array( $this, 'register_pages' ) );
 			$this->register_taxonomies();
-			flush_rewrite_rules( true );
+			//flush_rewrite_rules( true );
 
 			//Wiki Setting : wiki-settings.php
 			add_action( 'admin_menu', 'fwds_plugin_settings' );

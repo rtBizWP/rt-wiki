@@ -131,7 +131,7 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 			if ( $current_user->has_cap( 'create_users' ) ){
 
 				?>
-
+				<h3 id="wordpress-rtwiki">rtWiki</h3>
 				<table class="form-table">
 
 					<tbody>
