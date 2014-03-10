@@ -22,7 +22,7 @@ class RtWikiDailyChanges
 	function get_users_subscribeposts_list()
 	{
 		$subscriberslist = array();
-		$blogusers       = get_users();
+		$blogusers       = get_users( );
 		$supported_posts = rtwiki_get_supported_attribute();
 		if ( is_array( $supported_posts ) && ! empty( $supported_posts ) ){
 			foreach ( $supported_posts as $post_types ) {
@@ -40,7 +40,6 @@ class RtWikiDailyChanges
 				}
 			}
 		}
-
 		return $subscriberslist;
 	}
 
@@ -49,12 +48,16 @@ class RtWikiDailyChanges
 	 */
 	function send_daily_change_mail()
 	{
+		var_dump( 'Schedule called' );
 		$subscriberslist = $this->get_users_subscribeposts_list();
 		foreach ( $subscriberslist as $key => $value ) {
 			$user_info = get_userdata( $key );
 			$finalBody = '';
 			foreach ( $value as $postid ) {
-				$finalBody .= $this->get_post_content_diff( $postid ) . '<br/>';
+				$finalBody .= $this->get_post_content_diff( $postid );
+				if ( isset( $finalBody ) && $finalBody != '' ){
+					$finalBody .= '<br/>';
+				}
 			}
 			if ( isset( $finalBody ) && $finalBody != '' ){
 				add_filter( 'wp_mail_content_type', 'set_html_content_type' );

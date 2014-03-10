@@ -33,7 +33,7 @@ class RtWikiContributers extends WP_Widget
 			}
 			echo '<div class="rtwikicontributers" >';
 			get_contributers( $post->ID );
-			echo '</div" >';
+			echo '</div>';
 			echo $args[ 'after_widget' ];
 		}
 	}
@@ -51,7 +51,7 @@ class RtWikiContributers extends WP_Widget
 		if ( isset( $instance[ 'title' ] ) ){
 			$title = $instance[ 'title' ];
 		} else {
-			$title = __( 'New title', 'text_domain' );
+			$title = __( 'Contributers', 'text_domain' );
 		}
 		$number = isset( $instance[ 'number' ] ) ? absint( $instance[ 'number' ] ) : 1;
 		?>
@@ -116,7 +116,7 @@ class RtWikiSubPage extends WP_Widget
 		if ( isset( $instance[ 'title' ] ) ){
 			$title = $instance[ 'title' ];
 		} else {
-			$title = __( 'New title', 'text_domain' );
+			$title = __( 'SubPages', 'text_domain' );
 		}
 		$number = isset( $instance[ 'number' ] ) ? absint( $instance[ 'number' ] ) : 1;
 		?>
@@ -156,15 +156,19 @@ class RtWikiTaxonimies extends WP_Widget
 			$title = apply_filters( 'widget_title', 'Taxonimies' );
 		}
 
-		echo $args[ 'before_widget' ];
-		if ( isset( $title ) ){
-			echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+		$out=wiki_custom_taxonomies( $post->ID );
+
+		if ( isset( $out ) && $out != '' ){
+			echo $args[ 'before_widget' ];
+			if ( isset( $title ) ){
+				echo $args[ 'before_title' ] .  $title . $args[ 'after_title' ];
+			}
+			//wiki_default_taxonomies($post->ID);
+			echo '<div class="rtwikitaxonimies" >';
+			echo $out;
+			echo '</div>';
+			echo $args[ 'after_widget' ];
 		}
-		//wiki_default_taxonomies($post->ID);
-		echo '<div class="rtwikitaxonimies" >';
-		wiki_custom_taxonomies( $post->ID );
-		echo '</div>';
-		echo $args[ 'after_widget' ];
 	}
 
 	function update( $new_instance, $old_instance )
@@ -180,7 +184,7 @@ class RtWikiTaxonimies extends WP_Widget
 		if ( isset( $instance[ 'title' ] ) ){
 			$title = $instance[ 'title' ];
 		} else {
-			$title = __( 'New title', 'text_domain' );
+			$title = __( 'Taxonimies', 'text_domain' );
 		}
 		$number = isset( $instance[ 'number' ] ) ? absint( $instance[ 'number' ] ) : 1;
 		?>
@@ -254,9 +258,9 @@ class RtWikiPageSubscribe extends WP_Widget
 				$subPageCheck = '';
 			}
 			echo '<form id="user-subscribe" method="post" action="?PageSubscribe=1">
-                <input type="checkbox" name="single_subscribe" value="current"  ' . $singleCheck . ' >Subscribe to this page <br/>';
+                <label><input type="checkbox" name="single_subscribe" value="current"  ' . $singleCheck . ' >&nbspSubscribe to this page </label>';
 			if ( $parentStatus == true ){
-				echo '<input type="checkbox" name="subPage_subscribe" value="subpage"  ' . $subPageCheck . ' >Subscribe to this page and  Sub Pages <br />';
+				echo '<label><input type="checkbox" name="subPage_subscribe" value="subpage"  ' . $subPageCheck . ' >&nbspSubscribe to this page and  Sub Pages</label>';
 			}
 			echo '<input type="hidden" name=post-type value=' . $post->post_type . ' /><input type="submit" class="button" name=post-update-subscribe" value="Submit" >
                 <input type="hidden" name="update-postId"  value=' . $post->ID . '>
@@ -279,7 +283,7 @@ class RtWikiPageSubscribe extends WP_Widget
 		if ( isset( $instance[ 'title' ] ) ){
 			$title = $instance[ 'title' ];
 		} else {
-			$title = __( 'New title', 'text_domain' );
+			$title = __( 'Subscribe', 'text_domain' );
 		}
 		$number = isset( $instance[ 'number' ] ) ? absint( $instance[ 'number' ] ) : 1;
 		?>
@@ -342,7 +346,7 @@ function rt_list_wikis()
 							<div class='rtwiki-diff-wrap'>
 								<h4 class='rtwiki-diff-meta'>
 									<cite class='rtwiki-diff-author'><a
-											href='<?php echo esc_url( get_author_posts_url( $revision->post_author ) ); ?>'><?php echo esc_html( ucwords( get_the_author_meta( 'display_name', $revision->post_author ) ) ); ?></a></cite>
+											href='<?php echo get_author_posts_url( $revision->post_author ); ?>'><?php echo esc_html( ucwords( get_the_author_meta( 'display_name', $revision->post_author ) ) ); ?></a></cite>
 									<?php echo esc_html( __( 'has edited', 'rtCamp' ) ); ?>
 									<a href='post.php?post=<?php echo esc_attr( $posts->post_parent ); ?>&action=edit'><?php echo esc_attr( $revision->post_title ); ?></a>
 									<?php echo esc_html( __( '(' . $hour_ago . ')', 'rtCamp' ) ); ?>

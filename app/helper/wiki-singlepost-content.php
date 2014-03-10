@@ -42,7 +42,7 @@ function get_contributers( $postid )
 		foreach ( $revision as $revisions ) {
 			if ( ! in_array( $revisions->post_author, $authorId, true ) ){
 				$id = $revisions->post_author;
-				echo '<li><a href="' . get_author_posts_url( $id ) . '">' . get_userdata( $id )->display_name . '</a></li>';
+				echo '<li><a href="' . get_author_posts_url( $id ) . '">' . get_avatar( get_the_author_meta( $id ), apply_filters( 'rtwiki_contributers_avatar_size', 32 ) ) . '<span>&nbsp' . get_userdata( $id )->display_name . '</span></a></li>';
 				$authorId[ ] = $revisions->post_author;
 			}
 		}
@@ -96,6 +96,7 @@ function get_subpages( $parentId, $lvl, $post_type = 'post' )
  *
  * @param type                          $postid
  * @param bool|\type                    $display
+ * @return string
  *
  * @global RtWikiAttributeTaxonomyModel $rtWikiAttributesModel
  *
@@ -109,34 +110,29 @@ function wiki_custom_taxonomies( $postid, $display = true )
 	global $rtWikiAttributesModel;
 	$rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
 	$attributes            = $rtWikiAttributesModel->get_all_attributes( get_post_type() );
-	if ( $display ){
-		$out = '';
-		foreach ( $attributes as $attr ) {
-			if ( $out != '' ){
-				$ulstyle = "style='display: none;'";
-			} else {
-				$ulstyle = '';
-			}
-			$taxonomy = $attr->attribute_name;
-			$out     .= "<div class='wikidropdown'><h3><a href='#' >" . $attr->attribute_name . '</a></h3>';
-
-			if ( is_single() ){
+	$out = '';
+	foreach ( $attributes as $attr ) {
+		if ( $out != '' ){
+			$ulstyle = "style='display: none;'";
+		} else {
+			$ulstyle = '';
+		}
+		$taxonomy = $attr->attribute_name;
+		$terms    = wp_get_post_terms( $postid, $taxonomy );
+			/*if ( is_single() ){
 				$terms = wp_get_post_terms( $postid, $taxonomy );
 			} else {
 				$terms = get_terms( $taxonomy );
+			}*/
+		if ( ! empty( $terms ) ){
+			$out .= "<div class='wikidropdown'><h3><a href='#' >" . $attr->attribute_name . '</a></h3>';
+			$out .= '<ul ' . $ulstyle . ' >';
+			foreach ( $terms as $term ) {
+				$out .= '<li><a href="' . get_term_link( $term, $taxonomy ) . '" title="' . $term->name . '" >' . $term->name . '</a></li>';
 			}
-			if ( ! empty( $terms ) ){
-				$out .= '<ul ' . $ulstyle . ' >';
-				foreach ( $terms as $term ) {
-					$out .= '<li><a href="' . get_term_link( $term, $taxonomy ) . '" title="' . $term->name . '" >' . $term->name . '</a></li>';
-				}
-				$out .= '</ul>';
-			} else {
-				$out .= 'No ' . $taxonomy . ' assign.';
-			}
+			$out .= '</ul>';
 			$out .= '</div>';
 		}
-		//$out .= "</ul>";
-		echo $out;
 	}
+	return $out;
 }

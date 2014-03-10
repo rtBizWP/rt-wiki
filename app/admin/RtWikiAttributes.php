@@ -86,11 +86,16 @@ if ( ! class_exists( 'RtWikiAttributes' ) ){
 					'show_admin_column' => true,
 					'show_in_nav_menus' => $show_in_nav_menus,
 					'query_var' => true,
-					'rewrite' => array( 'slug' => $post_type . '/' . $name ),
-					'with_front' => true, );
+					'rewrite' => array(
+						'slug' => $post_type . '/' . $name,
+						'with_front' => false,
+						'hierarchical' => true,
+					),
+				);
 				register_taxonomy( $name, apply_filters( 'rtwiki_taxonomy_objects_' . $name, $post_type ), apply_filters( 'rtwiki_taxonomy_args_' . $name, $args ) );
+				add_rewrite_rule( '^' . $post_type . '/' . $name . '/([^/]*)/?','index.php?post_type=' . $post_type . '&' . $name . '=$matches[1]', 'top' );
+				add_rewrite_rule( '^' . $post_type . '/' . $name . '/([^/]*)/([^/]*)/([^/]*)/?','index.php?post_type=' . $post_type . '&' . $name . '=$matches[1]&paged=$matches[3]', 'top' );
 			}
-
 		}
 
 		/**
@@ -241,7 +246,7 @@ if ( ! class_exists( 'RtWikiAttributes' ) ){
 				<h2><i class="icon-tag"></i> <?php _e( 'Edit Attribute' ) ?></h2>
 
 				<form
-					action="admin.php?page=<?php echo esc_url( $_GET[ 'page' ] ); ?>&amp;edit=<?php echo absint( $edit ); ?>&amp;p_type=<?php echo esc_url( isset( $_GET[ 'p_type' ] ) ? $_GET[ 'p_type' ] : ( ( isset( $_GET[ 'post_type' ] ) ? $_GET[ 'post_type' ] : '' ) ) ) ?>"
+					action="admin.php?page=<?php echo $_GET[ 'page' ]; ?>&amp;edit=<?php echo absint( $edit ); ?>&amp;p_type=<?php echo isset( $_GET[ 'p_type' ] ) ? $_GET[ 'p_type' ] : ( ( isset( $_GET[ 'post_type' ] ) ? $_GET[ 'post_type' ] : '' ) ) ?>"
 					method="post">
 					<table class="form-table">
 						<tbody>
@@ -331,12 +336,12 @@ if ( ! class_exists( 'RtWikiAttributes' ) ){
 									<tr>
 
 										<td>
-											<a href="edit-tags.php?taxonomy=<?php echo esc_url( rtwiki_attribute_taxonomy_name( $tax->attribute_name ) ); ?>&amp;post_type=<?php echo esc_url( $post_type ); ?>"><?php echo esc_html( $tax->attribute_label ); ?></a>
+											<a href="edit-tags.php?taxonomy=<?php echo rtwiki_attribute_taxonomy_name( $tax->attribute_name ); ?>&amp;post_type=<?php echo $post_type; ?>"><?php echo esc_html( $tax->attribute_label ); ?></a>
 
 											<div class="row-actions"><span class="edit"><a
-														href="<?php echo esc_url( add_query_arg( 'edit', $tax->id, 'admin.php?page=' . $_GET[ 'page' ] . '&amp;p_type=' . $post_type ) ); ?>"><?php _e( 'Edit' ); ?></a> | </span><span
+														href="<?php echo add_query_arg( 'edit', $tax->id, 'admin.php?page=' . $_GET[ 'page' ] . '&amp;p_type=' . $post_type ); ?>"><?php _e( 'Edit' ); ?></a> | </span><span
 													class="delete"><a class="delete"
-																	  href="<?php echo esc_url( add_query_arg( 'delete', $tax->id, 'admin.php?page=' . $_GET[ 'page' ] . '&amp;p_type=' . $post_type ) ); ?>"><?php _e( 'Delete' ); ?></a></span>
+																	  href="<?php echo add_query_arg( 'delete', $tax->id, 'admin.php?page=' . $_GET[ 'page' ] . '&amp;p_type=' . $post_type ); ?>"><?php _e( 'Delete' ); ?></a></span>
 											</div>
 										</td>
 										<td><?php echo esc_html( $tax->attribute_name ); ?></td>
@@ -374,7 +379,7 @@ if ( ! class_exists( 'RtWikiAttributes' ) ){
 					?>
 										</td>
 										<td>
-											<a href="edit-tags.php?taxonomy=<?php echo esc_url( rtwiki_attribute_taxonomy_name( $tax->attribute_name ) ); ?>&amp;post_type=wiki"
+											<a href="edit-tags.php?taxonomy=<?php echo rtwiki_attribute_taxonomy_name( $tax->attribute_name ); ?>&amp;post_type=wiki"
 											   class="button alignright"><?php _e( 'Configure&nbsp;terms', 'woocommerce' ); ?></a>
 										</td>
 									</tr>
@@ -399,7 +404,7 @@ if ( ! class_exists( 'RtWikiAttributes' ) ){
 								<p><?php _e( '' ); ?></p>
 
 								<form
-									action="admin.php?page=<?php echo esc_url( $_GET[ 'page' ] ) ?>&amp;p_type=<?php echo esc_url( $post_type ); ?>"
+									action="admin.php?page=<?php echo $_GET[ 'page' ] ?>&amp;p_type=<?php echo $post_type; ?>"
 									method="post">
 									<div class="form-field">
 										<label for="attribute_label"><?php _e( 'Name' ); ?></label>

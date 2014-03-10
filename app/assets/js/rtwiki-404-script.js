@@ -4,6 +4,7 @@
  */
 
 jQuery(document).ready(function ($) {
+    $('.post-content').append(redirectURL);
     $('.page-content').append(redirectURL);
 });
 
