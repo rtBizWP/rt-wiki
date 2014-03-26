@@ -176,7 +176,7 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 						<td><input type="radio" onclick="uncheckAll(this,'w')" class="case_w rtwiki_w" id="w_<?php echo esc_html( $groupSlug ) ?>"
 								   name="access_rights[<?php echo esc_html( $groupSlug ) ?>]"
 								   <?php if ( isset( $access_rights[ $groupSlug ] ) && ( $access_rights[ $groupSlug ] == 2 ) ) { ?>checked="checked"<?php } ?>
-								   value="2 "/></td>
+								   value="2"/></td>
 					</tr>
 				<?php } ?>
 				</tbody>

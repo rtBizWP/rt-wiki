@@ -259,10 +259,6 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 			}
 		}
-
-
-
 	}
-
 }
 

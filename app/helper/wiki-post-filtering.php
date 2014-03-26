@@ -204,7 +204,7 @@ function get_admin_panel_permission( $pageID )
 						$ans = get_term_if_exists( $term->slug, $user_id );
 						if ( $ans == $term->slug && isset( $access_rights[ $term->slug ] ) ){
 							if ( $noflag < $access_rights[ $term->slug ] ){
-								$noflag=$access_rights[ $term->slug ];
+								$noflag = $access_rights[ $term->slug ];
 							}
 						}
 					}
