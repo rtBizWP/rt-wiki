@@ -32,7 +32,7 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 			$this->register_roles();
 
-			remove_role( "rtwikiadmin" );
+			//remove_role( "rtwikiadmin" );
 
 			add_action( 'edit_user_profile', array( $this, 'add_access_profile_fields' ), 1 );
 
