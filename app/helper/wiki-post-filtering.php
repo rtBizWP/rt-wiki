@@ -104,48 +104,58 @@ function post_check()
  */
 function add_capabilities( $capabilities, $cap, $args, $user )
 {
-	global $post, $current_user;
+	/*global $post, $current_user;
 	$supported_posts = rtwiki_get_supported_attribute();
 	if ( is_object( $post ) && in_array( $post->post_type, $supported_posts ) ){
 		$access = 'na';
+
 		if ( ( is_object( $user ) && ! empty( $user->roles ) && ( in_array( 'rtwikiadmin', $current_user->roles ) || in_array( 'rtwikieditor', $current_user->roles ) || $user->ID == $post->post_author ) ) ){
 			return $user->allcaps;
 		}
 		$access = get_admin_panel_permission( $post->ID );
-
-		if ( ( is_object( $post ) && $post->post_author != get_current_user_id() ) ){
-			$capabilities[ 'edit_wiki' ] = false;
-			$capabilities[ 'edit_others_wiki' ] = false;
-			$capabilities[ 'publish_wiki' ] = false;
-			$capabilities[ 'read_wiki' ] = false;
-			$capabilities[ 'read_private_wiki' ]     = false;
-			$capabilities[ 'delete_wiki' ] = false;
-			$capabilities[ 'edit_published_wiki' ]   = false;
-			$capabilities[ 'delete_published_wiki' ] = false;
-			$capabilities[ 'delete_others_wiki' ]    = false;
-			$capabilities[ 'edit_others_posts' ]     = false;
-			$capabilities[ 'edit_published_posts' ]  = false;
-		}
-		if ( $access == 'r' ){
-			$capabilities[ 'read_wiki' ] = true;
-			$capabilities[ 'read_private_wiki' ] = true;
-		}
-		if ( 'w' == $access ){
-			$capabilities[ 'edit_wiki' ] = true;
-			$capabilities[ 'edit_others_wiki' ] = true;
-			$capabilities[ 'publish_wiki' ] = true;
-			$capabilities[ 'read_wiki' ] = true;
-			$capabilities[ 'read_private_wiki' ]     = true;
-			$capabilities[ 'delete_wiki' ] = true;
-			$capabilities[ 'edit_published_wiki' ]   = true;
-			$capabilities[ 'delete_published_wiki' ] = true;
-			$capabilities[ 'delete_others_wiki' ]    = true;
-			$capabilities[ 'edit_others_posts' ]     = true;
-			$capabilities[ 'edit_published_posts' ]  = true;
+		if ( ( is_object( $post ) && $post->post_author == get_current_user_id() ) ){
+			$capabilities["read_wiki"] = true;
+			$capabilities["delete_wiki"] = true;
+			$capabilities["edit_wikis"] = true;
+			$capabilities["edit_others_wikis"] = true;
+			$capabilities["publish_wikis"] = true;
+			$capabilities["read_private_wikis"] = true;
+			$capabilities["delete_wikis"] = true;
+			$capabilities["delete_private_wikis"] = true;
+			$capabilities["delete_published_wikis"] = true;
+			$capabilities["delete_others_wikis"] = true;
+			$capabilities["edit_private_wikis"] = true;
+			$capabilities["edit_published_wikis"] = true;
+		}elseif( $access == 'r' ){
+			$capabilities["read_wiki"] = true;
+			$capabilities["delete_wiki"] = false;
+			$capabilities["edit_wikis"] = false;
+			$capabilities["edit_others_wikis"] = false;
+			$capabilities["publish_wikis"] = false;
+			$capabilities["read_private_wikis"] = false;
+			$capabilities["delete_wikis"] = false;
+			$capabilities["delete_private_wikis"] = false;
+			$capabilities["delete_published_wikis"] = false;
+			$capabilities["delete_others_wikis"] = false;
+			$capabilities["edit_private_wikis"] = false;
+			$capabilities["edit_published_wikis"] = false;
+		}elseif ( 'w' == $access ){
+			$capabilities["read_wiki"] = true;
+			$capabilities["delete_wiki"] = true;
+			$capabilities["edit_wikis"] = true;
+			$capabilities["edit_others_wikis"] = true;
+			$capabilities["publish_wikis"] = true;
+			$capabilities["read_private_wikis"] = true;
+			$capabilities["delete_wikis"] = false;
+			$capabilities["delete_private_wikis"] = false;
+			$capabilities["delete_published_wikis"] = false;
+			$capabilities["delete_others_wikis"] = false;
+			$capabilities["edit_private_wikis"] = true;
+			$capabilities["edit_published_wikis"] = true;
 		}
 	}
 
-	return $capabilities;
+	return $capabilities;*/
 }
 
 
@@ -160,64 +170,55 @@ function add_capabilities( $capabilities, $cap, $args, $user )
  */
 function get_admin_panel_permission( $pageID )
 {
-
-	$noflag   = 0;
-	$noPublic = 0;
 	global $current_user;
-	$user          = get_current_user_id();
-	$terms         = get_terms( 'user-group', array( 'hide_empty' => true ) );
-	$access_rights = get_post_meta( $pageID, 'access_rights', true );
+	$base_parent = get_post_meta( $pageID, 'base_parent', true );
+	$access_rights = get_post_meta( $base_parent , 'access_rights', true );
 
-	if ( ! is_user_logged_in() ){
-		if ( isset( $access_rights[ 'public' ] ) && ( 1 == $access_rights[ 'public' ] ) ){
-			return 'r';
-		} else if ( isset( $access_rights[ 'public' ] ) && ( 0 == $access_rights[ 'public' ] ) ){
-			return false;
-		}
-	} else {
+	if ( isset( $access_rights ) ){
 
-		$post_meta = get_post( $pageID );
+		if ( ! is_user_logged_in() ){
 
-		if ( is_object( $post_meta ) && ( in_array( 'rtwikiadmin', $current_user->roles ) || in_array( 'rtwikieditor', $current_user->roles ) || $user == $post_meta->post_author ) ){
-			return 'a';
-		} else {
 			if ( isset( $access_rights[ 'public' ] ) && 1 == $access_rights[ 'public' ] ){
 				return 'r';
-			} else if ( isset( $access_rights[ 'all' ] ) ){
-				if ( isset( $access_rights[ 'all' ][ 'w' ] ) && ( $access_rights[ 'all' ][ 'w' ] == 1 ) ){
-					if ( in_array( 'rtwikisubscriber', $current_user->roles ) ) {
+			}
+		} else {
+
+			if ( in_array( 'rtwikimoderator', $current_user->roles )  ){
+				return 'a';
+			} else{
+
+				if ( isset( $access_rights[ 'public' ] ) && 1 == $access_rights[ 'public' ] ){
+					return 'r';
+				}elseif ( isset( $access_rights[ 'all' ] ) ){
+					if ( $access_rights[ 'all' ]== 2 ){
+						return 'w';
+					}elseif ( $access_rights[ 'all' ]== 1 ){
 						return 'r';
 					}
-					return 'w';
-				} else if ( isset( $access_rights[ 'all' ][ 'r' ] ) && ( $access_rights[ 'all' ][ 'r' ] == 1 ) ){
-					return 'r';
-				} else if ( isset( $access_rights[ 'all' ][ 'na' ] ) && ( $access_rights[ 'all' ][ 'na' ] == 1 ) ){
-					$noflag = 1;
-				}
-			} else {
-				foreach ( $terms as $term ) {
-					$ans = get_term_if_exists( $term->slug, $user );
-					if ( $ans == $term->slug && isset( $access_rights[ $term->name ] ) ){
-						if ( isset( $access_rights[ $term->name ][ 'w' ] ) && ( $access_rights[ $term->name ][ 'w' ] == 1 ) ){
-							if ( in_array( 'rtwikisubscriber', $current_user->roles ) ) {
-								return 'r';
+				}else{
+					$terms = get_terms( 'user-group', array( 'hide_empty' => true ) );
+					$user_id  = get_current_user_id();
+					$noflag   = 0;
+
+					foreach ( $terms as $term ) {
+						$ans = get_term_if_exists( $term->slug, $user_id );
+						if ( $ans == $term->slug && isset( $access_rights[ $term->slug ] ) ){
+							if ( $noflag < $access_rights[ $term->slug ] ){
+								$noflag=$access_rights[ $term->slug ];
 							}
-							return 'w';
-						} else if ( isset( $access_rights[ $term->name ][ 'r' ] ) && ( $access_rights[ $term->name ][ 'r' ] == 1 ) ){
-							return 'r';
-						} else if ( isset( $access_rights[ $term->name ][ 'na' ] ) && ( $access_rights[ $term->name ][ 'na' ] == 1 ) ){
-							$noflag = 1;
 						}
-					} else if ( $ans == '' || $ans == null ){
-						$noPublic = 1;
+					}
+
+					if( $noflag == 2 ){
+						return 'w';
+					}elseif ( $noflag == 1 ){
+						return 'r';
 					}
 				}
-			}
-			if ( $noflag == 1 || $noPublic == 1 ){
-				return false;
 			}
 		}
 	}
+	return false;
 }
 
 /**
@@ -235,50 +236,55 @@ function get_admin_panel_permission( $pageID )
  */
 function get_permission( $pageID, $userid, $flag = 0 )
 {
-	$noflag        = 0;
-	$noPublic      = 0;
-	$terms         = get_terms( 'user-group', array( 'hide_empty' => true ) );
-	$access_rights = get_post_meta( $pageID, 'access_rights', true );
-	$curuser = get_user_by( 'id', $userid );
-	if ( is_array( $curuser ) ){
-		$curuser = $curuser[0];
-	}
-	if ( isset( $access_rights[ 'public' ] ) && ( 1 == $access_rights[ 'public' ] ) ){
-		return true;
-	} else if ( is_user_logged_in( ) || $flag == 1 ){
-		$post_details = get_post( $pageID );
-		// if rtwikiAdmin or rtwikieditor or postauthor
-		if ( in_array( 'rtwikiadmin', $curuser->roles ) || in_array( 'rtwikieditor', $curuser->roles ) || $userid == $post_details->post_author ){
-			return true;
-		}else if ( isset( $access_rights[ 'all' ] ) ) {
-			if ( ( isset( $access_rights[ 'all' ][ 'r' ] ) && ( $access_rights[ 'all' ][ 'r' ] == 1 ) ) || ( isset( $access_rights[ 'all' ][ 'w' ] ) && ( $access_rights[ 'all' ][ 'w' ] == 1 ) ) ){
+	global $current_user;
+
+
+	$base_parent = get_post_meta( $pageID, 'base_parent', true );
+	$access_rights = get_post_meta( $base_parent , 'access_rights', true );
+
+	if ( isset( $access_rights ) ){
+
+		if ( ! is_user_logged_in() ){
+
+			if ( isset( $access_rights[ 'public' ] ) && 1 == $access_rights[ 'public' ] ){
 				return true;
-			} else if ( isset( $access_rights[ 'all' ][ 'na' ] ) && ( $access_rights[ 'all' ][ 'na' ] == 1 ) ){
-				$noflag = 1;
 			}
-		}else {
-			foreach ( $terms as $term ) {
-				$ans = get_term_if_exists( $term->slug, $userid );
-				if ( $ans == $term->slug && isset( $access_rights[ $term->name ] ) ){
-					if ( ( isset( $access_rights[ $term->name ][ 'r' ] ) && ( $access_rights[ $term->name ][ 'r' ] == 1 ) ) || ( isset( $access_rights[ $term->name ][ 'w' ] ) && ( $access_rights[ $term->name ][ 'w' ] == 1 ) ) ){
+		} else {
+
+			if ( in_array( 'rtwikimoderator', $current_user->roles )  ){
+				return true;
+			} else{
+
+				if ( isset( $access_rights[ 'public' ] ) && 1 == $access_rights[ 'public' ] ){
+					return true;
+				}elseif ( isset( $access_rights[ 'all' ] ) ){
+					if ( $access_rights[ 'all' ]== 2 || $access_rights[ 'all' ]== 1 ){
 						return true;
-					} else if ( isset( $access_rights[ $term->name ][ 'na' ] ) && ( $access_rights[ $term->name ][ 'na' ] == 1 ) ){
-						$noflag = 1;
 					}
-				} else if ( $ans == '' || $ans == null ){
-					$noPublic = 1;
+				}else{
+					$terms = get_terms( 'user-group', array( 'hide_empty' => true ) );
+					$user_id  = get_current_user_id();
+					$noflag   = 0;
+
+					foreach ( $terms as $term ) {
+						$ans = get_term_if_exists( $term->slug, $user_id );
+						if ( $ans == $term->slug && isset( $access_rights[ $term->slug ] ) ){
+							if ( $noflag < $access_rights[ $term->slug ] ){
+								$noflag=$access_rights[ $term->slug ];
+								if ( $noflag>0 )
+									break;
+							}
+						}
+					}
+					if( $noflag > 0 ){
+						return true;
+					}
 				}
 			}
-			if ( $noflag == 1 ){
-				return false;
-			}
-			if ( $noPublic == 1 ){
-				return false;
-			}
 		}
-	} else if ( isset( $access_rights[ 'public' ] ) && ! is_user_logged_in() && ( 0 == $access_rights[ 'public' ] ) ){
-		return false;
 	}
+
+	return false;
 }
 
 /**
