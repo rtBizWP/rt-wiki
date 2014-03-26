@@ -44,6 +44,12 @@ if ( ! class_exists( 'RtWikiAdmin' ) ){
 			add_action( 'admin_init', 'post_check' );
 			//add_filter( 'user_has_cap', 'add_capabilities', 10, 4 );
 
+			//trash bulk action remove for wikiwriter
+			$supported_posts = rtwiki_get_supported_attribute();
+			foreach( $supported_posts as $_POST ){
+				add_filter( 'bulk_actions-edit-'.$_POST, 'remove_bulk_actions' );
+			}
+
 			//Yoast plugin Sitemap rtWiki filtering
 			add_filter( 'wpseo_sitemaps_supported_taxonomies', 'rtwiki_sitemap_taxonomies' );
 			add_filter( 'wpseo_sitemaps_supported_post_types', 'rtwiki_sitemap_posttypes' );

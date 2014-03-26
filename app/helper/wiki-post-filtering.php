@@ -12,6 +12,14 @@
  * @author     Dipesh
  */
 
+function remove_bulk_actions( $actions ){
+	global $current_user;
+	if ( in_array( 'rtwikiwriter', $current_user->roles ) ){
+			unset( $actions[ 'trash' ] );
+	}
+	return $actions;
+}
+
 /**
  * check permission before move post of CPT to trash
  *
