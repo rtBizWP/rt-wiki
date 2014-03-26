@@ -42,7 +42,7 @@ if ( ! class_exists( 'RtWikiAdmin' ) ){
 			add_action( 'wp_trash_post', 'my_wp_trash_post' );
 			add_filter( 'page_row_actions', 'remove_quick_edit', 10 );
 			add_action( 'admin_init', 'post_check' );
-			add_filter( 'user_has_cap', 'add_capabilities', 10, 4 );
+			//add_filter( 'user_has_cap', 'add_capabilities', 10, 4 );
 
 			//Yoast plugin Sitemap rtWiki filtering
 			add_filter( 'wpseo_sitemaps_supported_taxonomies', 'rtwiki_sitemap_taxonomies' );
@@ -65,13 +65,6 @@ if ( ! class_exists( 'RtWikiAdmin' ) ){
 			$rtWikiAttributesModel = new RtWikiAttributeTaxonomyModel();
 			$rtWikiSubscribe       = new RtWikiSubscribeModel();
 			$rtWikiAttributes      = new RtWikiAttributes();
-			$rtWikiContributorCaps = array(
-				'read' => true,
-				'edit_posts' => true,
-				'edit_others_posts' => true,
-				'edit_published_posts' => true,
-				'delete_posts' => false, );
-			//add_role( 'rtwikicontributor', __( 'RtWikiContributor' ), $rtWikiContributorCaps );
 		}
 
 		/**
@@ -81,10 +74,9 @@ if ( ! class_exists( 'RtWikiAdmin' ) ){
 		 */
 		function register_pages()
 		{
-
 			global $rtWikiAttributes;
 			$attributes = rtwiki_get_supported_attribute();
-			if ( is_array( $attributes ) && ! empty( $attributes ) ){
+			if ( is_array( $attributes ) && ! empty( $attributes ) && current_user_can('edit_wiki') ){
 				foreach ( $attributes as $attribute ) {
 					if ( $attribute !== 'post' ){
 						add_submenu_page( 'edit.php?post_type=' . $attribute, __( 'Attributes' ), __( 'Attributes' ), 'administrator', $attribute . '-attributes', array( $rtWikiAttributes, 'attributes_page' ) );
