@@ -15,7 +15,7 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 	class RtWikiRoles
 	{
 
-		public $global_caps = array( 'edit_wiki' => 'edit_wiki', 'edit_others_wiki' => 'edit_others_wiki', 'publish_wiki' => 'publish_wiki', 'read_wiki' => 'read_wiki', 'read_private_wiki' => 'read_private_wiki', 'delete_wiki' => 'delete_wiki', 'edit_published_wiki' => 'edit_published_wiki', 'delete_published_wiki' => 'delete_published_wiki', 'delete_others_wiki' => 'delete_others_wiki', );
+		public $global_caps = array();
 
 		var $rtwikiroles;
 
@@ -24,20 +24,11 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 			$this->rtwikiroles = array(
 				array(
-					'name' => 'Wiki Admin',
-					'label' => 'rtwikiadmin', ),
+					'name' => 'Wiki Moderator',
+					'label' => 'rtwikimoderator', ),
 				array(
-					'name' => 'Wiki Editor',
-					'label' => 'rtwikieditor', ),
-				array(
-					'name' => 'Wiki Author',
-					'label' => 'rtwikiauthor', ),
-				array(
-					'name' => 'Wiki Contributor',
-					'label' => 'rtwikicontributor', ),
-				array(
-					'name' => 'Wiki Subscriber',
-					'label' => 'rtwikisubscriber', ), );
+					'name' => 'Wiki Writer',
+					'label' => 'rtwikiwriter', ), );
 
 			$this->register_roles();
 
@@ -73,49 +64,42 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 			foreach ( $this->rtwikiroles as $rtwikirole ) {
 
-				if ( $rtwikirole[ 'label' ] == 'rtwikiadmin' || $rtwikirole[ 'label' ] == 'rtwikieditor' || $rtwikirole[ 'label' ] == 'rtwikiauthor' ){
+				if ( $rtwikirole[ 'label' ] == 'rtwikimoderator' ){
 
 					$caps = array(
-						$this->global_caps[ 'edit_wiki' ] => true,
-						$this->global_caps[ 'edit_others_wiki' ] => true,
-						$this->global_caps[ 'publish_wiki' ] => true,
-						$this->global_caps[ 'read_wiki' ] => true,
-						$this->global_caps[ 'read_private_wiki' ] => true,
-						$this->global_caps[ 'delete_wiki' ] => true,
-						$this->global_caps[ 'edit_published_wiki' ] => true,
-						$this->global_caps[ 'delete_published_wiki' ] => true,
-						$this->global_caps[ 'delete_others_wiki' ] => true, );
+						"edit_wiki" => true,
+						"read_wiki" => true,
+						"delete_wiki" => true,
+						"edit_wikis" => true,
+						"edit_others_wikis" => true,
+						"publish_wikis" => true,
+						"read_private_wikis" => true,
+						"delete_wikis" => true,
+						"delete_private_wikis" => true,
+						"delete_published_wikis" => true,
+						"delete_others_wikis" => true,
+						"edit_private_wikis" => true,
+						"edit_published_wikis" => true,
+					);
 
-				} else if ( $rtwikirole[ 'label' ] == 'rtwikicontributor' ){
-
+				}else if( $rtwikirole[ 'label' ] == 'rtwikimoderator' ){
 					$caps = array(
-						$this->global_caps[ 'edit_wiki' ] => true,
-						$this->global_caps[ 'edit_others_wiki' ] => false,
-						$this->global_caps[ 'publish_wiki' ] => false,
-						$this->global_caps[ 'read_wiki' ] => true,
-						$this->global_caps[ 'read_private_wiki' ] => false,
-						$this->global_caps[ 'delete_wiki' ] => true,
-						$this->global_caps[ 'edit_published_wiki' ] => false,
-						$this->global_caps[ 'delete_published_wiki' ] => false,
-						$this->global_caps[ 'delete_others_wiki' ] => false, );
-
-				} else if ( $rtwikirole[ 'label' ] == 'rtwikisubscriber' ){
-
-					$caps = array(
-						$this->global_caps[ 'edit_wiki' ] => false,
-						$this->global_caps[ 'edit_others_wiki' ] => false,
-						$this->global_caps[ 'publish_wiki' ] => false,
-						$this->global_caps[ 'read_wiki' ] => true,
-						$this->global_caps[ 'read_private_wiki' ] => false,
-						$this->global_caps[ 'delete_wiki' ] => false,
-						$this->global_caps[ 'edit_published_wiki' ] => false,
-						$this->global_caps[ 'delete_published_wiki' ] => false,
-						$this->global_caps[ 'delete_others_wiki' ] => false, );
-
+						"edit_wiki" => true,
+						"read_wiki" => true,
+						"delete_wiki" => true,
+						"edit_wikis" => true,
+						"edit_others_wikis" => true,
+						"publish_wikis" => true,
+						"read_private_wikis" => true,
+						"delete_wikis" => false,
+						"delete_private_wikis" => false,
+						"delete_published_wikis" => false,
+						"delete_others_wikis" => false,
+						"edit_private_wikis" => true,
+						"edit_published_wikis" => true,
+					);
 				}
-
 				$label = strtolower( str_replace( '-', '_', sanitize_title( $rtwikirole[ 'label' ] ) ) );
-				//remove_role( $label );
 				$role = get_role( $label );
 				if ( empty( $role ) ){
 					add_role( $label, __( ucfirst( $rtwikirole[ 'name' ] ) ), $caps );
