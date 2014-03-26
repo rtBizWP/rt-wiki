@@ -32,6 +32,8 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 			$this->register_roles();
 
+			remove_role( "rtwikiadmin" );
+
 			add_action( 'edit_user_profile', array( $this, 'add_access_profile_fields' ), 1 );
 
 			add_action( 'show_user_profile', array( $this, 'add_access_profile_fields' ), 1 );
@@ -74,10 +76,10 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 						"edit_others_wikis" => true,
 						"publish_wikis" => true,
 						"read_private_wikis" => true,
-						"delete_wikis" => true,
-						"delete_private_wikis" => true,
-						"delete_published_wikis" => true,
-						"delete_others_wikis" => true,
+						"delete_wikis" => tru,
+						"delete_private_wikis" => false,
+						"delete_published_wikis" => false,
+						"delete_others_wikis" => false,
 						"edit_private_wikis" => true,
 						"edit_published_wikis" => true,
 					);
