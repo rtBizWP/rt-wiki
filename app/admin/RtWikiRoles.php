@@ -32,8 +32,6 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 			$this->register_roles();
 
-			//remove_role( "rtwikiadmin" );
-
 			add_action( 'edit_user_profile', array( $this, 'add_access_profile_fields' ), 1 );
 
 			add_action( 'show_user_profile', array( $this, 'add_access_profile_fields' ), 1 );
@@ -76,7 +74,7 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 						"edit_others_wikis" => true,
 						"publish_wikis" => true,
 						"read_private_wikis" => true,
-						"delete_wikis" => tru,
+						"delete_wikis" => false,
 						"delete_private_wikis" => false,
 						"delete_published_wikis" => false,
 						"delete_others_wikis" => false,
@@ -106,6 +104,11 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 				if ( empty( $role ) ){
 					add_role( $label, __( ucfirst( $rtwikirole[ 'name' ] ) ), $caps );
 				}
+
+				if ( isset( $_REQUEST['rt_wp_wiki_reset_roles'] ) && ! empty( $_REQUEST['rt_wp_wiki_reset_roles'] ) ) {
+					remove_role( $label );
+					add_role( $label, __( ucfirst( $rtwikirole[ 'name' ] ) ), $caps );
+				}
 			}
 		}
 
@@ -118,6 +121,7 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 				?>
 				<h3 id="wordpress-rtwiki">rtWiki</h3>
+				<a href="?rt_wp_wiki_reset_roles=true"> Reset Roles </a>
 				<table class="form-table">
 
 					<tbody>
