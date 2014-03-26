@@ -78,7 +78,7 @@ function get_term_if_exists( $term, $userid )
 {
 
 	global $wpdb;
-	$query   = "SELECT slug FROM $wpdb->terms WHERE term_id IN(SELECT term_id from $wpdb->term_taxonomy WHERE term_taxonomy_id IN(SELECT term_taxonomy_id from $wpdb->term_relationships WHERE object_id=$userid))and name='" . $term . "'";
+	$query   = "SELECT slug FROM $wpdb->terms WHERE term_id IN(SELECT term_id from $wpdb->term_taxonomy WHERE term_taxonomy_id IN(SELECT term_taxonomy_id from $wpdb->term_relationships WHERE object_id=$userid))and slug='" . $term . "'";
 	$page_id = $wpdb->get_var( $query );
 
 	return $page_id;
