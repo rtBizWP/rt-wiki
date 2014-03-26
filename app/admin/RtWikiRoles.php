@@ -74,15 +74,15 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 						"edit_others_wikis" => true,
 						"publish_wikis" => true,
 						"read_private_wikis" => true,
-						"delete_wikis" => false,
-						"delete_private_wikis" => false,
-						"delete_published_wikis" => false,
-						"delete_others_wikis" => false,
+						"delete_wikis" => true,
+						"delete_private_wikis" => true,
+						"delete_published_wikis" => true,
+						"delete_others_wikis" => true,
 						"edit_private_wikis" => true,
 						"edit_published_wikis" => true,
 					);
 
-				}else if( $rtwikirole[ 'label' ] == 'rtwikimoderator' ){
+				}else if( $rtwikirole[ 'label' ] == 'rtwikiwriter' ){
 					$caps = array(
 						"edit_wiki" => true,
 						"read_wiki" => true,
