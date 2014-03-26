@@ -94,5 +94,18 @@ if ( ! $attributes ) { ?>
 
 	<?php } ?>
 	</section>
-<?php get_sidebar();
+<?php
+$supported_posts = rtwiki_get_supported_attribute();
+$post_type = get_post_type();
+if ( in_array( $post_type, $supported_posts ) ){
+	?>
+	<aside id="sidebar" class="rtp-sidebar-section large-4 columns" role="complementary">
+		<div class="rtp-sidebar-inner-wrapper">
+			<?php dynamic_sidebar( 'rt-wiki-archive-sidebar' ); ?>
+		</div>
+	</aside>
+<?php
+} else {
+	get_sidebar();
+}
 get_footer();

@@ -85,11 +85,11 @@ if ( ! class_exists( 'RTWiki' ) ){
 			add_filter( 'cron_schedules', array( $this, 'wiki_add_weekly_schedule' ) );
 
 			//Wiki Daily update
-			$rtwikidailychange = new RtWikiDailyChanges();
-			add_action( 'wiki_daily_event_hook', array( $rtwikidailychange, 'send_daily_change_mail' ) );
-			register_activation_hook( __FILE__, array( $this, 'wiki_prefix_activation' ) );
-			register_deactivation_hook( __FILE__, array( $this, 'wiki_prefix_deactivation' )  );
-			add_action( 'init',array( $this, 'wiki_prefix_setup_schedule' ) );
+			//$rtwikidailychange = new RtWikiDailyChanges();
+			//add_action( 'wiki_daily_event_hook', array( $rtwikidailychange, 'send_daily_change_mail' ) );
+			//register_activation_hook( __FILE__, array( $this, 'wiki_prefix_activation' ) );
+			//register_deactivation_hook( __FILE__, array( $this, 'wiki_prefix_deactivation' )  );
+			//add_action( 'init',array( $this, 'wiki_prefix_setup_schedule' ) );
 
 			//disable wiki daily update schedula
 			//wp_clear_scheduled_hook( 'wiki_daily_event_hook' );
@@ -142,15 +142,26 @@ if ( ! class_exists( 'RTWiki' ) ){
 		function rt_wiki_widget_area()
 		{
 			$arg = array(
-				'name' => __( 'rtWiki Widget Area', 'rtCamp' ),
-				'id' => 'rt-wiki-sidebar',
-				'description' => __( 'An optional sidebar for the rtWiki Widget', 'rtCamp' ),
+				'name' => __( 'Wiki Single page Widget', 'rtCamp' ),
+				'id' => 'rt-wiki-single-sidebar',
+				'description' => __( 'An optional sidebar for the Wiki single page Widget', 'rtCamp' ),
 				'before_widget' => '<div id="%1$s" class="widget %2$s sidebar-widget rtp-subscribe-widget-container">',
 				'after_widget' => '</div>',
 				'before_title' => '<h3 class="widgettitle">',
 				'after_title' => '</h3>', ) ;
 
 			register_sidebar( $arg );
+
+			$archive_arg = array(
+				'name' => __( 'Wiki Archive page Widget', 'rtCamp' ),
+				'id' => 'rt-wiki-archive-sidebar',
+				'description' => __( 'An optional sidebar for the Wiki Archive page Widget', 'rtCamp' ),
+				'before_widget' => '<div id="%1$s" class="widget %2$s sidebar-widget rtp-subscribe-widget-container">',
+				'after_widget' => '</div>',
+				'before_title' => '<h3 class="widgettitle">',
+				'after_title' => '</h3>', ) ;
+
+			register_sidebar( $archive_arg );
 		}
 
 
