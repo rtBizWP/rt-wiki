@@ -30,9 +30,11 @@ function my_wp_trash_post( $post_id )
 	$post            = get_post( $post_id );
 	$supported_posts = rtwiki_get_supported_attribute();
 	$access = get_admin_panel_permission( $post_id );
-	if ( in_array( $post->post_type, $supported_posts ) && in_array( $post->post_status, array( 'publish', 'draft', 'future' ) ) ){
+	if ( in_array( $post->post_type, $supported_posts ) &&  in_array( $post->post_status, array( 'publish', 'draft', 'future' ) ) ){
 		if ( $access != 'a' ){
-			WP_DIE( __( 'You dont have enough access rights to move this post to the trash' ) . "<br><a href='edit.php?post_type=$post->post_type'>" . __( 'Go Back' , 'rtCamp' ) . '</a>' );
+			WP_DIE( __( "You don't have enough access rights to move " . $post->post_title . " post to the trash" ) . "<br><a href='edit.php?post_type=$post->post_type'>" . __( 'Go Back' , 'rtCamp' ) . '</a>' );
+		}elseif ( if_sub_pages( $post->ID, $post->post_type ) == true ){
+			WP_DIE( __( "You can't move " . $post->post_title . " post to trash. It has a child Posts." ) . "<br><a href='edit.php?post_type=$post->post_type'>" . __( 'Go Back' , 'rtCamp' ) . '</a>' );
 		}
 	}
 }
@@ -79,20 +81,21 @@ function post_check()
 	if ( ! is_admin() ) return;
 
 	$page            = isset( $_GET[ 'post' ] ) ? $_GET[ 'post' ] : 0;
+	$post            = get_post( $page );
 	$supported_posts = rtwiki_get_supported_attribute();
-	$posttype        = get_post_type( $page );
+	$posttype        = $post->post_type;
 	$access = get_admin_panel_permission( $page );
 	if ( isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] == 'edit' ){
 		if ( in_array( $posttype, $supported_posts ) ){
 			if ( $access != 'w' && $access != 'a' ){
-				WP_DIE( __( 'You dont have enough access rights to Edit this post' ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
+				WP_DIE( __( "You don't have enough access rights to Edit " . $post->post_title . "  post" ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
 			}
 		}
 	}
 	if ( isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] == 'trash' ){
 		if ( in_array( $posttype, $supported_posts ) ){
 			if ( $access != 'a' ){
-				WP_DIE( __( 'You dont have enough access rights to move this post to the trash' ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
+				WP_DIE( __( "You don't have enough access rights to move " . $post->post_title . "  post to the trash" ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
 			}
 		}
 	}
