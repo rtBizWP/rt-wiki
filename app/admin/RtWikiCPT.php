@@ -123,12 +123,12 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 			}
 
 			if( $post->post_parent!= 0 ){
-				echo "<p> Oops, Child paged permission depend upon its Base parent. </p><p>For change base parent permission ";
-				edit_post_link('Click here', '', '', $post->post_parent);
-				echo "</p>";
+				$base_parent=get_post_meta( $post->ID, 'base_parent', true );
+				echo "<p> Child page permissions depend on its base parent page, </p><p>";
+				edit_post_link('Click here', '', '', $base_parent);
+				echo " to change permissions of base parent page.</p>";
 				return;
 			}
-
 			$access_rights = get_post_meta( $post->ID, 'access_rights', true );
 			$disabled      = '';
 
@@ -262,7 +262,8 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 				}
 			}else{
 				update_post_meta( $post, 'access_rights', null );
-				update_post_meta( $post, 'base_parent', $post_info->post_parent );
+				$base_parent=get_post_meta( $post_info->post_parent, 'base_parent', true );
+				update_post_meta( $post, 'base_parent', $base_parent );
 			}
 		}
 
