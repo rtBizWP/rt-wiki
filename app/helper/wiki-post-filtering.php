@@ -15,7 +15,7 @@
 function remove_bulk_actions( $actions ){
 	global $current_user;
 	if ( in_array( 'rtwikiwriter', $current_user->roles ) ){
-			unset( $actions[ 'trash' ] );
+		return null;
 	}
 	return $actions;
 }

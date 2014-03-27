@@ -100,9 +100,9 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 		 */
 		function wiki_permission_metabox()
 		{
-			global $rtwiki_cpt;
+			global $rtwiki_cpt, $current_user;
 			$supported_posts = rtwiki_get_supported_attribute();
-			if ( is_array( $supported_posts ) && ! empty( $supported_posts ) ){
+			if ( is_array( $supported_posts ) && ! empty( $supported_posts ) && in_array( 'rtwikimoderator', $current_user->roles ) ){
 				foreach ( $supported_posts as $posts )
 					add_meta_box( $posts . '_post_access', 'Permissions', array( $rtwiki_cpt, 'display_wiki_post_access_metabox' ), $posts, 'normal', 'high' );
 			}
@@ -115,10 +115,9 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 		 */
 		function display_wiki_post_access_metabox( $post )
 		{
-			wp_nonce_field( plugin_basename( __FILE__ ), $post->post_type . '_noncename' );
 
 			if( $post->post_status=="auto-draft" ){
-				echo "<div> Oops, You haven't access now. It will arrive after wiki saved.</div>";
+				echo "<div>Please publish this page to view permissions.</div>";
 				return;
 			}
 
@@ -216,19 +215,16 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 		 */
 		function rtp_wiki_permission_save( $post )
 		{
-			global $wpdb;
 
 			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 
+			if ( ! isset( $_REQUEST[ 'post_type' ] ) ){
+				$_REQUEST[ 'post_type' ] = 'post';
+			}
+
 			$post_info = get_post( $post );
 
-			if ( $post_info->post_parent == 0 ){
-
-				if ( ! isset( $_REQUEST[ 'post_type' ] ) ){
-					$_REQUEST[ 'post_type' ] = 'post';
-				}
-
-				if ( ! isset( $_REQUEST[ $_REQUEST[ 'post_type' ] . '_noncename' ] ) || ! wp_verify_nonce( @$_POST[ $_POST[ 'post_type' ] . '_noncename' ], plugin_basename( __FILE__ ) ) ) return;
+			if ( $_REQUEST['parent_id'] == 0 ){
 
 				$supported_posts = rtwiki_get_supported_attribute();
 				if ( in_array( $_POST[ 'post_type' ], $supported_posts, true ) ){
