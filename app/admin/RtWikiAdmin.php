@@ -46,8 +46,8 @@ if ( ! class_exists( 'RtWikiAdmin' ) ){
 
 			//trash bulk action remove for wikiwriter
 			$supported_posts = rtwiki_get_supported_attribute();
-			foreach( $supported_posts as $_POST ){
-				add_filter( 'bulk_actions-edit-'.$_POST, 'remove_bulk_actions' );
+			foreach( $supported_posts as $supported_post ){
+				add_filter( 'bulk_actions-edit-'.$supported_post, 'remove_bulk_actions' );
 			}
 
 			//Yoast plugin Sitemap rtWiki filtering
