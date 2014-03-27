@@ -126,8 +126,8 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 				$base_parent = get_post_meta( $post->ID, 'base_parent', true );
 				$base_parent_meta = get_post( $base_parent );
 				echo "<p> Child page permissions depend on its base parent page ( " . $base_parent_meta->post_title . " )</p><p>";
-				edit_post_link('Click here to change permissions of '.$base_parent_meta->post_title, '', '', $base_parent);
-				echo ".</p>";
+				echo "<a class='post-edit-link' target='_blank' href='" . get_edit_post_link( $base_parent ) . "'>Click here</a>";
+				echo ' to change permissions of ' . $base_parent_meta->post_title . '</p>';
 				return;
 			}
 			$access_rights = get_post_meta( $post->ID, 'access_rights', true );
