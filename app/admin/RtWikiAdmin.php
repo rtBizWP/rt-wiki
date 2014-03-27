@@ -40,6 +40,7 @@ if ( ! class_exists( 'RtWikiAdmin' ) ){
 
 			//Post filtering
 			add_action( 'wp_trash_post', 'my_wp_trash_post' );
+			add_action( 'before_delete_post', 'my_delete_post' );
 			add_filter( 'page_row_actions', 'remove_quick_edit', 10 );
 			add_action( 'admin_init', 'post_check' );
 			//add_filter( 'user_has_cap', 'add_capabilities', 10, 4 );

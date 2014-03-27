@@ -39,6 +39,19 @@ function my_wp_trash_post( $post_id )
 	}
 }
 
+function my_delete_post ( $post_id ){
+	$post            = get_post( $post_id );
+	$supported_posts = rtwiki_get_supported_attribute();
+	$access = get_admin_panel_permission( $post_id );
+	if( in_array( $post->post_type, $supported_posts ) ){
+		if ( $access != 'a' ){
+			WP_DIE( __( "You don't have enough access rights to delete " . $post->post_title . " post." ) . "<br><a href='edit.php?post_type=$post->post_type'>" . __( 'Go Back' , 'rtCamp' ) . '</a>' );
+		}elseif ( if_sub_pages( $post->ID, $post->post_type ) == true ){
+			WP_DIE( __( "You can't delete " . $post->post_title . " post. It has a child Posts." ) . "<br><a href='edit.php?post_type=$post->post_type'>" . __( 'Go Back' , 'rtCamp' ) . '</a>' );
+		}
+	}
+}
+
 /**
  * removes quick edit from wiki post type
  *
