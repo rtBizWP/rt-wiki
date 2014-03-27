@@ -124,7 +124,7 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 
 			if( $post->post_parent!= 0 ){
 				$base_parent=get_post_meta( $post->ID, 'base_parent', true );
-				echo "<p> Child page permissions depend on its base parent page, </p><p>";
+				echo "<p> Child page permissions depend on its base parent page. </p><p>";
 				edit_post_link('Click here', '', '', $base_parent);
 				echo " to change permissions of base parent page.</p>";
 				return;
