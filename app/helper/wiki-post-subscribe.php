@@ -332,7 +332,7 @@ function my_pre_post_update( $post_ID, $post ){
 	if ( in_array( get_post_type(), $supported_posts ) ) {
 		$posttype = get_post_type();
 		if( in_array( 'rtwikiwriter', $current_user->roles ) && (!isset( $_REQUEST['parent_id'] ) || empty( $_REQUEST['parent_id'] ) ) ){
-			WP_DIE( __( "You don't have enough access rights to create root page " . $post->post_title . "  post" ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
+			WP_DIE( __( "You don't have enough access rights to create root post" ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
 		}
 		$post_meta=get_post( $post_ID );
 		$supported_posts = rtwiki_get_supported_attribute();
