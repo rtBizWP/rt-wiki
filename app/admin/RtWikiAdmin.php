@@ -47,6 +47,8 @@ if ( ! class_exists( 'RtWikiAdmin' ) ){
 			add_action( 'pre_post_update', 'my_pre_post_update' );
 			//add_filter( 'user_has_cap', 'add_capabilities', 10, 4 );
 
+			add_filter( 'get_pages', 'rtwiki_get_pages' );
+
 			//trash bulk action remove for wikiwriter
 			$supported_posts = rtwiki_get_supported_attribute();
 			foreach( $supported_posts as $supported_post ){
