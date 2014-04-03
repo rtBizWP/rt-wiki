@@ -544,3 +544,12 @@ function rtwiki_get_pages($pages, $r){
 	}
 	return $pages;
 }
+
+function rtwiki_dropdown_pages($dropdown_args, $post){
+	global $current_user;
+	$supported_posts = rtwiki_get_supported_attribute();
+	if ( in_array( get_post_type(), $supported_posts ) && in_array( 'rtwikiwriter', $current_user->roles )  ) {
+		unset( $dropdown_args['show_option_none'] );
+	}
+	return $dropdown_args;
+}

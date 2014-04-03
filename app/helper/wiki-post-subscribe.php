@@ -326,11 +326,19 @@ function wiki_page_changes_send_mail( $postID, $subscribersList )
  * @param $post
  */
 function my_pre_post_update( $post_ID, $post ){
-	global $wiki_post_old_value;
-	$post_meta=get_post( $post_ID );
+
+	global $wiki_post_old_value,$current_user;
 	$supported_posts = rtwiki_get_supported_attribute();
-	if ( in_array( $post_meta->post_type, $supported_posts, true ) ){
-		$wiki_post_old_value = $post_meta;
+	if ( in_array( get_post_type(), $supported_posts ) ) {
+		$posttype = get_post_type();
+		if( in_array( 'rtwikiwriter', $current_user->roles ) && (!isset( $_REQUEST['parent_id'] ) || empty( $_REQUEST['parent_id'] ) ) ){
+			WP_DIE( __( "You don't have enough access rights to create root page " . $post->post_title . "  post" ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
+		}
+		$post_meta=get_post( $post_ID );
+		$supported_posts = rtwiki_get_supported_attribute();
+		if ( in_array( $post_meta->post_type, $supported_posts, true ) ){
+			$wiki_post_old_value = $post_meta;
+		}
 	}
 }
 
