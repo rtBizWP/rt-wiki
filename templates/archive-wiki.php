@@ -40,7 +40,7 @@ if ( ! $attributes ) { ?>
 					'show_date' => '',
 					'sort_column' => 'menu_order, post_title',
 					'title_li' => '',
-					'walker' => new RtWikiWalker(), );
+					'walker' => '', );
 
 	$wikis = wp_list_pages( $args );
 

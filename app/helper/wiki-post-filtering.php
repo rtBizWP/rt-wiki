@@ -531,8 +531,14 @@ function rtwiki_get_pages($pages, $r){
 	$supported_posts = rtwiki_get_supported_attribute();
 	if ( in_array( get_post_type(), $supported_posts ) ) {
 		foreach( $pages as $key=>$argpage){
-			if( get_admin_panel_permission( $argpage->ID ) != 'a' && get_admin_panel_permission( $argpage->ID ) != 'w' ){
-				unset($pages[$key]);
+			if (is_admin()){
+				if ( get_admin_panel_permission( $argpage->ID ) != 'a' && get_admin_panel_permission( $argpage->ID ) != 'w' ){
+					unset($pages[$key]);
+				}
+			}else{
+				if ( get_permission( $argpage->ID, get_current_user_id(), 0 ) == false ){
+					unset($pages[$key]);
+				}
 			}
 		}
 	}
