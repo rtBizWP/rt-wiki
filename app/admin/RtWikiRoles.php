@@ -118,11 +118,7 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 
 			if ( isset( $_REQUEST['rt_wp_wiki_reset_roles'] ) && ! empty( $_REQUEST['rt_wp_wiki_reset_roles'] ) ) {
-				remove_role( 'rtwikiadmin' );
-				remove_role( 'rtwikieditor' );
-				remove_role( 'rtwikiauthor' );
-				remove_role( 'rtwikicontributor' );
-				remove_role( 'rtwikisubscriber' );
+				add_role( 'rtwikiadmin','rtwikiadmin', $caps );
 				$users = get_users( array( 'role' => 'rtwikiadmin' ) );
 				foreach ( $users as $user ) {
 					$u_obj = new WP_User( $user );
@@ -148,6 +144,11 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 					$u_obj = new WP_User( $user );
 					$u_obj->remove_role( 'rtwikisubscriber' );
 				}
+				remove_role( 'rtwikiadmin' );
+				remove_role( 'rtwikieditor' );
+				remove_role( 'rtwikiauthor' );
+				remove_role( 'rtwikicontributor' );
+				remove_role( 'rtwikisubscriber' );
 			}
 		}
 
