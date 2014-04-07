@@ -215,7 +215,10 @@ function get_admin_panel_permission( $pageID )
 					return 'r';
 				}elseif ( isset( $access_rights[ 'all' ] ) ){
 					if ( $access_rights[ 'all' ]== 2 ){
-						return 'w';
+						if ( in_array( 'rtwikiwriter', $current_user->roles )  ) {
+							return 'w';
+						}
+						return 'r';
 					}elseif ( $access_rights[ 'all' ]== 1 ){
 						return 'r';
 					}
@@ -233,8 +236,11 @@ function get_admin_panel_permission( $pageID )
 						}
 					}
 
-					if( $noflag == 2 ){
-						return 'w';
+					if( $noflag == 2  ){
+						if ( in_array( 'rtwikiwriter', $current_user->roles )  ) {
+							return 'w';
+						}
+						return 'r';
 					}elseif ( $noflag == 1 ){
 						return 'r';
 					}

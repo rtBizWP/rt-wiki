@@ -325,7 +325,7 @@ function wiki_page_changes_send_mail( $postID, $subscribersList )
  * @param $post_ID
  * @param $post
  */
-function my_pre_post_update( $post_ID, $post ){
+function my_pre_post_update( $post_ID ){
 
 	global $wiki_post_old_value,$current_user;
 	$supported_posts = rtwiki_get_supported_attribute();
