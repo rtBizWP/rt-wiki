@@ -126,7 +126,7 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 
 				?>
 				<h3 id="wordpress-rtwiki">rtWiki</h3>
-				<a href="?rt_wp_wiki_reset_roles=true"> Reset Roles </a>
+				<a href="<?php echo add_query_arg( 'rt_wp_wiki_reset_roles', true, $_SERVER['REQUEST_URI'] ); ?>"><?php _e('Reset Roles'); ?></a>
 				<table class="form-table">
 
 					<tbody>
