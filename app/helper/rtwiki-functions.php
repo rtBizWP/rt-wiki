@@ -105,9 +105,7 @@ function get_rtwiki_archive( $atts ) {
 	$wikis = wp_list_pages( $args );
 
 	if ( isset( $wikis ) ){
-		echo '<ul>';
-		echo $wikis;
-		echo '</ul>';
+		return '<ul>'. $wikis . '</ul>';
 	} else {
 		get_template_part( 'content', 'none' );
 	}
