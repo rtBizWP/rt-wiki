@@ -88,7 +88,7 @@ function get_term_if_exists( $term, $userid )
 function get_rtwiki_archive( $atts ) {
 	$args = array(
 		'authors' => '',
-		'child_of' => 0,
+		'child_of' => get_the_ID(),
 		'depth' => 0,
 		'echo' => 0,
 		'exclude' => '',
@@ -100,12 +100,14 @@ function get_rtwiki_archive( $atts ) {
 		'show_date' => '',
 		'sort_column' => 'menu_order, post_title',
 		'title_li' => '',
-		'walker' => new RtWikiWalker(), );
+		 );
 
 	$wikis = wp_list_pages( $args );
 
 	if ( isset( $wikis ) ){
+		echo '<ul>';
 		echo $wikis;
+		echo '</ul>';
 	} else {
 		get_template_part( 'content', 'none' );
 	}

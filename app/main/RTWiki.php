@@ -79,7 +79,7 @@ if ( ! class_exists( 'RTWiki' ) ){
 			add_action( 'save_post', 'send_mail_postupdate_wiki', 99, 1 );
 
 			//shortcode for wiki archive link
-			add_shortcode( 'rtwikiarchive', 'get_rtwiki_archive' );
+			add_shortcode( 'rt-wiki-child-pages', 'get_rtwiki_archive' );
 
 			//change schedual time for daily update
 			add_filter( 'cron_schedules', array( $this, 'wiki_add_weekly_schedule' ) );
