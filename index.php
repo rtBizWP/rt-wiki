@@ -114,14 +114,16 @@ function rtwiki_autoloader( $class_name )
  */
 include_once 'app/lib/wp-helpers.php';
 
-/**
- * Register the autoloader function into spl_autoload
- */
-spl_autoload_register( 'rtwiki_autoloader' );
+function rtp_wp_wiki_loader(){
+	/**
+	 * Register the autoloader function into spl_autoload
+	 */
+	spl_autoload_register( 'rtwiki_autoloader' );
 
-global $rtWiki;
-$rtWiki = new RTWiki();
-
+	global $rtWiki;
+	$rtWiki = new RTWiki();
+}
+add_action( 'plugins_loaded', 'rtp_wp_wiki_loader' );
 /**
  * Next File: /app/main/RTWiki.php
  */

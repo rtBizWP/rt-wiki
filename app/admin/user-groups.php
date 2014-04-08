@@ -608,7 +608,7 @@ if ( ! class_exists( 'KWS_User_Groups' ) ){
 							href="<?php echo admin_url( 'edit-tags.php?action=edit&taxonomy=user-group&tag_ID=' . $current->term_id . '&post_type=post' ); ?>"
 							class="add-new-h2"
 							style="background:#fefefe;"><?php _e( 'Edit User Group', 'user-group' ); ?></a></h2>
-					<?php echo esc_html( wpautop( $current->description ) ); ?>
+					<?php echo wpautop( $current->description ) ; ?>
 				</div>
 				<p class="howto" style="font-style:normal;">
 					<span><?php echo esc_html( sprintf( __( 'Showing %s in %s', 'user-group' ), $role_name, '&ldquo;' . $current->name . '&rdquo;' ) ); ?>

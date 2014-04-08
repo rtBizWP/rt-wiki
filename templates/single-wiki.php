@@ -42,7 +42,7 @@ if ( in_array( $post_type, $supported_posts ) ){
 	?>
 	<aside id="sidebar" class="rtp-sidebar-section large-4 columns" role="complementary">
 		<div class="rtp-sidebar-inner-wrapper">
-			<?php dynamic_sidebar( 'rt-wiki-sidebar' ); ?>
+			<?php dynamic_sidebar( 'rt-wiki-single-sidebar' ); ?>
 		</div>
 	</aside>
  <?php

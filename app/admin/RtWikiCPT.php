@@ -16,7 +16,6 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 		public function __construct()
 		{
 			$this->create_wiki();
-			//$this->add_wiki_caps();
 			add_action( 'save_post', array( $this, 'rtp_wiki_permission_save' ) );
 			add_action( 'user-group_add_form_fields', array( $this, 'user_group_taxonomy_add_new_meta_field' ), 10, 2 );
 			add_action( 'user-group_edit_form_fields', array( $this, 'user_group_taxonomy_edit_meta_field' ), 10, 2 );
@@ -73,7 +72,7 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 						'show_in_menu' => true,
 						'query_var' => true,
 						'rewrite' => array( 'slug' => $slug ),
-						'capability_type' => 'post',
+							'capability_type' => 'wiki',
 						'has_archive' => true,
 						'hierarchical' => true,
 						'menu_position' => 10,
@@ -97,32 +96,13 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 		}
 
 		/**
-		 * Add capabilities to diffrent type user
-		 */
-		function add_wiki_caps()
-		{
-			$roles = array( get_role( 'administrator' ), get_role( 'author' ), get_role( 'editor' ), get_role( 'contributor' ), get_role( 'rtwikicontributor' ) );
-			foreach ( $roles as $role ) {
-				$role->remove_cap( 'edit_wiki' );
-				$role->remove_cap( 'edit_others_wiki' );
-				$role->remove_cap( 'publish_wiki' );
-				$role->remove_cap( 'read_wiki' );
-				$role->remove_cap( 'read_private_wiki' );
-				$role->remove_cap( 'delete_wiki' );
-				$role->remove_cap( 'edit_published_wiki' );
-				$role->remove_cap( 'delete_published_wiki' );
-				$role->remove_cap( 'delete_others_wiki' );
-			}
-		}
-
-		/**
 		 * Add User group and permission type metabox
 		 */
 		function wiki_permission_metabox()
 		{
-			global $rtwiki_cpt;
+			global $rtwiki_cpt, $current_user;
 			$supported_posts = rtwiki_get_supported_attribute();
-			if ( is_array( $supported_posts ) && ! empty( $supported_posts ) ){
+			if ( is_array( $supported_posts ) && ! empty( $supported_posts ) && in_array( 'rtwikimoderator', $current_user->roles ) ){
 				foreach ( $supported_posts as $posts )
 					add_meta_box( $posts . '_post_access', 'Permissions', array( $rtwiki_cpt, 'display_wiki_post_access_metabox' ), $posts, 'normal', 'high' );
 			}
@@ -135,12 +115,24 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 		 */
 		function display_wiki_post_access_metabox( $post )
 		{
-			wp_nonce_field( plugin_basename( __FILE__ ), $post->post_type . '_noncename' );
 
+			if( $post->post_status=="auto-draft" ){
+				echo "<div>Please publish this page to view permissions.</div>";
+				return;
+			}
+
+			if( $post->post_parent!= 0 ){
+				$base_parent = get_post_meta( $post->ID, 'base_parent', true );
+				$base_parent_meta = get_post( $base_parent );
+				echo "<p> Child page permissions depend on its base parent page ( " . $base_parent_meta->post_title . " )</p><p>";
+				echo "<a class='post-edit-link' target='_blank' href='" . get_edit_post_link( $base_parent ) . "'>Click here</a>";
+				echo ' to change permissions of ' . $base_parent_meta->post_title . '</p>';
+				return;
+			}
 			$access_rights = get_post_meta( $post->ID, 'access_rights', true );
 			$disabled      = '';
 
-			if ( isset( $access_rights[ 'public' ] ) && ( 1 == $access_rights[ 'public' ] ) ) $disabled = 'disabled="disabled"';
+			if ( ( isset( $access_rights[ 'public' ] ) && ( 1 == $access_rights[ 'public' ] ) ) || ! isset( $access_rights ) || empty( $access_rights ) ) $disabled = 'disabled="disabled"';
 			?>
 			<table>
 				<tbody>
@@ -153,56 +145,38 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 
 				<tr>
 					<td>All</td>
-					<td><input type="radio" onclick="if (this.checked) {
-                                uncheckAllGroup('na');
-                            }
-                           " <?php echo esc_html( $disabled ); ?> class="rtwiki_all_na rtwiki_na"
+					<td><input type="radio" onclick="uncheckAllGroup(this,'na')" <?php echo esc_html( $disabled ); ?> class="rtwiki_all_na rtwiki_na"
 							   name="access_rights[all]"
-							   <?php if ( isset( $access_rights[ 'all' ][ 'na' ] ) && ( $access_rights[ 'all' ][ 'na' ] == 1 ) ) { ?>checked="checked"<?php } ?>
-							   value="na"/></td>
-					<td><input type="radio" onclick="if (this.checked) {
-                                uncheckAllGroup('r');
-                            }
-                           " class="rtwiki_all_r rtwiki_r" name="access_rights[all]"
-							   <?php if ( isset( $access_rights[ 'all' ][ 'r' ] ) == 1 ) { ?>checked="checked"<?php } ?>
-							   value="r"/></td>
-					<td><input type="radio" onclick="if (this.checked) {
-                                uncheckAllGroup('w');
-                            }
-                           " class="rtwiki_all_w rtwiki_w" name="access_rights[all]"
-							   <?php if ( isset( $access_rights[ 'all' ][ 'w' ] ) == 1 ) { ?>checked="checked"<?php } ?>
-							   value="w"/></td>
+							   <?php if ( isset( $access_rights[ 'all' ] ) && ( $access_rights[ 'all' ] == 0 ) ) { ?>checked="checked"<?php } ?>
+							   value="0"/></td>
+					<td><input type="radio" onclick="uncheckAllGroup(this,'r')" class="rtwiki_all_r rtwiki_r" name="access_rights[all]"
+					           <?php if ( isset( $access_rights[ 'all' ] ) && ( $access_rights[ 'all' ] == 1 ) ) { ?>checked="checked"<?php } ?>
+							   value="1"/></td>
+					<td><input type="radio" onclick="uncheckAllGroup(this,'w')" class="rtwiki_all_w rtwiki_w" name="access_rights[all]"
+					           <?php if ( isset( $access_rights[ 'all' ] ) && ( $access_rights[ 'all' ] == 2 ) ) { ?>checked="checked"<?php } ?>
+							   value="2"/></td>
 				</tr>
 
 			<?php
 			$args = array( 'orderby' => 'asc', 'hide_empty' => false );
 			$terms = get_terms( 'user-group', $args );
 			foreach ( $terms as $term ) {
-				$groupName = $term->name;
+				$groupSlug = $term->slug;
 					?>
 					<tr>
-						<td><?php echo esc_html( $groupName ) ?></td>
-						<td><input type="radio" onclick="if (this.checked) {
-                                        uncheckAll('na');
-                                    }
-                               " class="case_na rtwiki_na" <?php echo esc_html( $disabled ); ?> id="na"
-								   name="access_rights[<?php echo esc_html( $groupName ) ?>]"
-								   <?php if ( isset( $access_rights[ $groupName ][ 'na' ] ) && ( $access_rights[ $groupName ][ 'na' ] == 1 ) ) { ?>checked="checked"<?php } ?>
-								   value="na"/></td>
-						<td><input type="radio" onclick="if (this.checked) {
-                                        uncheckAll('r');
-                                    }
-                               " class="case_r rtwiki_r" id="r"
-								   name="access_rights[<?php echo esc_html( $groupName ) ?>]"
-								   <?php if ( ( '' != $disabled ) || ( isset( $access_rights[ $groupName ][ 'r' ] ) && ( $access_rights[ $groupName ][ 'r' ] == 1 ) ) ) { ?>checked="checked"<?php } ?>
-								   value="r"/></td>
-						<td><input type="radio" onclick="if (this.checked) {
-                                        uncheckAll('w');
-                                    }
-                               " class="case_w rtwiki_w" id="w"
-								   name="access_rights[<?php echo esc_html( $groupName ) ?>]"
-								   <?php if ( isset( $access_rights[ $groupName ][ 'w' ] ) && ( $access_rights[ $groupName ][ 'w' ] == 1 ) ) { ?>checked="checked"<?php } ?>
-								   value="w"/></td>
+						<td><a href="users.php?user-group=<?php echo esc_html( $groupSlug ) ?>" title="<?php echo esc_html( $term->name ) ?>"><?php echo esc_html( $term->name ) ?></a> (<?php echo esc_html( $term->count ) ?>)</td>
+						<td><input type="radio" onclick="uncheckAll(this,'na')" class="case_na rtwiki_na" <?php echo esc_html( $disabled ); ?> id="na_<?php echo esc_html( $groupSlug ) ?>"
+								   name="access_rights[<?php echo esc_html( $groupSlug ) ?>]"
+								   <?php if ( isset( $access_rights[ $groupSlug ] ) && ( $access_rights[ $groupSlug ] == 0 ) ) { ?>checked="checked"<?php } ?>
+								   value="0"/></td>
+						<td><input type="radio" onclick="uncheckAll(this,'r')" class="case_r rtwiki_r" id="r_<?php echo esc_html( $groupSlug ) ?>"
+								   name="access_rights[<?php echo esc_html( $groupSlug ) ?>]"
+								   <?php if ( ( '' != $disabled ) || ( isset( $access_rights[ $groupSlug ] ) && ( $access_rights[ $groupSlug ] == 1 ) ) ) { ?>checked="checked"<?php } ?>
+								   value="1"/></td>
+						<td><input type="radio" onclick="uncheckAll(this,'w')" class="case_w rtwiki_w" id="w_<?php echo esc_html( $groupSlug ) ?>"
+								   name="access_rights[<?php echo esc_html( $groupSlug ) ?>]"
+								   <?php if ( isset( $access_rights[ $groupSlug ] ) && ( $access_rights[ $groupSlug ] == 2 ) ) { ?>checked="checked"<?php } ?>
+								   value="2"/></td>
 					</tr>
 				<?php } ?>
 				</tbody>
@@ -217,11 +191,15 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 					<td>Public</td>
 					<td colspan='2'><input type="checkbox" onclick='if (this.checked) {
                         jQuery(".rtwiki_na").prop("checked", false);
+                        jQuery(".rtwiki_w").prop("checked", false);
+                        jQuery(".rtwiki_r").prop("checked", true);
                         jQuery(".rtwiki_na").prop("disabled", true);
                     } else {
+                        jQuery(".rtwiki_r").prop("checked", false);
                         jQuery(".rtwiki_na").prop("disabled", false);
-                    }' id="rtwiki_public_na"
-										   name="access_rights[public]" <?php if ( ( isset( $access_rights[ 'public' ] ) && ( 1 == $access_rights[ 'public' ] ) ) || ! isset( $access_rights[ 'public' ] ) ){ ?> checked="checked" <?php } ?>
+                        jQuery(".rtwiki_na").prop("checked", true);
+                    }' id="rtwiki_public_na" class="rtwiki_pub"
+										   name="access_rights[public]" <?php if ( ( isset( $access_rights[ 'public' ] ) && ( 1 == $access_rights[ 'public' ] ) ) || ! isset( $access_rights ) || empty( $access_rights ) ){ ?> checked="checked" <?php } ?>
 										   value='1'/></td>
 				</tr>
 				</tbody>
@@ -237,7 +215,6 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 		 */
 		function rtp_wiki_permission_save( $post )
 		{
-			global $wpdb;
 
 			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 
@@ -245,32 +222,45 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 				$_REQUEST[ 'post_type' ] = 'post';
 			}
 
-			if ( ! isset( $_REQUEST[ $_REQUEST[ 'post_type' ] . '_noncename' ] ) || ! wp_verify_nonce( @$_POST[ $_POST[ 'post_type' ] . '_noncename' ], plugin_basename( __FILE__ ) ) ) return;
+			$post_info = get_post( $post );
 
-			$supported_posts = rtwiki_get_supported_attribute();
-			if ( in_array( $_POST[ 'post_type' ], $supported_posts, true ) ){
-				if ( ! current_user_can( 'edit_page', $post ) ){
-					return;
-				} else {
-					$perm  = array( 'na', 'r', 'w' );
-					$args  = array( 'orderby' => 'asc', 'hide_empty' => false );
-					$terms = get_terms( 'user-group', $args );
-					$group = array( 'all' );
-					foreach ( $terms as $term ) {
-						$group[ ] = $term->name;
-					}
+			if ( $_REQUEST['parent_id'] == 0 ){
 
-					if ( isset( $_POST[ 'access_rights' ] ) ){
-						foreach ( $_POST[ 'access_rights' ] as $key => $value ) {
-							$access_rights[ $key ][ $value ] = 1;
+				$supported_posts = rtwiki_get_supported_attribute();
+				if ( in_array( $_POST[ 'post_type' ], $supported_posts, true ) ){
+					if ( ! current_user_can( 'edit_wiki', $post ) ){
+						return;
+					} else {
+						$args  = array( 'orderby' => 'asc', 'hide_empty' => false );
+						$terms = get_terms( 'user-group', $args );
+
+						if( ( isset( $_POST[ 'access_rights' ][ 'public' ] ) && $_POST[ 'access_rights' ][ 'public' ]== 1 ) || !isset( $_POST[ 'access_rights' ] ) ){
+							foreach ( $terms as $term ) {
+								$access_rights[$term->slug]=1;
+							}
+							$access_rights[ 'public' ]=1;
+						}elseif ( isset( $_POST[ 'access_rights' ][ 'all' ] ) ){
+							foreach ( $terms as $term ) {
+								$access_rights[$term->slug]=$_POST[ 'access_rights' ][ 'all' ];
+							}
+							$access_rights[ 'all' ]=$_POST[ 'access_rights' ][ 'all' ];
+						}else{
+							foreach ( $terms as $term ) {
+								if( isset( $_POST[ 'access_rights' ][ $term->slug ] ) ){
+									$access_rights[$term->slug]=$_POST[ 'access_rights' ][ $term->slug ];
+								}else{
+									$access_rights[$term->slug]=1;
+								}
+							}
 						}
+						update_post_meta( $post, 'access_rights', $access_rights );
+						update_post_meta( $post, 'base_parent', $post );
 					}
-
-					if ( isset( $_POST[ 'access_rights' ][ 'public' ] ) || ! isset( $_POST[ 'access_rights' ]) ) $access_rights[ 'public' ] = 1; else
-						$access_rights[ 'public' ] = 0;
-
-					update_post_meta( $post, 'access_rights', $access_rights );
 				}
+			}else{
+				update_post_meta( $post, 'access_rights', null );
+				$base_parent=get_post_meta( $post_info->post_parent, 'base_parent', true );
+				update_post_meta( $post, 'base_parent', $base_parent );
 			}
 		}
 

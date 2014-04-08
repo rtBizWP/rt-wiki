@@ -63,7 +63,6 @@ if ( ! class_exists( 'RtWikiAttributes' ) ){
 			global $rtWikiAttributesModel;
 			$tax  = $rtWikiAttributesModel->get_attribute( $attr_id );
 			$name = rtwiki_attribute_taxonomy_name( $tax->attribute_name );
-			// $pname=substr($name,3);
 			$hierarchical = true;
 
 			if ( $name ){
@@ -82,7 +81,8 @@ if ( ! class_exists( 'RtWikiAttributes' ) ){
 					'new_item_name' => __( 'New' ) . ' ' . $label,);
 				$args = array(
 					'hierarchical' => $hierarchical,
-					'labels' => $labels, 'show_ui' => true,
+					'labels' => $labels,
+					'show_ui' => true,
 					'show_admin_column' => true,
 					'show_in_nav_menus' => $show_in_nav_menus,
 					'query_var' => true,

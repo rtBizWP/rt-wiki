@@ -222,20 +222,16 @@ function rt_wiki_subpages_check( $parentId, $subPage, $post_type = 'post' )
  */
 function send_mail_postupdate_wiki( $post )
 {
-	global $rtWikiSubscribe;
-	$postObject      = get_post( $post );
+	global $rtWikiSubscribe, $wiki_post_old_value;
+
+	$newPostObject = get_post( $post );
 	$supported_posts = rtwiki_get_supported_attribute();
-	$diff            = '';
-	if ( in_array( get_post_type( $post ), $supported_posts, true ) ){
-		$subscribersList = $rtWikiSubscribe->get_Subscribers( $postObject->ID );
-		$subscribersList = array_unique( array_merge( $subscribersList, $rtWikiSubscribe->get_parent_subpost_subscribers( get_all_parent_ids( get_post( $postObject->post_parent ), '' ) ) ) );
+
+	if ( in_array( $newPostObject->post_type, $supported_posts, true ) ){
+		$subscribersList = $rtWikiSubscribe->get_Subscribers( $newPostObject->ID );
+		$subscribersList = array_unique( array_merge( $subscribersList, $rtWikiSubscribe->get_parent_subpost_subscribers( get_all_parent_ids( get_post( $newPostObject->post_parent ), '' ) ) ) );
 		if ( ! empty( $subscribersList ) || $subscribersList != null ){
-			foreach ( $subscribersList as $subscriber ) {
-				$user_info = get_userdata( $subscriber );
-				if ( get_permission( $postObject->ID, $user_info->ID ) ){
-					wiki_page_changes_send_mail( $postObject->ID, $user_info->user_email, $diff, get_permalink( $postObject->ID ) );
-				}
-			}
+			wiki_page_changes_send_mail($post, $subscribersList );
 		}
 	}
 }
@@ -273,34 +269,76 @@ function get_all_parent_ids( $post, $postids )
  * @param type   $tax_diff : body of mail
  * @param string $url      : url of post
  */
-function wiki_page_changes_send_mail( $postID, $email, $tax_diff = '', $url = '' )
+function wiki_page_changes_send_mail( $postID, $subscribersList )
 {
+	global $wiki_post_old_value;
 
-	$revision = wp_get_post_revisions( $postID );
-	$content  = array();
-	$title    = array();
+	if ( isset($postID) ){
 
-	foreach ( $revision as $revisions ) {
-		$content[ ] = $revisions->post_content;
-		$title[ ]   = $revisions->post_title;
-	}
+		$newPostObject = get_post( $postID );
 
-	if ( ! empty( $content ) ){
-		$url  = 'Page Link:' . $url . '<br>';
-		$body = rtwiki_text_diff( $title[ count( $title ) - 1 ], $title[ 0 ], $content[ count( $title ) - 1 ], $content[ 0 ] );
+		$headers[ ] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes( get_bloginfo( 'name' ) ) . '.com>';
 
-		$body     .= $tax_diff;
-		$finalBody = $url . '<br>' . $body;
+		$subject = 'Updates for "' . strtoupper( $newPostObject->post_title )."'";
+
+		if ( $wiki_post_old_value->post_content != $newPostObject->post_content ){
+			$body = rtwiki_text_diff( $wiki_post_old_value->post_title, $newPostObject->post_title, $wiki_post_old_value->post_content, $newPostObject->post_content );
+		}
+		if ( $wiki_post_old_value->post_parent != $newPostObject->post_parent ){
+			$body .= '<p>Parent page chnaged</p>';
+			if( isset( $wiki_post_old_value->post_parent ) && !empty( $wiki_post_old_value->post_parent ) && $wiki_post_old_value->post_parent != 0 ){
+				$body .= '<p>Old Parent: ' . get_permalink(  $wiki_post_old_value->post_parent ) . '</p>';
+			}else{
+				$body .= "<p>Old Parent: No parent, Old post was 'Base Parent'.</p>";
+			}
+
+			if( isset( $newPostObject->post_parent ) && !empty( $newPostObject->post_parent ) && $newPostObject->post_parent != 0 ){
+				$body .= '<p>New Parent: ' . get_permalink( $newPostObject->post_parent ).'</p>';
+			}else{
+				$body .= "<p>New Parent: No parent, New Post is become 'Base Parent'.</p>";
+			}
+		}
+
+		$url  = 'Page Link: ' . get_permalink( $newPostObject->ID );
+		$finalBody = $url . '<br/><br/>' . $body;
+
 		add_filter( 'wp_mail_content_type', 'set_html_content_type' );
 
-		$subject = 'Updates for "' . strtoupper( get_the_title( $postID ) ) . '"';
-		// $subject .=':Time: ' . date("F j, Y, g:i a");
-		$headers[ ] = 'From: rtcamp.com <no-reply@' . sanitize_title_with_dashes( get_bloginfo( 'name' ) ) . '.com>';
-		//var_dump($email, $subject, $finalBody, $headers);
-		//exit();
-		wp_mail( $email, $subject, $finalBody, $headers );
+		if ( isset($body) && !empty( $body ) && isset( $url ) && !empty( $url ) ){
+
+			foreach ( $subscribersList as $subscriber ) {
+				$user_info = get_userdata( $subscriber );
+				if ( get_permission( $newPostObject->ID, $user_info->ID ) ){
+					wp_mail( $user_info->user_email, $subject, $finalBody, $headers );
+				}
+			}
+
+		}
 
 		remove_filter( 'wp_mail_content_type', 'set_html_content_type' );
+	}
+}
+
+/**
+ * Store old value of wiki docs.
+ *
+ * @param $post_ID
+ * @param $post
+ */
+function my_pre_post_update( $post_ID ){
+
+	global $wiki_post_old_value,$current_user;
+	$supported_posts = rtwiki_get_supported_attribute();
+	if ( in_array( get_post_type(), $supported_posts ) ) {
+		$posttype = get_post_type();
+		if( in_array( 'rtwikiwriter', $current_user->roles ) && (!isset( $_REQUEST['parent_id'] ) || empty( $_REQUEST['parent_id'] ) ) ){
+			WP_DIE( __( "You don't have enough access rights to create root post" ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
+		}
+		$post_meta=get_post( $post_ID );
+		$supported_posts = rtwiki_get_supported_attribute();
+		if ( in_array( $post_meta->post_type, $supported_posts, true ) ){
+			$wiki_post_old_value = $post_meta;
+		}
 	}
 }
 
