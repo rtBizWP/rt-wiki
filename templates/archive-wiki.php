@@ -13,8 +13,8 @@ $content_class = apply_filters( 'rtwiki_content_class', 'large-8 columns rtp-sin
 	<section id="content" class="rtp-content-section <?php echo $content_class ?> " role="main">
 
 	<?php
-	global $rtWikiAttributesModel;
-	$attributes = $rtWikiAttributesModel->attribute_exists( get_query_var( 'taxonomy' ), get_post_type() );
+	global $rt_attributes_model;
+	$attributes = $rt_attributes_model->attribute_exists( get_query_var( 'taxonomy' ), get_post_type() );
 if ( ! $attributes ) { ?>
 
 		<article id="<?php echo get_post_type() . '-list'; ?>" <?php post_class( 'clearfix wikilist rtp-post-box' ); ?>>

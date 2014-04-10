@@ -1,27 +1,42 @@
 <?php
 /**
- * rtWiki
- *
+ * Don't load this file directly!
+ */
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+/**
  * The RtWikiCPT Class. Creates A wiki CPT, along with permissions metabox
  * Adds email address custom field to user-group taxonomy.
  *
- * @package    RtWikiAdmin
- * @subpackage Admin
- *
  * @author     Dipesh
  */
-if ( ! class_exists( 'RtWikiCPT' ) ){
-	class RtWikiCPT
+if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
+
+    /**
+     * Class Rt_Wiki_CPT
+     */
+    class Rt_Wiki_CPT
 	{
-		public function __construct()
+        /**
+         * Object initialization
+         */
+        public function __construct()
 		{
-			$this->create_wiki();
-			add_action( 'save_post', array( $this, 'rtp_wiki_permission_save' ) );
-			add_action( 'user-group_add_form_fields', array( $this, 'user_group_taxonomy_add_new_meta_field' ), 10, 2 );
-			add_action( 'user-group_edit_form_fields', array( $this, 'user_group_taxonomy_edit_meta_field' ), 10, 2 );
-			add_action( 'edited_user-group', array( $this, 'save_taxonomy_custom_meta' ), 20, 2 );
-			add_action( 'create_user-group', array( $this, 'save_taxonomy_custom_meta' ), 20, 2 );
+			$this->hook();
 		}
+
+        /**
+         * Apply Hook/Filter for Wiki's
+         */
+        function hook(){
+            add_action( 'init', array( $this, 'create_wiki' ) );
+            add_action( 'admin_init', array( $this, 'wiki_permission_metabox' ) );
+            add_action( 'save_post', array( $this, 'rtp_wiki_permission_save' ) );
+            add_action( 'user-group_add_form_fields', array( $this, 'user_group_taxonomy_add_new_meta_field' ), 10, 2 );
+            add_action( 'user-group_edit_form_fields', array( $this, 'user_group_taxonomy_edit_meta_field' ), 10, 2 );
+            add_action( 'edited_user-group', array( $this, 'save_taxonomy_custom_meta' ), 20, 2 );
+            add_action( 'create_user-group', array( $this, 'save_taxonomy_custom_meta' ), 20, 2 );
+        }
 
 		/**
 		 * Creates wiki named CPT.
@@ -75,7 +90,7 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 							'capability_type' => 'wiki',
 						'has_archive' => true,
 						'hierarchical' => true,
-						'menu_position' => 10,
+						'menu_position' => 30,
 						'supports' => array(
 							'title',
 							'editor',
@@ -100,11 +115,11 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 		 */
 		function wiki_permission_metabox()
 		{
-			global $rtwiki_cpt, $current_user;
+			global $current_user;
 			$supported_posts = rtwiki_get_supported_attribute();
 			if ( is_array( $supported_posts ) && ! empty( $supported_posts ) && in_array( 'rtwikimoderator', $current_user->roles ) ){
 				foreach ( $supported_posts as $posts )
-					add_meta_box( $posts . '_post_access', 'Permissions', array( $rtwiki_cpt, 'display_wiki_post_access_metabox' ), $posts, 'normal', 'high' );
+					add_meta_box( $posts . '_post_access', 'Permissions', array( $this, 'display_wiki_post_access_metabox' ), $posts, 'normal', 'high' );
 			}
 		}
 

@@ -1,12 +1,14 @@
 <?php
 
 /*
-  Plugin Name: rtWiki
-  Description: Creates a Wiki CPT. Check for pages inside it. If not found will create it. Post filtering for different user groups
-  Version: 0.1 BETA
+  Plugin Name: WordPress Wiki
+  Plugin URI: http://rtcamp.com/
+  Description: Manage wiki in multiple groups
+  Version: 0.1.30
   Author: rtCamp
-  Author Uri: http://rtcamp.com
-  Contributors: Prannoy Tank, Sohil
+  Author URI: http://rtcamp.com
+  License: GPL
+  Text Domain: rt_wiki
  */
 
 /**
@@ -34,6 +36,14 @@ if ( ! defined( 'RT_WIKI_URL' ) ){
 }
 
 /**
+ * The server file system path to the App directory
+ *
+ */
+if ( ! defined( 'RT_WIKI_PATH_ADMIN' ) ){
+    define( 'RT_WIKI_PATH_APP', plugin_dir_path( __FILE__ ) . 'app/' );
+}
+
+/**
  * The server file system path to the admin directory
  *
  */
@@ -46,7 +56,7 @@ if ( ! defined( 'RT_WIKI_PATH_ADMIN' ) ){
  *
  */
 if ( ! defined( 'RT_WIKI_PATH_LIB' ) ){
-	define( 'RT_WIKI_PATH_LIB', plugin_dir_path( __FILE__ ) . 'lib/' );
+	define( 'RT_WIKI_PATH_LIB', plugin_dir_path( __FILE__ ) . 'app/lib/' );
 }
 
 /**
@@ -85,45 +95,31 @@ if ( ! defined( 'RC_TC_BASE_FILE' ) ) define( 'RC_TC_BASE_FILE', __FILE__ );
 if ( ! defined( 'RC_TC_BASE_DIR' ) ) define( 'RC_TC_BASE_DIR', dirname( RC_TC_BASE_FILE ) );
 if ( ! defined( 'RC_TC_PLUGIN_URL' ) ) define( 'RC_TC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
-/**
- * Auto Loader Function
- *
- * Autoloads classes on instantiation. Used by spl_autoload_register.
- *
- * @param string $class_name The name of the class to autoload
- */
-function rtwiki_autoloader( $class_name )
-{
-	$rtLibPath = array(
-		'app/helper/' . $class_name . '.php',
-		'app/admin/' . $class_name . '.php',
-		'app/models/' . $class_name . '.php',
-		'app/main/' . $class_name . '.php',);
+include_once RT_WIKI_PATH_LIB . 'wp-helpers.php';
 
-	foreach ( $rtLibPath as $path ) {
-		$path = RT_WIKI_PATH . $path;
-		if ( file_exists( $path ) ){
-			include $path;
-			break;
-		}
-	}
+function rt_wiki_include() {
+
+    include_once RT_WIKI_PATH_HELPER . 'rtwiki-functions.php';
+    include_once RT_WIKI_PATH_ADMIN . 'rtwiki-widgets.php';
+
+    global $rtwiki_app_autoload, $rtwiki_admin_autoload, $rtwiki_models_autoload, $rtwiki_helper_autoload;
+    $rtwiki_app_autoload = new RT_WP_Autoload( RT_WIKI_PATH_APP );
+    $rtwiki_admin_autoload = new RT_WP_Autoload( RT_WIKI_PATH_ADMIN );
+    $rtwiki_models_autoload = new RT_WP_Autoload( RT_WIKI_PATH_MODELS );
+    $rtwiki_helper_autoload = new RT_WP_Autoload( RT_WIKI_PATH_HELPER );
+
 }
 
-/**
- * Rtdb helper class
- */
-include_once 'app/lib/wp-helpers.php';
+function rt_wiki_init() {
 
-function rtp_wp_wiki_loader(){
-	/**
-	 * Register the autoloader function into spl_autoload
-	 */
-	spl_autoload_register( 'rtwiki_autoloader' );
+    rt_wiki_include();
 
-	global $rtWiki;
-	$rtWiki = new RTWiki();
+    global $rt_wp_wiki;
+    $rt_wp_wiki = new RT_WP_WIKI();
+
 }
-add_action( 'plugins_loaded', 'rtp_wp_wiki_loader' );
+add_action( 'rt_biz_init', 'rt_wiki_init', 1 );
+
 /**
- * Next File: /app/main/RTWiki.php
+ * Next File: /app/class-rt-wp-wiki.php
  */

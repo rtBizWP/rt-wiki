@@ -10,12 +10,19 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @author Dipesh
  */
-if ( ! class_exists( 'RtWikiRoles' ) ){
+if ( ! class_exists( 'Rt_Wiki_Roles' ) ){
 
-	class RtWikiRoles
+	class Rt_Wiki_Roles
 	{
 
-		public $global_caps = array();
+		public $global_caps = array(
+            'manage_wp_wiki' => 'manage_wp_wiki',
+            'manage_attributes' => 'manage_attributes',
+            'manage_rtwiki_terms' => 'manage_rtwiki_terms',
+            'edit_rtwiki_terms' => 'edit_rtwiki_terms',
+            'delete_rtwiki_terms' => 'delete_rtwiki_terms',
+            'assign_rtwiki_terms' => 'assign_rtwiki_terms',
+        );
 
 		var $rtwikiroles;
 
@@ -33,15 +40,10 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 			$this->register_roles();
 
 			add_action( 'edit_user_profile', array( $this, 'add_access_profile_fields' ), 1 );
-
 			add_action( 'show_user_profile', array( $this, 'add_access_profile_fields' ), 1 );
-
 			add_action( 'profile_update', array( $this, 'update_access_profile_fields' ), 10, 2 );
-
 			add_filter( 'editable_roles', array( $this, 'remove_wp_wiki_roles' ) );
-
 			add_action( 'restrict_manage_users', array( $this, 'wiki_user_role_bulk_dropdown' ) );
-
 			add_action( 'load-users.php', array( $this, 'wiki_user_role_bulk_change'   ) );
 
 		}
@@ -67,6 +69,8 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 				if ( $rtwikirole[ 'label' ] == 'rtwikimoderator' ){
 
 					$caps = array(
+                        $this->global_caps['manage_wp_wiki'] => true,
+                        $this->global_caps['manage_attributes'] => true,
 						"edit_wiki" => true,
 						"read_wiki" => true,
 						"delete_wiki" => true,
@@ -80,6 +84,10 @@ if ( ! class_exists( 'RtWikiRoles' ) ){
 						"delete_others_wikis" => true,
 						"edit_private_wikis" => true,
 						"edit_published_wikis" => true,
+                        $this->global_caps['manage_rtwiki_terms'] => true,
+                        $this->global_caps['edit_rtwiki_terms'] => true,
+                        $this->global_caps['delete_rtwiki_terms'] => true,
+                        $this->global_caps['assign_rtwiki_terms'] => true,
 					);
 
 				}else if( $rtwikirole[ 'label' ] == 'rtwikiwriter' ){

@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @author     Udit
  */
-if ( ! class_exists( 'RtWikiSubscribeModel' ) ){
+if ( ! class_exists( 'RT_Subscribe_Model' ) ){
 
-	class RtWikiSubscribeModel extends RT_DB_Model
+	class RT_Subscribe_Model extends RT_DB_Model
 	{
 
 		public function __construct()
