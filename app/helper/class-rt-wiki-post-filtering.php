@@ -64,7 +64,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
             add_filter( 'wpseo_sitemaps_supported_post_types', array( $this, 'rtwiki_sitemap_posttypes' ) );
 
             //Wiki Parent page filtering
-            add_filter( 'get_pages', 'rtwiki_get_pages' );
+            add_filter( 'get_pages', array( $this, 'rtwiki_get_pages' ) );
             add_filter( 'page_attributes_dropdown_pages_args', array( $this, 'rtwiki_dropdown_pages' ) );
 
         }
@@ -203,13 +203,14 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
          */
         function wiki_wp_trash_post( $post_id )
         {
+            global $rt_wiki_subscribe;
             $post            = get_post( $post_id );
             $supported_posts = rtwiki_get_supported_attribute();
             $access = $this->get_admin_panel_permission( $post_id );
             if ( in_array( $post->post_type, $supported_posts ) &&  in_array( $post->post_status, array( 'publish', 'draft', 'future' ) ) ){
                 if ( $access != 'a' ){
                     WP_DIE( __( "You don't have enough access rights to move '" . $post->post_title . "' page" ) . "<br><a href='edit.php?post_type=$post->post_type'>" . __( 'Go Back' , 'rtCamp' ) . '</a>' );
-                }elseif ( $this->if_sub_pages( $post->ID, $post->post_type ) == true ){
+                }elseif ( $rt_wiki_subscribe->if_sub_pages( $post->ID, $post->post_type ) == true ){
                     WP_DIE( __( "You don't have enough access rights to move '" . $post->post_title . "' page, It has a child pages." ) . "<br><a href='edit.php?post_type=$post->post_type'>" . __( 'Go Back' , 'rtCamp' ) . '</a>' );
                 }
             }
@@ -221,13 +222,14 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
          * @param $post_id
          */
         function my_delete_post ( $post_id ){
+            global $rt_wiki_subscribe;
             $post = get_post( $post_id );
             $supported_posts = rtwiki_get_supported_attribute();
             $access = $this->get_admin_panel_permission( $post_id );
             if( in_array( $post->post_type, $supported_posts ) ){
                 if ( $access != 'a' ){
                     WP_DIE( __( "You don't have enough access rights to delete " . $post->post_title . "' page" ) . "<br><a href='edit.php?post_type=$post->post_type'>" . __( 'Go Back' , 'rtCamp' ) . '</a>' );
-                }elseif ( $this->if_sub_pages( $post->ID, $post->post_type ) == true ){
+                }elseif ( $rt_wiki_subscribe->if_sub_pages( $post->ID, $post->post_type ) == true ){
                     WP_DIE( __( "You don't have enough access rights to delete '" . $post->post_title . "' page, It has a child Posts." ) . "<br><a href='edit.php?post_type=$post->post_type'>" . __( 'Go Back' , 'rtCamp' ) . '</a>' );
                 }
             }
@@ -521,7 +523,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
          * @param $r
          * @return mixed
          */
-        function rtwiki_get_pages($pages, $r){
+        function rtwiki_get_pages($pages){
             $supported_posts = rtwiki_get_supported_attribute();
             if ( in_array( get_post_type(), $supported_posts ) ) {
                 foreach( $pages as $key=>$argpage){

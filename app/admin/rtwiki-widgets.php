@@ -82,10 +82,10 @@ class RtWikiSubPage extends WP_Widget
 
 	function widget( $args, $instance )
 	{
-        global $rt_wiki_widget_helper,$rt_wiki_post_filtering;
+        global $rt_wiki_widget_helper,$rt_wiki_subscribe;
 		extract( $args, EXTR_SKIP );
 		global $post;
-		$isParent = $rt_wiki_post_filtering->if_sub_pages( $post->ID, $post->post_type );
+		$isParent = $rt_wiki_subscribe->if_sub_pages( $post->ID, $post->post_type );
 
 		if ( isset( $instance['title']  ) ){
 			$title = apply_filters( 'widget_title', $instance['title'] );
@@ -240,7 +240,7 @@ class RtWikiPageSubscribe extends WP_Widget
 			} else {
 				$singleCheck = '';
 			}
-			$isParent = $rt_wiki_post_filtering->if_sub_pages( $post->ID, $post->post_type );
+			$isParent = $rt_wiki_subscribe->if_sub_pages( $post->ID, $post->post_type );
 
 			if ( $isParent == true ){
 				if ( $rt_wiki_subscribe->rt_wiki_subpages_check( $post->ID, true, $post->post_type ) == true ){

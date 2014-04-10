@@ -32,10 +32,6 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
             add_action( 'init', array( $this, 'create_wiki' ) );
             add_action( 'admin_init', array( $this, 'wiki_permission_metabox' ) );
             add_action( 'save_post', array( $this, 'rtp_wiki_permission_save' ) );
-            add_action( 'user-group_add_form_fields', array( $this, 'user_group_taxonomy_add_new_meta_field' ), 10, 2 );
-            add_action( 'user-group_edit_form_fields', array( $this, 'user_group_taxonomy_edit_meta_field' ), 10, 2 );
-            add_action( 'edited_user-group', array( $this, 'save_taxonomy_custom_meta' ), 20, 2 );
-            add_action( 'create_user-group', array( $this, 'save_taxonomy_custom_meta' ), 20, 2 );
         }
 
 		/**
@@ -276,69 +272,6 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 				update_post_meta( $post, 'access_rights', null );
 				$base_parent=get_post_meta( $post_info->post_parent, 'base_parent', true );
 				update_post_meta( $post, 'base_parent', $base_parent );
-			}
-		}
-
-		/**
-		 * Adds Email Address field in User Group Taxonomy
-		 */
-		function user_group_taxonomy_add_new_meta_field()
-		{
-			?>
-			<div class="form-field">
-				<label for="term_meta[email_address]"><?php _e( 'Email Address', 'rtcamp' ); ?></label>
-				<input type="text" name="user-group[email_address]" id="user-group[email_address]" value="">
-
-				<p class="description"><?php _e( 'Enter a Email address for this field', 'rtcamp' ); ?></p>
-			</div>
-		<?php
-		}
-
-		/**
-		 * Edit User-Group
-		 *
-		 * @param type $term
-		 */
-		function user_group_taxonomy_edit_meta_field( $term )
-		{
-			$t_id      = $term->term_id;
-			$term_meta = '';
-			if ( is_multisite() ) $term_meta = get_site_option( 'user-group-meta' ); else
-				$term_meta = get_option( 'user-group-meta' );
-			?>
-			<tr class="form-field">
-				<th scope="row" valign="top"><label
-						for="term_meta[email_address]"><?php _e( 'Email Address', 'rtCamp' ); ?></label></th>
-				<td>
-					<input type="text" name="user-group[email_address]" id="user-group[email_address]"
-						   value="<?php echo esc_attr( $term_meta[ $t_id ][ 'email_address' ] ) ? esc_attr( $term_meta[ $t_id ][ 'email_address' ] ) : ''; ?>"/>
-
-					<p class="description"><?php _e( 'Enter a email address for this field', 'rtcamp' ); ?></p>
-				</td>
-			</tr>
-		<?php
-		}
-
-		/**
-		 * Adds New User-Group Term
-		 *
-		 * @param type $term_id
-		 */
-		function save_taxonomy_custom_meta( $term_id )
-		{
-
-			if ( isset( $_POST[ 'user-group' ] ) ){
-				$term_meta = '';
-				if ( is_multisite() ) $term_meta = (array)get_site_option( 'user-group-meta' ); else
-					$term_meta = (array)get_option( 'user-group-meta' );
-				$term_meta[ $term_id ] = (array)$_POST[ 'user-group' ];
-				if ( is_multisite() ) update_site_option( 'user-group-meta', $term_meta ); else
-					update_option( 'user-group-meta', $term_meta );
-
-				if ( isset( $_POST[ '_wp_original_http_referer' ] ) ){
-					wp_safe_redirect( $_POST[ '_wp_original_http_referer' ] );
-					exit();
-				}
 			}
 		}
 	}

@@ -220,7 +220,6 @@ if ( ! class_exists( 'RT_Attributes' ) ) {
 			$this->orderby_required      = $orderby_required;
 
 			add_action( 'admin_menu', array( $this, 'register_attribute_menu' ) );
-
 			$this->register_attribute_mappings();
 		}
 

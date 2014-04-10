@@ -20,6 +20,14 @@ if ( ! defined( 'RT_WIKI_VERSION' ) ){
 }
 
 /**
+ * Text domain for wiki plugin
+ *
+ */
+if ( !defined( 'RT_WIKI_TEXT_DOMAIN' ) ) {
+    define( 'RT_WIKI_TEXT_DOMAIN', 'rt_wiki' );
+}
+
+/**
  * The server file system path to the plugin directory
  *
  */
