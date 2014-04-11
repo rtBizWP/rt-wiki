@@ -84,6 +84,7 @@ if ( ! class_exists( 'RT_WP_WIKI' ) ){
             $rt_wiki_widget_helper = new Rt_Wiki_Widget_Helper();
             $rt_wiki_roles = new Rt_Wiki_Roles();
             $rt_wiki_cpt = new Rt_Wiki_CPT();
+            $rt_wiki_acl = new Rt_Wiki_ACL();
 
         }
 

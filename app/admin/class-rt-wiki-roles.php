@@ -14,6 +14,7 @@ if ( ! class_exists( 'Rt_Wiki_Roles' ) ){
 
 	class Rt_Wiki_Roles
 	{
+        var $wiki_cap_name = 'wiki';
 
 		public $global_caps = array(
             'manage_wp_wiki' => 'manage_wp_wiki',
@@ -71,19 +72,19 @@ if ( ! class_exists( 'Rt_Wiki_Roles' ) ){
 					$caps = array(
                         $this->global_caps['manage_wp_wiki'] => true,
                         $this->global_caps['manage_attributes'] => true,
-						"edit_wiki" => true,
-						"read_wiki" => true,
-						"delete_wiki" => true,
-						"edit_wikis" => true,
-						"edit_others_wikis" => true,
-						"publish_wikis" => true,
-						"read_private_wikis" => true,
-						"delete_wikis" => true,
-						"delete_private_wikis" => true,
-						"delete_published_wikis" => true,
-						"delete_others_wikis" => true,
-						"edit_private_wikis" => true,
-						"edit_published_wikis" => true,
+						"edit_{$this->wiki_cap_name}" => true,
+						"read_{$this->wiki_cap_name}" => true,
+						"delete_{$this->wiki_cap_name}" => true,
+						"edit_{$this->wiki_cap_name}s" => true,
+						"edit_others_{$this->wiki_cap_name}s" => true,
+						"publish_{$this->wiki_cap_name}s" => true,
+						"read_private_{$this->wiki_cap_name}s" => true,
+						"delete_{$this->wiki_cap_name}s" => true,
+						"delete_private_{$this->wiki_cap_name}s" => true,
+						"delete_published_{$this->wiki_cap_name}s" => true,
+						"delete_others_{$this->wiki_cap_name}s" => true,
+						"edit_private_{$this->wiki_cap_name}s" => true,
+						"edit_published_{$this->wiki_cap_name}s" => true,
                         $this->global_caps['manage_rtwiki_terms'] => true,
                         $this->global_caps['edit_rtwiki_terms'] => true,
                         $this->global_caps['delete_rtwiki_terms'] => true,
@@ -92,19 +93,19 @@ if ( ! class_exists( 'Rt_Wiki_Roles' ) ){
 
 				}else if( $rtwikirole[ 'label' ] == 'rtwikiwriter' ){
 					$caps = array(
-						"edit_wiki" => true,
-						"read_wiki" => true,
-						"delete_wiki" => true,
-						"edit_wikis" => true,
-						"edit_others_wikis" => true,
-						"publish_wikis" => true,
-						"read_private_wikis" => true,
-						"delete_wikis" => false,
-						"delete_private_wikis" => false,
-						"delete_published_wikis" => false,
-						"delete_others_wikis" => false,
-						"edit_private_wikis" => true,
-						"edit_published_wikis" => true,
+						"edit_{$this->wiki_cap_name}" => true,
+						"read_{$this->wiki_cap_name}" => true,
+						"delete_{$this->wiki_cap_name}" => true,
+						"edit_{$this->wiki_cap_name}s" => true,
+						"edit_others_{$this->wiki_cap_name}s" => true,
+						"publish_{$this->wiki_cap_name}s" => true,
+						"read_private_{$this->wiki_cap_name}s" => true,
+						"delete_{$this->wiki_cap_name}s" => false,
+						"delete_private_{$this->wiki_cap_name}s" => false,
+						"delete_published_{$this->wiki_cap_name}s" => false,
+						"delete_others_{$this->wiki_cap_name}s" => false,
+						"edit_private_{$this->wiki_cap_name}s" => true,
+						"edit_published_{$this->wiki_cap_name}s" => true,
 					);
 				}
 				$label = strtolower( str_replace( '-', '_', sanitize_title( $rtwikirole[ 'label' ] ) ) );
