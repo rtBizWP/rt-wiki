@@ -116,21 +116,21 @@ if ( !class_exists( 'Rt_Wiki_Widget_Helper' ) ) {
          */
         function wiki_custom_taxonomies( $postid, $display = true )
         {
-
             $post = get_post( $postid );
             //$post_type = $post->post_type;
             //$taxonomies = get_object_taxonomies($post_type);
-            global $rt_attributes_model;
+            global $rt_attributes_relationship_model,$rt_attributes_model,$rt_attributes;
 
-            $attributes = $rt_attributes_model->get_all_attributes( get_post_type() );
+            $attributes = $rt_attributes_relationship_model->get_relations_by_post_type( get_post_type() );
             $out = '';
-            foreach ( $attributes as $attr ) {
+            foreach ( $attributes as $attributes ) {
+                $attr = $rt_attributes_model->get_attribute( $attributes->attr_id );
                 if ( $out != '' ){
                     $ulstyle = "style='display: none;'";
                 } else {
                     $ulstyle = '';
                 }
-                $taxonomy = $attr->attribute_name;
+                $taxonomy = $rt_attributes->get_taxonomy_name( $attr->attribute_name );
                 $terms    = wp_get_post_terms( $postid, $taxonomy );
                 /*if ( is_single() ){
                     $terms = wp_get_post_terms( $postid, $taxonomy );
