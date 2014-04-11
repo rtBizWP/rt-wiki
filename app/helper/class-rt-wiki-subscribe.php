@@ -47,6 +47,7 @@ if ( !class_exists( 'Rt_Wiki_Subscribe' ) ) {
                 $postID      = $_REQUEST[ 'update-postId' ]; //get post id from the request parameter
                 $url         = get_permalink( $postID ); //get permalink from post id
                 $redirectURl = $url . '?' . $actionParam . '=1'; //form the url
+                $flagsuccess=0;
 
                 if ( ! is_user_logged_in() && $pagenow != 'wp-login.php' ){
                     wp_redirect( wp_login_url( $redirectURl ), 302 ); //after login and if permission is set , user would be subscribed to the page
@@ -65,18 +66,23 @@ if ( !class_exists( 'Rt_Wiki_Subscribe' ) ) {
                         if ( $_REQUEST[ 'single_subscribe' ] == 'current' ){
                             if ( isset( $_REQUEST[ 'subPage_subscribe' ] ) && $_REQUEST[ 'subPage_subscribe' ] == 'subpage' ) :
                                 $this->subscribe_post_curuser( $postID, 1 );
+                                $flagsuccess=1;
                             else :
                                 $this->subscribe_post_curuser( $postID, 0 );
+                                $flagsuccess=2;
                             endif;
                         }
                     } else if ( !isset( $_REQUEST[ 'single_subscribe' ] ) || empty( $_REQUEST[ 'single_subscribe' ] ) ){
                         if ( isset( $_REQUEST[ 'subPage_subscribe' ] ) && $_REQUEST[ 'subPage_subscribe' ] == 'subpage' ):
                             $this->subscribe_post_curuser( $postID, 1 );
+                            $flagsuccess=1;
                         else :
                             $this->unsubscribe_post_curuser( $postID );
+                            $flagsuccess=3;
                         endif;
                     }
                 }
+                wp_safe_redirect( add_query_arg( array('success_massage' => $flagsuccess), wp_get_referer() ))  ;
             }
         }
 

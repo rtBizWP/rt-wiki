@@ -259,6 +259,19 @@ class RtWikiPageSubscribe extends WP_Widget
 			} else {
 				$subPageCheck = '';
 			}
+            if ( isset( $_REQUEST['success_massage'] ) && !empty( $_REQUEST['success_massage'] ) ){
+                $success_massage='';
+                if ( $_REQUEST['success_massage']==0 ){
+                    $success_massage='<div class="error">Error: Subscription Fail<div>';
+                }elseif ( $_REQUEST['success_massage']==1 ) {
+                    $success_massage='<div class="successs">Successfully subscribed Parent & its child pages<div>';
+                }elseif ( $_REQUEST['success_massage']==2 ) {
+                    $success_massage='<div class="successs">Successfully subscribed Parent page<div>';
+                }elseif ( $_REQUEST['success_massage']==3 ) {
+                    $success_massage='<div class="successs">Successfully unsubscribed Parent & its child pages<div>';
+                }
+                echo $success_massage;
+            }
 			echo '<form id="user-subscribe" method="post" action="?PageSubscribe=1">
                 <label><input type="checkbox" name="single_subscribe" value="current"  ' . $singleCheck . ' >&nbspSubscribe to this page </label>';
 			if ( $parentStatus == true ){
