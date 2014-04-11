@@ -54,24 +54,24 @@ if ( !class_exists( 'Rt_Wiki_Subscribe' ) ) {
 
                     //Single post subscribe
                     $singleStatus = '';
-                    if ( isset( $_POST[ 'single_subscribe' ] ) ) $singleStatus = $_POST[ 'single_subscribe' ];
+                    if ( isset( $_REQUEST[ 'single_subscribe' ] ) ) $singleStatus = $_REQUEST[ 'single_subscribe' ];
 
                     //Post type
                     $post_type = 'post';
-                    if ( isset( $_POST[ 'post-type' ] ) ) $post_type = $_POST[ 'post-type' ];
+                    if ( isset( $_REQUEST[ 'post-type' ] ) ) $post_type = $_REQUEST[ 'post-type' ];
 
                     //subscribe or unsubscribe single post
-                    if ( isset( $_POST[ 'single_subscribe' ] ) ){
-                        if ( $_POST[ 'single_subscribe' ] == 'current' ){
-                            if ( isset( $_POST[ 'subPage_subscribe' ] ) && $_POST[ 'subPage_subscribe' ] == 'subpage' ) :
+                    if ( isset( $_REQUEST[ 'single_subscribe' ] ) && !empty( $_REQUEST[ 'single_subscribe' ] ) ){
+                        if ( $_REQUEST[ 'single_subscribe' ] == 'current' ){
+                            if ( isset( $_REQUEST[ 'subPage_subscribe' ] ) && $_REQUEST[ 'subPage_subscribe' ] == 'subpage' ) :
                                 $this->subscribe_post_curuser( $postID, 1 );
                             else :
                                 $this->subscribe_post_curuser( $postID, 0 );
                             endif;
                         }
-                    } else if ( $_POST[ 'single_subscribe' ] == null ){
-                        if ( isset( $_POST[ 'subPage_subscribe' ] ) && $_POST[ 'subPage_subscribe' ] == 'subpage' ):
-                            $this->unsubcribe_subpost_curuser( $postID, 1 );
+                    } else if ( !isset( $_REQUEST[ 'single_subscribe' ] ) || empty( $_REQUEST[ 'single_subscribe' ] ) ){
+                        if ( isset( $_REQUEST[ 'subPage_subscribe' ] ) && $_REQUEST[ 'subPage_subscribe' ] == 'subpage' ):
+                            $this->subscribe_post_curuser( $postID, 1 );
                         else :
                             $this->unsubscribe_post_curuser( $postID );
                         endif;
