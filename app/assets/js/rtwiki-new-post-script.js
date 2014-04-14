@@ -3,8 +3,12 @@
  * and open the template in the editor.
  */
 jQuery(document).ready(function ($) {
-    $('#title').val(getUrlVars()["rtpost_title"]);
-    $('#parent_id').val(getUrlVars()["rtpost_parent"]);
+    if ( getUrlVars()["rtpost_title"] ) {
+        $('#title').val(getUrlVars()["rtpost_title"]);
+    }
+    if ( getUrlVars()["rtpost_parent"] ) {
+        $('#parent_id').val(getUrlVars()["rtpost_parent"]);
+    }
 });
 
 function getUrlVars() {
