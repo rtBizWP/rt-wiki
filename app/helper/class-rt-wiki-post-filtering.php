@@ -93,7 +93,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
                     }
                 } else {
 
-                    if ( in_array( 'rtwikimoderator', $current_user->roles )  ){
+                    if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) )  ){
                         return 'a';
                     } else{
 
@@ -101,7 +101,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
                             return 'r';
                         }elseif ( isset( $access_rights[ 'all' ] ) ){
                             if ( $access_rights[ 'all' ]== 2 ){
-                                if ( in_array( 'rtwikiwriter', $current_user->roles )  ) {
+                                if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  || current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ) {
                                     return 'w';
                                 }
                                 return 'r';
@@ -123,7 +123,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
                             }
 
                             if( $noflag == 2  ){
-                                if ( in_array( 'rtwikiwriter', $current_user->roles )  ) {
+                                if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  || current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ) {
                                     return 'w';
                                 }
                                 return 'r';
@@ -162,7 +162,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
                     }
                 } else {
 
-                    if ( in_array( 'rtwikimoderator', $current_user->roles )  ){
+                    if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) )  ){
                         return true;
                     } else{
 
@@ -268,14 +268,14 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
         }
 
         /**
-         * remove bulk action of wiki for rtwikiwriter
+         * remove bulk action of wiki for rt_wik_editor or rt_wiki_author
          *
          * @param $actions
          * @return null
          */
         function remove_wiki_bulk_actions( $actions ){
             global $current_user;
-            if ( in_array( 'rtwikiwriter', $current_user->roles ) ){
+            if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  || current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ){
                 unset( $actions['trash'] );
             }
             return $actions;
@@ -544,7 +544,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
         function rtwiki_dropdown_pages($dropdown_args){
             global $current_user;
             $supported_posts = rtwiki_get_supported_attribute();
-            if ( in_array( get_post_type(), $supported_posts ) && in_array( 'rtwikiwriter', $current_user->roles )  ) {
+            if ( in_array( get_post_type(), $supported_posts ) && ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  || current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ) ) {
                 unset( $dropdown_args['show_option_none'] );
             }
             return $dropdown_args;
@@ -552,18 +552,22 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
 
         function filter_caps( $all_caps, $required_caps, $args, $user ) {
             global $post;
+            if ( in_array( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) , $required_caps ) || in_array( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ), $required_caps ) || in_array( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ), $required_caps ) ){
+                return $all_caps;
+            }
+
             $supported_posts = rtwiki_get_supported_attribute();
             if ( is_object( $post ) && in_array( $post->post_type, $supported_posts ) && $post->post_status != "auto-draft" && $post->post_status != "draft" ){
                 $access = 'na';
-                if ( is_object( $user ) && ! empty( $user->roles ) &&  in_array( 'rtwikimoderator', $user->roles ) ){
-                    return $user->allcaps;
+                if ( is_object( $user )  &&  current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ){
+                    return $all_caps;
                 }
                 $access = $this->get_admin_panel_permission( $post->ID );
                 if( $access == 'r' ){
                     $all_caps["edit_wiki"] = false;
                     $all_caps["read_wiki"] = true;
                     $all_caps["delete_wiki"] = false;
-                    $all_caps["edit_wikis"] = false;
+                    /*$all_caps["edit_wikis"] = true;
                     $all_caps["edit_others_wikis"] = false;
                     $all_caps["publish_wikis"] = false;
                     $all_caps["read_private_wikis"] = true;
@@ -572,13 +576,12 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
                     $all_caps["delete_published_wikis"] = false;
                     $all_caps["delete_others_wikis"] = false;
                     $all_caps["edit_private_wikis"] = false;
-                    $all_caps["edit_published_wikis"] = false;
-                    $all_caps["read"] = true;
+                    $all_caps["edit_published_wikis"] = false;*/
                 }elseif ( 'w' == $access ){
                     $all_caps["edit_wiki"] = true;
                     $all_caps["read_wiki"] = true;
                     $all_caps["delete_wiki"] = false;
-                    $all_caps["edit_wikis"] = true;
+                    /*$all_caps["edit_wikis"] = true;
                     $all_caps["edit_others_wikis"] = true;
                     $all_caps["publish_wikis"] = true;
                     $all_caps["read_private_wikis"] = true;
@@ -587,13 +590,12 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
                     $all_caps["delete_published_wikis"] = false;
                     $all_caps["delete_others_wikis"] = false;
                     $all_caps["edit_private_wikis"] = true;
-                    $all_caps["edit_published_wikis"] = true;
-                    $all_caps["read"] = true;
+                    $all_caps["edit_published_wikis"] = true;*/
                 }elseif ( false == $access ){
                     $all_caps["edit_wiki"] = false;
                     $all_caps["read_wiki"] = false;
                     $all_caps["delete_wiki"] = false;
-                    $all_caps["edit_wikis"] = false;
+                   /* $all_caps["edit_wikis"] = true;
                     $all_caps["edit_others_wikis"] = false;
                     $all_caps["publish_wikis"] = false;
                     $all_caps["read_private_wikis"] = false;
@@ -602,8 +604,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
                     $all_caps["delete_published_wikis"] = false;
                     $all_caps["delete_others_wikis"] = false;
                     $all_caps["edit_private_wikis"] = false;
-                    $all_caps["edit_published_wikis"] = false;
-                    $all_caps["read"] = false;
+                    $all_caps["edit_published_wikis"] = false;*/
                 }
             }
             return $all_caps;

@@ -14,6 +14,9 @@
  */
 if ( ! class_exists( 'Rt_Wiki_ACL' ) ) {
 	class Rt_Wiki_ACL {
+
+        var $wiki_cap_name = 'wiki';
+
 		public function __construct() {
 			add_filter( 'rt_biz_modules', array( $this, 'register_rt_wiki_module' ) );
 		}
@@ -23,7 +26,7 @@ if ( ! class_exists( 'Rt_Wiki_ACL' ) ) {
 			$module_key = ( function_exists( 'rt_biz_sanitize_module_key' ) ) ? rt_biz_sanitize_module_key( RT_WIKI_TEXT_DOMAIN ) : '';
 			$modules[ $module_key ] = array(
 				'label' => __( 'rtWiki' ),
-				'post_types' => array( $rt_wiki_roles->wiki_cap_name ),
+				'post_types' => array( $this->wiki_cap_name ),
 			);
 			return $modules;
 		}

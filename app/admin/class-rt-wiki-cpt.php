@@ -113,7 +113,7 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 		{
 			global $current_user;
 			$supported_posts = rtwiki_get_supported_attribute();
-			if ( is_array( $supported_posts ) && ! empty( $supported_posts ) && in_array( 'rtwikimoderator', $current_user->roles ) ){
+			if ( is_array( $supported_posts ) && ! empty( $supported_posts ) && current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ){
 				foreach ( $supported_posts as $posts )
 					add_meta_box( $posts . '_post_access', 'Permissions', array( $this, 'display_wiki_post_access_metabox' ), $posts, 'normal', 'high' );
 			}
