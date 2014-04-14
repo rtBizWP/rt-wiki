@@ -90,25 +90,26 @@ function remove_quick_edit( $actions )
  */
 function post_check()
 {
-	global $pagenow, $current_user;
 	if ( ! is_admin() ) return;
 
-	$page            = isset( $_GET[ 'post' ] ) ? $_GET[ 'post' ] : 0;
-	$post            = get_post( $page );
-	$supported_posts = rtwiki_get_supported_attribute();
-	$posttype        = $post->post_type;
-	$access = get_admin_panel_permission( $page );
-	if ( isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] == 'edit' ){
-		if ( in_array( $posttype, $supported_posts ) ){
-			if ( $access != 'w' && $access != 'a' ){
-				WP_DIE( __( "You don't have enough access rights to modify '" . $post->post_title . "' page" ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
+	if (isset( $_GET[ 'post' ] )){
+		$page = $_GET[ 'post' ];
+		$post = get_post( $page );
+		$supported_posts = rtwiki_get_supported_attribute();
+		$posttype = $post->post_type;
+		$access = get_admin_panel_permission( $page );
+		if ( isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] == 'edit' ){
+			if ( in_array( $posttype, $supported_posts ) ){
+				if ( $access != 'w' && $access != 'a' ){
+					WP_DIE( __( "You don't have enough access rights to modify '" . $post->post_title . "' page" ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
+				}
 			}
 		}
-	}
-	if ( isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] == 'trash' ){
-		if ( in_array( $posttype, $supported_posts ) ){
-			if ( $access != 'a' ){
-				WP_DIE( __( "You don't have enough access rights to move '" . $post->post_title . "' page" ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
+		if ( isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] == 'trash' ){
+			if ( in_array( $posttype, $supported_posts ) ){
+				if ( $access != 'a' ){
+					WP_DIE( __( "You don't have enough access rights to move '" . $post->post_title . "' page" ) . "<br><a href='edit.php?post_type=$posttype'>" . __( 'Go Back', 'rtCamp' ) . '</a>' );
+				}
 			}
 		}
 	}
