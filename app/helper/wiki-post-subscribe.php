@@ -92,7 +92,7 @@ function update_subscribe()
 				}
 			} else if ( $_POST[ 'single_subscribe' ] == null ){
 				if ( isset( $_POST[ 'subPage_subscribe' ] ) && $_POST[ 'subPage_subscribe' ] == 'subpage' ):
-					unsubcribe_subpost_curuser( $postID, 1 );
+                    subscribe_post_curuser( $postID, 1 );
 				else :
 					unsubscribe_post_curuser( $postID );
 				endif;
