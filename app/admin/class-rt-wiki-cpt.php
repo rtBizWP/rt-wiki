@@ -86,7 +86,7 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 							'capability_type' => 'wiki',
 						'has_archive' => true,
 						'hierarchical' => true,
-						'menu_position' => 30,
+						'menu_position' => 33,
 						'supports' => array(
 							'title',
 							'editor',
