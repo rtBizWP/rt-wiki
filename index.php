@@ -1,7 +1,7 @@
 <?php
 
 /*
-  Plugin Name: WordPress Wiki
+  Plugin Name: rt-Wiki
   Plugin URI: http://rtcamp.com/
   Description: Manage wiki in multiple groups
   Version: 0.1.30
