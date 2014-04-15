@@ -71,11 +71,15 @@ if ( ! class_exists( 'RT_WP_WIKI' ) ){
 		function init_globals()
 		{
             global $rt_wiki_settings,$rt_wiki_post_filtering, $rt_wiki_404_redirect,
-                   $rt_wiki_subscribe, $rt_wiki_daily_change, $rt_wiki_widget, $rt_wiki_diff,
-                   $rt_wiki_widget_helper,$rt_wiki_subscribe_model,$rt_wiki_cpt,$rt_wiki_roles;
+                   $rt_wiki_subscribe, $rt_wiki_daily_change, $rt_wiki_acl, $rt_wiki_diff,
+                   $rt_wiki_widget_helper,$rt_wiki_subscribe_model,$rt_wiki_cpt,$rt_wiki_roles,
+                   $rt_attributes,$rt_attributes_model, $rt_attributes_relationship_model;
 
             $rt_wiki_subscribe_model = new RT_Subscribe_Model();
             $rt_wiki_settings= new Rt_Wiki_Settings();
+            $rt_attributes = new RT_Attributes( RT_WIKI_TEXT_DOMAIN );
+            $rt_attributes_model = new RT_Attributes_Model();
+            $rt_attributes_relationship_model = new RT_Attributes_Relationship_Model();
             $rt_wiki_post_filtering= new Rt_Wiki_Post_Filtering();
             $rt_wiki_404_redirect = new Rt_Wiki_404_Redirect();
             //$rt_wiki_daily_change = new Rt_Wiki_Daily_Changes();

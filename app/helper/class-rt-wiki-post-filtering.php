@@ -62,7 +62,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
             add_action( 'do_feed_atom', array( $this, 'filter_wiki_do_feed' ), 10, 1 );
 
             //Yoast plugin Sitemap rtWiki filtering
-            add_filter( 'wpseo_sitemaps_supported_taxonomies', array( $this, 'rtwiki_sitemap_taxonomies' ) );
+            //add_filter( 'wpseo_sitemaps_supported_taxonomies', array( $this, 'rtwiki_sitemap_taxonomies' ) );
             add_filter( 'wpseo_sitemaps_supported_post_types', array( $this, 'rtwiki_sitemap_posttypes' ) );
 
             //Wiki Parent page filtering

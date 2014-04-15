@@ -37,7 +37,7 @@ if ( ! class_exists( 'Rt_Wiki_Admin' ) ){
 		function register_pages()
 		{
             global $rt_attributes, $rt_wiki_roles, $rt_attributes_model, $rt_attributes_relationship_model;
-            $rt_attributes = new RT_Attributes( RT_WIKI_TEXT_DOMAIN );
+
             $attributes = rtwiki_get_supported_attribute();
 
             $admin_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) : '';
@@ -59,8 +59,6 @@ if ( ! class_exists( 'Rt_Wiki_Admin' ) ){
                     }
                 }
             }
-            $rt_attributes_model = new RT_Attributes_Model();
-            $rt_attributes_relationship_model = new RT_Attributes_Relationship_Model();
 		}
 
     }
