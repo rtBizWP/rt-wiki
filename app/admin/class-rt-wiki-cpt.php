@@ -235,7 +235,7 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 
 			$post_info = get_post( $post );
 
-			if ( $_REQUEST['parent_id'] == 0 ){
+			if ( isset( $_REQUEST['parent_id'] ) && $_REQUEST['parent_id'] == 0 ){
 
 				$supported_posts = rtwiki_get_supported_attribute();
 				if ( in_array( $_POST[ 'post_type' ], $supported_posts, true ) ){
