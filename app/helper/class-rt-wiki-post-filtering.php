@@ -96,39 +96,40 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
                     if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) )  ){
                         return 'a';
                     } else{
-
-                        if ( isset( $access_rights[ 'public' ] ) && 1 == $access_rights[ 'public' ] ){
-                            return 'r';
-                        }elseif ( isset( $access_rights[ 'all' ] ) ){
-                            if ( $access_rights[ 'all' ]== 2 ){
-                                if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  || current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ) {
-                                    return 'w';
+                        if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) ) || current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ){
+                            if ( isset( $access_rights[ 'public' ] ) && 1 == $access_rights[ 'public' ] ){
+                                return 'r';
+                            }elseif ( isset( $access_rights[ 'all' ] ) ){
+                                if ( $access_rights[ 'all' ]== 2 ){
+                                    if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  || current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ) {
+                                        return 'w';
+                                    }
+                                    return 'r';
+                                }elseif ( $access_rights[ 'all' ]== 1 ){
+                                    return 'r';
                                 }
-                                return 'r';
-                            }elseif ( $access_rights[ 'all' ]== 1 ){
-                                return 'r';
-                            }
-                        }else{
-                            $terms = get_terms( 'user-group', array( 'hide_empty' => true ) );
-                            $user_id  = get_current_user_id();
-                            $noflag   = 0;
+                            }else{
+                                $terms = get_terms( 'user-group', array( 'hide_empty' => true ) );
+                                $user_id  = get_current_user_id();
+                                $noflag   = 0;
 
-                            foreach ( $terms as $term ) {
-                                $ans = get_term_if_exists( $term->slug, $user_id );
-                                if ( $ans == $term->slug && isset( $access_rights[ $term->slug ] ) ){
-                                    if ( $noflag < $access_rights[ $term->slug ] ){
-                                        $noflag = $access_rights[ $term->slug ];
+                                foreach ( $terms as $term ) {
+                                    $ans = get_term_if_exists( $term->slug, $user_id );
+                                    if ( $ans == $term->slug && isset( $access_rights[ $term->slug ] ) ){
+                                        if ( $noflag < $access_rights[ $term->slug ] ){
+                                            $noflag = $access_rights[ $term->slug ];
+                                        }
                                     }
                                 }
-                            }
 
-                            if( $noflag == 2  ){
-                                if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  || current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ) {
-                                    return 'w';
+                                if( $noflag == 2  ){
+                                    if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  || current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ) {
+                                        return 'w';
+                                    }
+                                    return 'r';
+                                }elseif ( $noflag == 1 ){
+                                    return 'r';
                                 }
-                                return 'r';
-                            }elseif ( $noflag == 1 ){
-                                return 'r';
                             }
                         }
                     }
@@ -165,30 +166,31 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
                     if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) )  ){
                         return true;
                     } else{
-
-                        if ( isset( $access_rights[ 'public' ] ) && 1 == $access_rights[ 'public' ] ){
-                            return true;
-                        }elseif ( isset( $access_rights[ 'all' ] ) ){
-                            if ( $access_rights[ 'all' ]== 2 || $access_rights[ 'all' ]== 1 ){
+                        if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) ) || current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ){
+                            if ( isset( $access_rights[ 'public' ] ) && 1 == $access_rights[ 'public' ] ){
                                 return true;
-                            }
-                        }else{
-                            $terms = get_terms( 'user-group', array( 'hide_empty' => true ) );
-                            $user_id  = get_current_user_id();
-                            $noflag   = 0;
+                            }elseif ( isset( $access_rights[ 'all' ] ) ){
+                                if ( $access_rights[ 'all' ]== 2 || $access_rights[ 'all' ]== 1 ){
+                                    return true;
+                                }
+                            }else{
+                                $terms = get_terms( 'user-group', array( 'hide_empty' => true ) );
+                                $user_id  = get_current_user_id();
+                                $noflag   = 0;
 
-                            foreach ( $terms as $term ) {
-                                $ans = get_term_if_exists( $term->slug, $user_id );
-                                if ( $ans == $term->slug && isset( $access_rights[ $term->slug ] ) ){
-                                    if ( $noflag < $access_rights[ $term->slug ] ){
-                                        $noflag=$access_rights[ $term->slug ];
-                                        if ( $noflag>0 )
-                                            break;
+                                foreach ( $terms as $term ) {
+                                    $ans = get_term_if_exists( $term->slug, $user_id );
+                                    if ( $ans == $term->slug && isset( $access_rights[ $term->slug ] ) ){
+                                        if ( $noflag < $access_rights[ $term->slug ] ){
+                                            $noflag=$access_rights[ $term->slug ];
+                                            if ( $noflag>0 )
+                                                break;
+                                        }
                                     }
                                 }
-                            }
-                            if( $noflag > 0 ){
-                                return true;
+                                if( $noflag > 0 ){
+                                    return true;
+                                }
                             }
                         }
                     }
@@ -275,7 +277,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
          */
         function remove_wiki_bulk_actions( $actions ){
             global $current_user;
-            if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  || current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ){
+            if ( ! current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ){
                 unset( $actions['trash'] );
             }
             return $actions;
@@ -520,13 +522,13 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
             $supported_posts = rtwiki_get_supported_attribute();
             if ( in_array( get_post_type(), $supported_posts ) ) {
                 foreach( $pages as $key=>$argpage){
-                    if (is_admin()){
+                    if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ){
                         $access=$this->get_admin_panel_permission( $argpage->ID );
                         if ( $access != 'a' && $access != 'w' ){
                             unset($pages[$key]);
                         }
                     }else{
-                        if ( $this->get_permission( $argpage->ID, get_current_user_id(), 0 ) == false ){
+                        if ( $this->get_permission( $argpage->ID, get_current_user_id(), 0 ) == false  ){
                             unset($pages[$key]);
                         }
                     }
@@ -544,7 +546,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
         function rtwiki_dropdown_pages($dropdown_args){
             global $current_user;
             $supported_posts = rtwiki_get_supported_attribute();
-            if ( in_array( get_post_type(), $supported_posts ) && ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  || current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ) ) {
+            if ( in_array( get_post_type(), $supported_posts ) && ! current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ) {
                 unset( $dropdown_args['show_option_none'] );
             }
             return $dropdown_args;
