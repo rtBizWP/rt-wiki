@@ -142,9 +142,10 @@ if ( ! class_exists( 'RT_WP_WIKI' ) ){
             global $rt_wiki_404_redirect;
 			wp_register_script( 'rtwiki-custom-script', RT_WIKI_URL . 'app/assets/js/rtwiki-custom-script.js', array( 'jquery' ) );
 			wp_enqueue_script( 'rtwiki-custom-script' );
-			if ( is_404() ) {
+            $supported_posts = rtwiki_get_supported_attribute();
+            if ( is_404() && is_array( $supported_posts ) && in_array( get_query_var( 'post_type' ), $supported_posts ) ){
 				wp_register_script( 'rtwiki-404-script', RT_WIKI_URL . 'app/assets/js/rtwiki-404-script.js', array( 'jquery' ) );
-				wp_localize_script( 'rtwiki-404-script', 'redirectURL', array( $rt_wiki_404_redirect, 'redirect_404' ) );
+				wp_localize_script( 'rtwiki-404-script', 'redirectURL', $rt_wiki_404_redirect->redirect_404() );
 				wp_enqueue_script( 'rtwiki-404-script' );
 			}
 
