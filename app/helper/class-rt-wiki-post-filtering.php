@@ -156,12 +156,13 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
 
             if ( isset( $access_rights ) ){
 
-                if ( ! is_user_logged_in() ){
+                //
 
-                    if ( isset( $access_rights[ 'public' ] ) && 1 == $access_rights[ 'public' ] ){
-                        return true;
-                    }
-                } else {
+                if ( isset( $access_rights[ 'public' ] ) && 1 == $access_rights[ 'public' ] ){
+                    return true;
+                }
+                //} else {
+                if ( is_user_logged_in() ){
 
                     if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) )  ){
                         return true;
