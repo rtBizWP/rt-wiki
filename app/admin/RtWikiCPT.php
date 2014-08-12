@@ -71,7 +71,8 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 						'show_ui' => true,
 						'show_in_menu' => true,
 						'query_var' => true,
-						'rewrite' => array( 'slug' => $slug ),
+						'rewrite' => array( 'slug' => $slug,
+										'with_front' => false ),
 							'capability_type' => 'wiki',
 						'has_archive' => true,
 						'hierarchical' => true,
@@ -328,18 +329,3 @@ if ( ! class_exists( 'RtWikiCPT' ) ){
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
