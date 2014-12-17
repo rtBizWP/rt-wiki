@@ -1,6 +1,6 @@
 <?php
 /*
- * 
+ *
  * The Template for displaying all single posts.
  *
  */
@@ -29,6 +29,8 @@ if ( have_posts() ){
 					<div class="post-content">
 						<?php the_content(); ?>
 					</div>
+					<h2> Subpages </h2>
+					<?php echo get_rtwiki_archive() ?>
 				</article>
 	<?php
 }
