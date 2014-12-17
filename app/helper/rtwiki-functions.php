@@ -107,6 +107,7 @@ function get_rtwiki_archive( $atts ) {
 	if ( isset( $wikis ) ){
 		return '<ul>'. $wikis . '</ul>';
 	} else {
-		get_template_part( 'content', 'none' );
+		return 'There are no subpages';
+		// get_template_part( 'content', 'none' );
 	}
 }
