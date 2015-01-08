@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * The RtWikiCPT Class. Creates A wiki CPT, along with permissions metabox
- * Adds email address custom field to user-group taxonomy.
  *
  * @author     Dipesh
  */
@@ -83,10 +82,10 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 						'show_in_menu' => true,
 						'query_var' => true,
 						'rewrite' => array( 'slug' => $slug ),
-							'capability_type' => 'wiki',
+						'capability_type' => 'wiki',
 						'has_archive' => true,
 						'hierarchical' => true,
-						'menu_position' => 10,
+						'menu_position' => 36,
 						'supports' => array(
 							'title',
 							'editor',
@@ -100,7 +99,9 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 						'menu_icon' => true,
 						'can_export' => true,
 						'show_in_nav_menus' => true,
-						'show_in_admin_bar' => true, );
+						'show_in_admin_bar' => true,
+						'map_meta_cap'       => true, //Required For ACL Without map_meta_cap Cap ACL isn't working.
+						);
 					register_post_type( $slug, $args );
 				}
 			}
@@ -169,13 +170,12 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 				</tr>
 
 			<?php
-			$args = array( 'orderby' => 'asc', 'hide_empty' => false );
-			$terms = get_terms( 'user-group', $args );
-			foreach ( $terms as $term ) {
+			$department = rt_biz_get_department();
+			foreach ( $department as $term ) {
 				$groupSlug = $term->slug;
 					?>
 					<tr>
-						<td><a href="users.php?user-group=<?php echo esc_html( $groupSlug ) ?>" title="<?php echo esc_html( $term->name ) ?>"><?php echo esc_html( $term->name ) ?></a> (<?php echo esc_html( $term->count ) ?>)</td>
+						<td><a href="edit.php?post_type=<?php echo rt_biz_get_contact_post_type(); ?>&<?php echo  RT_Departments::$slug . '='. esc_html( $groupSlug ) ?>" title="<?php echo esc_html( $term->name ) ?>"><?php echo esc_html( $term->name ) ?></a> (<?php echo esc_html( $term->count ) ?>)</td>
 						<td><input type="radio" onclick="uncheckAll(this,'na')" class="case_na rtwiki_na" <?php echo esc_html( $disabled ); ?> id="na_<?php echo esc_html( $groupSlug ) ?>"
 								   name="access_rights[<?php echo esc_html( $groupSlug ) ?>]"
 								   <?php if ( isset( $access_rights[ $groupSlug ] ) && ( $access_rights[ $groupSlug ] == 0 ) ) { ?>checked="checked"<?php } ?>
@@ -235,28 +235,26 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 
 			$post_info = get_post( $post );
 
-			if ( isset( $_REQUEST['parent_id'] ) && $_REQUEST['parent_id'] == 0 ){
+			if ( !isset( $_REQUEST['parent_id'] ) || $_REQUEST['parent_id'] == 0  ){
 
 				$supported_posts = rtwiki_get_supported_attribute();
 				if ( in_array( $_POST[ 'post_type' ], $supported_posts, true ) ){
 					if ( ! current_user_can( 'edit_wiki', $post ) ){
 						return;
 					} else {
-						$args  = array( 'orderby' => 'asc', 'hide_empty' => false );
-						$terms = get_terms( 'user-group', $args );
-
+						$department = rt_biz_get_department();
 						if( ( isset( $_POST[ 'access_rights' ][ 'public' ] ) && $_POST[ 'access_rights' ][ 'public' ]== 1 ) || !isset( $_POST[ 'access_rights' ] ) ){
-							foreach ( $terms as $term ) {
+							foreach ( $department as $term ) {
 								$access_rights[$term->slug]=1;
 							}
 							$access_rights[ 'public' ]=1;
 						}elseif ( isset( $_POST[ 'access_rights' ][ 'all' ] ) ){
-							foreach ( $terms as $term ) {
+							foreach ( $department as $term ) {
 								$access_rights[$term->slug]=$_POST[ 'access_rights' ][ 'all' ];
 							}
 							$access_rights[ 'all' ]=$_POST[ 'access_rights' ][ 'all' ];
 						}else{
-							foreach ( $terms as $term ) {
+							foreach ( $department as $term ) {
 								if( isset( $_POST[ 'access_rights' ][ $term->slug ] ) ){
 									$access_rights[$term->slug]=$_POST[ 'access_rights' ][ $term->slug ];
 								}else{
