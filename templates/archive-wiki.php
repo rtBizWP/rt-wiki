@@ -13,13 +13,13 @@ $content_class = apply_filters( 'rtwiki_content_class', 'large-8 columns rtp-sin
 	<section id="content" class="rtp-content-section <?php echo $content_class ?> " role="main">
 
 	<?php
-	global $rtWikiAttributesModel;
-	$attributes = $rtWikiAttributesModel->attribute_exists( get_query_var( 'taxonomy' ), get_post_type() );
-	if ( ! $attributes ) {
-		?>
-			<article id="<?php echo get_post_type() . '-list'; ?>" <?php post_class( 'clearfix wikilist rtp-post-box' ); ?>>
+	global $rt_attributes_model;
+	$attributes = $rt_attributes_model->attribute_exists( get_query_var( 'taxonomy' ), get_post_type() );
+if ( ! $attributes ) { ?>
+
+		<article id="<?php echo get_post_type() . '-list'; ?>" <?php post_class( 'clearfix wikilist rtp-post-box' ); ?>>
 			<header class="post-header"><div class="rtp-secondary-header">
-				<h1 class="post-title"><?php _e( sprintf( '%s' , strtoupper( get_post_type() ) ) , 'rtCamp' ); ?></h1>
+					<h1 class="post-title"><?php _e( sprintf( '%s' , strtoupper( get_post_type() ) ) , 'rtCamp' ); ?></h1>
 				</div>
 			</header>
 			<div class="post-content">
@@ -29,7 +29,7 @@ $content_class = apply_filters( 'rtwiki_content_class', 'large-8 columns rtp-sin
 				$args = array(
 					'authors' => '',
 					'child_of' => 0,
-					'depth' => 1,
+					'depth' => 0,
 					'echo' => 0,
 					'exclude' => '',
 					'include' => '',
