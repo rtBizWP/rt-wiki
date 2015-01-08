@@ -1,14 +1,14 @@
 <?php
 
 /*
-  Plugin Name: rt-Wiki
+  Plugin Name: rtbiz-wiki
   Plugin URI: http://rtcamp.com/
   Description: Manage wiki in multiple groups
   Version: 0.1.30
   Author: rtCamp
   Author URI: http://rtcamp.com
   License: GPL
-  Text Domain: rt_wiki
+  Text Domain: rtbiz_wiki
  */
 
 /**
@@ -24,7 +24,7 @@ if ( ! defined( 'RT_WIKI_VERSION' ) ){
  *
  */
 if ( !defined( 'RT_WIKI_TEXT_DOMAIN' ) ) {
-    define( 'RT_WIKI_TEXT_DOMAIN', 'rt_wiki' );
+    define( 'RT_WIKI_TEXT_DOMAIN', 'rtbiz_wiki' );
 }
 
 /**
@@ -102,8 +102,6 @@ if ( ! defined( 'RT_WIKI_PATH_SCHEMA' ) ){
 if ( ! defined( 'RC_TC_BASE_FILE' ) ) define( 'RC_TC_BASE_FILE', __FILE__ );
 if ( ! defined( 'RC_TC_BASE_DIR' ) ) define( 'RC_TC_BASE_DIR', dirname( RC_TC_BASE_FILE ) );
 if ( ! defined( 'RC_TC_PLUGIN_URL' ) ) define( 'RC_TC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-
-include_once RT_WIKI_PATH_LIB . 'wp-helpers.php';
 
 function rt_wiki_include() {
 
