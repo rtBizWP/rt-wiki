@@ -66,7 +66,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
             add_filter( 'wpseo_sitemaps_supported_post_types', array( $this, 'rtwiki_sitemap_posttypes' ) );
 
             //Wiki Parent page filtering
-            add_filter( 'get_pages', array( $this, 'rtwiki_get_pages' ) );
+            add_filter( 'get_pages', array( $this, 'rtwiki_get_pages' ), 10, 2 );
             add_filter( 'page_attributes_dropdown_pages_args', array( $this, 'rtwiki_dropdown_pages' ) );
 
         }

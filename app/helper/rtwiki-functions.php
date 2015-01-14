@@ -127,10 +127,13 @@ function rc_tc_template_chooser( $template )
     $supported_posts = rtwiki_get_supported_attribute();
     if ( ! in_array( get_post_type(), $supported_posts ) ){
         $return = $template;
-    } // Else use custom template
-    else if ( is_singular() ) $return = rc_tc_get_template_hierarchy( 'single-wiki' ); else if ( is_archive() ) $return = rc_tc_get_template_hierarchy( 'archive-wiki' ); else
-        $return = $template;
-
+    }  else if ( is_singular() ) { // Else use custom template
+	    $return = rc_tc_get_template_hierarchy( 'single-wiki' );
+    } else if ( is_archive() ) {
+	    $return = rc_tc_get_template_hierarchy( 'archive-wiki' );
+    } else {
+	    $return = $template;
+    }
     return $return;
 }
 
@@ -153,8 +156,6 @@ function rc_tc_get_template_hierarchy( $template )
     } else {
         $file = RC_TC_BASE_DIR . '/templates/' . $template;
     }
-
-    $file = RC_TC_BASE_DIR . '/templates/' . $template;
 
     return apply_filters( 'rc_repl_template_' . $template, $file );
 }
