@@ -526,8 +526,9 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
         function rtwiki_get_pages($pages, $r){
             $supported_posts = rtwiki_get_supported_attribute();
             if ( in_array( get_post_type(), $supported_posts ) ) {
-                foreach( $pages as $key=>$argpage){
-                    if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ){
+                $rtbiz_access = current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) );
+	            foreach( $pages as $key=>$argpage){
+                    if ( $rtbiz_access ){
                         $access=$this->get_admin_panel_permission( $argpage->ID );
                         if ( $access != 'a' && $access != 'w' ){
                             unset($pages[$key]);
