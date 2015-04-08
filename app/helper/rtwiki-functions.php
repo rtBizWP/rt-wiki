@@ -85,7 +85,7 @@ function get_term_if_exists( $term, $userid )
 }
 
 
-function get_rtwiki_archive( $atts ) {
+function get_rtwiki_archive( ) {
 	$args = array(
 		'authors' => '',
 		'child_of' => get_the_ID(),
