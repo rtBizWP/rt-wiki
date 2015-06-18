@@ -40,8 +40,8 @@ if ( ! class_exists( 'Rt_Wiki_Admin' ) ){
 
             $attributes = rtwiki_get_supported_attribute();
 
-            $admin_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) : '';
-            $editor_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) : '';
+            $admin_cap = ( function_exists( 'rtbiz_get_access_role_cap' ) ) ? rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) : '';
+            $editor_cap = ( function_exists( 'rtbiz_get_access_role_cap' ) ) ? rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) : '';
 
             $terms_caps = array(
                 'manage_terms' => $editor_cap,

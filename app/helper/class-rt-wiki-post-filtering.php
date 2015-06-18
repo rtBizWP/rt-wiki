@@ -95,11 +95,11 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
                         return 'r';
                     }
                 } else {
-                    if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) )  ){
+                    if ( current_user_can( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) )  ){
                         return 'a';
-                    } elseif ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  ){
+                    } elseif ( current_user_can( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  ){
                         return 'w';
-                    } elseif ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ){
+                    } elseif ( current_user_can( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ){
                         if ( isset( $access_rights[ 'public' ] ) && 1 == $access_rights[ 'public' ] ){
                             return 'r';
                         }elseif ( isset( $access_rights[ 'all' ] ) ){
@@ -109,12 +109,12 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
                                 return 'r';
                             }
                         }else{
-                            $department = rt_biz_get_department();
+                            $department = rtbiz_get_team();
                             $user_id  = get_current_user_id();
                             $noflag   = 0;
 
                             foreach ( $department as $term ) {
-                                $contact = rt_biz_get_contact_for_wp_user( $user_id );
+                                $contact = rtbiz_get_contact_for_wp_user( $user_id );
                                 if ( ! empty( $contact ) ) {
                                     $contact = $contact[ 0 ];
                                     $ans     = get_term_if_exists( $term->slug, $contact->ID );
@@ -163,11 +163,11 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
                 //} else {
                 if ( is_user_logged_in() ){
 
-                    if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) )  ){
+                    if ( current_user_can( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) )  ){
                         return true;
-                    } elseif ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  ){
+                    } elseif ( current_user_can( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ) )  ){
                         return true;
-                    }else if ( current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ){
+                    }else if ( current_user_can( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ) ) ){
                         if ( isset( $access_rights[ 'public' ] ) && 1 == $access_rights[ 'public' ] ){
                             return true;
                         }elseif ( isset( $access_rights[ 'all' ] ) ){
@@ -175,12 +175,12 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
                                 return true;
                             }
                         }else{
-                            $department = rt_biz_get_department();
+                            $department = rtbiz_get_team();
                             $user_id  = get_current_user_id();
                             $noflag   = 0;
 
                             foreach ( $department as $term ) {
-                                $contact = rt_biz_get_contact_for_wp_user( $user_id );
+                                $contact = rtbiz_get_contact_for_wp_user( $user_id );
                                 if ( ! empty( $contact ) ){
                                     $contact = $contact[0];
                                     $ans = get_term_if_exists( $term->slug, $contact->ID );
@@ -281,7 +281,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
          */
         function remove_wiki_bulk_actions( $actions ){
             global $current_user;
-            if ( ! current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ){
+            if ( ! current_user_can( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ){
                 unset( $actions['trash'] );
             }
             return $actions;
@@ -526,7 +526,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
         function rtwiki_get_pages($pages, $r){
             $supported_posts = rtwiki_get_supported_attribute();
             if ( in_array( get_post_type(), $supported_posts ) ) {
-                $rtbiz_access = current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) );
+                $rtbiz_access = current_user_can( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) );
 	            foreach( $pages as $key=>$argpage){
                     if ( $rtbiz_access ){
                         $access=$this->get_admin_panel_permission( $argpage->ID );
@@ -552,7 +552,7 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
         function rtwiki_dropdown_pages($dropdown_args){
             global $current_user;
             $supported_posts = rtwiki_get_supported_attribute();
-            if ( in_array( get_post_type(), $supported_posts ) && ! current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ) {
+            if ( in_array( get_post_type(), $supported_posts ) && ! current_user_can( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ) {
                 unset( $dropdown_args['show_option_none'] );
             }
             return $dropdown_args;
@@ -560,14 +560,14 @@ if ( !class_exists( 'Rt_Wiki_Post_Filtering' ) ) {
 
         function filter_caps( $all_caps, $required_caps, $args, $user ) {
             global $post;
-            if ( in_array( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) , $required_caps ) || in_array( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ), $required_caps ) || in_array( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ), $required_caps ) ){
+            if ( in_array( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) , $required_caps ) || in_array( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'editor' ), $required_caps ) || in_array( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'author' ), $required_caps ) ){
                 return $all_caps;
             }
 
             $supported_posts = rtwiki_get_supported_attribute();
             if ( is_object( $post ) && in_array( $post->post_type, $supported_posts ) && $post->post_status != "auto-draft" && $post->post_status != "draft" ){
                 $access = 'na';
-                if ( is_object( $user )  &&  current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ){
+                if ( is_object( $user )  &&  current_user_can( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ){
                     return $all_caps;
                 }
                 $access = $this->get_admin_panel_permission( $post->ID );

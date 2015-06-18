@@ -114,7 +114,7 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 		{
 			global $current_user;
 			$supported_posts = rtwiki_get_supported_attribute();
-			if ( is_array( $supported_posts ) && ! empty( $supported_posts ) && current_user_can( rt_biz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ){
+			if ( is_array( $supported_posts ) && ! empty( $supported_posts ) && current_user_can( rtbiz_get_access_role_cap( RT_WIKI_TEXT_DOMAIN, 'admin' ) ) ){
 				foreach ( $supported_posts as $posts )
 					add_meta_box( $posts . '_post_access', 'Permissions', array( $this, 'display_wiki_post_access_metabox' ), $posts, 'normal', 'high' );
 			}
@@ -170,12 +170,12 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 				</tr>
 
 			<?php
-			$department = rt_biz_get_department();
+			$department = rtbiz_get_team();
 			foreach ( $department as $term ) {
 				$groupSlug = $term->slug;
 					?>
 					<tr>
-						<td><a href="edit.php?post_type=<?php echo rt_biz_get_contact_post_type(); ?>&<?php echo  RT_Departments::$slug . '='. esc_html( $groupSlug ) ?>" title="<?php echo esc_html( $term->name ) ?>"><?php echo esc_html( $term->name ) ?></a> (<?php echo esc_html( $term->count ) ?>)</td>
+						<td><a href="edit.php?post_type=<?php echo rtbiz_get_contact_post_type(); ?>&<?php echo  Rtbiz_Teams::$slug . '='. esc_html( $groupSlug ) ?>" title="<?php echo esc_html( $term->name ) ?>"><?php echo esc_html( $term->name ) ?></a> (<?php echo esc_html( $term->count ) ?>)</td>
 						<td><input type="radio" onclick="uncheckAll(this,'na')" class="case_na rtwiki_na" <?php echo esc_html( $disabled ); ?> id="na_<?php echo esc_html( $groupSlug ) ?>"
 								   name="access_rights[<?php echo esc_html( $groupSlug ) ?>]"
 								   <?php if ( isset( $access_rights[ $groupSlug ] ) && ( $access_rights[ $groupSlug ] == 0 ) ) { ?>checked="checked"<?php } ?>
@@ -238,11 +238,11 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 			if ( !isset( $_REQUEST['parent_id'] ) || $_REQUEST['parent_id'] == 0  ){
 
 				$supported_posts = rtwiki_get_supported_attribute();
-				if ( in_array( $_POST[ 'post_type' ], $supported_posts, true ) ){
+				if ( isset( $_POST[ 'post_type' ] ) && in_array( $_POST[ 'post_type' ], $supported_posts, true ) ){
 					if ( ! current_user_can( 'edit_wiki', $post ) ){
 						return;
 					} else {
-						$department = rt_biz_get_department();
+						$department = rtbiz_get_team();
 						if( ( isset( $_POST[ 'access_rights' ][ 'public' ] ) && $_POST[ 'access_rights' ][ 'public' ]== 1 ) || !isset( $_POST[ 'access_rights' ] ) ){
 							foreach ( $department as $term ) {
 								$access_rights[$term->slug]=1;

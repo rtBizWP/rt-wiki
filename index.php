@@ -124,7 +124,7 @@ function rt_wiki_init() {
     $rt_wp_wiki = new RT_WP_WIKI();
 
 }
-add_action( 'rt_biz_init', 'rt_wiki_init', 1 );
+add_action( 'rtbiz_init', 'rt_wiki_init', 1 );
 
 /**
  * Next File: /app/class-rt-wp-wiki.php

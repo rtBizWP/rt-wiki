@@ -30,7 +30,7 @@ if ( ! class_exists( 'RT_WP_WIKI' ) ){
 		 */
 		public function __construct()
 		{
-            $this->check_rt_biz_dependecy();
+            $this->check_rtbiz_dependecy();
 
             $this->init_globals();
 
@@ -52,13 +52,13 @@ if ( ! class_exists( 'RT_WP_WIKI' ) ){
 
 		}
 
-        function check_rt_biz_dependecy() {
-            if ( ! class_exists( 'Rt_Biz' ) ) {
-                add_action( 'admin_notices', array( $this, 'rt_biz_admin_notice' ) );
+        function check_rtbiz_dependecy() {
+            if ( ! class_exists( 'Rtbiz' ) ) {
+                add_action( 'admin_notices', array( $this, 'rtbiz_admin_notice' ) );
             }
         }
 
-        function rt_biz_admin_notice() { ?>
+        function rtbiz_admin_notice() { ?>
             <div class="updated">
                 <p><?php _e( sprintf( 'WordPress WIKI : It seems that WordPress Contacts plugin is not installed or activated. Please %s / %s it.', '<a href="'.admin_url( 'plugin-install.php?tab=search&s=rt-contacts' ).'">'.__( 'install' ).'</a>', '<a href="'.admin_url( 'plugins.php' ).'">'.__( 'activate' ).'</a>' ) ); ?></p>
             </div>
