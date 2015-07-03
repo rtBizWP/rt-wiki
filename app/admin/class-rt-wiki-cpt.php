@@ -235,7 +235,7 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 
 			$post_info = get_post( $post );
 
-			if ( !isset( $_REQUEST['parent_id'] ) || $_REQUEST['parent_id'] == 0  ){
+			if ( ! isset( $_REQUEST['parent_id'] ) || $_REQUEST['parent_id'] == 0  ){
 
 				$supported_posts = rtwiki_get_supported_attribute();
 				if ( isset( $_POST[ 'post_type' ] ) && in_array( $_POST[ 'post_type' ], $supported_posts, true ) ){
@@ -263,7 +263,7 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 							}
 						}
 						update_post_meta( $post, 'access_rights', $access_rights );
-						update_post_meta( $post, 'base_parent', $post_info->post_parent );
+						update_post_meta( $post, 'base_parent', $post );
 					}
 				}
 			}else{
