@@ -134,7 +134,7 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 			}
 
 			if( $post->post_parent!= 0 ){
-				$base_parent = get_post_meta( $post->ID, 'base_parent', true );
+					$base_parent = get_post_meta( $post->ID, 'base_parent', true );
 				$base_parent_meta = get_post( $base_parent );
 				echo "<p> Child page permissions depend on its base parent page ( " . $base_parent_meta->post_title . " )</p><p>";
 				echo "<a class='post-edit-link' target='_blank' href='" . get_edit_post_link( $base_parent ) . "'>Click here</a>";
@@ -263,7 +263,7 @@ if ( ! class_exists( 'Rt_Wiki_CPT' ) ){
 							}
 						}
 						update_post_meta( $post, 'access_rights', $access_rights );
-						update_post_meta( $post, 'base_parent', $post );
+						update_post_meta( $post, 'base_parent', $post_info->post_parent );
 					}
 				}
 			}else{
