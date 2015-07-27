@@ -49,8 +49,7 @@ if ( ! class_exists( 'Rt_Wiki_Admin' ) ){
                 'delete_terms' => $editor_cap,
                 'assign_terms' => $editor_cap,
             );
-
-            if ( is_array( $attributes ) && ! empty( $attributes ) && current_user_can('edit_wiki') ){
+            if ( is_array( $attributes ) && ! empty( $attributes ) && current_user_can( $editor_cap ) ){
                 foreach ( $attributes as $attribute ) {
                     if ( $attribute !== 'post' ){
                         $rt_attributes->add_attributes_page( $this->attributes_page_slug, 'edit.php?post_type='.$attribute, $attribute, $admin_cap, $terms_caps, $render_type = false, $storage_type = false, $orderby = true );
